@@ -1,0 +1,68 @@
+.countController .btn-primary {
+    background: transparent;
+    box-shadow: none;
+    font-size: 20px;
+    color: #000;
+    width: 30%;
+    text-align: center;
+    float: left;
+}
+
+.countController span {
+    width: 40%;
+    display: block;
+    float: left;
+    text-align: center;
+}
+
+
+.countController {
+    background: #f1f1f1;
+    overflow: hidden;
+    border-radius: 12px;
+    display: flex;
+}
+
+.proItem ._img {
+    border-radius: 12px;
+    background-size: cover !important;
+
+    position: relative;
+    width: 100%;
+    height: 100%;
+    opacity: 0.95;
+}
+
+.proItem .badge-secondary {
+    background: rgba(0, 0, 0, 0.62);
+    color: #fff;
+    font-weight: 500;
+    font-size: 14px;
+    float: right;
+    margin-left: 6px;
+    border-radius: 25px;
+}
+
+.proItem .btn_backet {
+    background: #f1f1f1;
+    box-shadow: none;
+    border-radius: 17px;
+    color: #000;
+    height: 41.6px;
+    padding-top: 12px !important;
+}
+
+.proItem ._name {
+    font-weight: 400;
+    color: #000;
+    font-size: 16px;
+}
+
+.proItem:hover > .imgdiv > ._img {
+    transition: 0.1s;
+    opacity: 1;
+}
+
+.proItem {
+    color: #000;
+}

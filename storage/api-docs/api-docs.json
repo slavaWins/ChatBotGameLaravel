@@ -1,0 +1,308 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Лосоь.Дебагер API",
+    "description": "Документация к апи для записи дебага",
+    "contact": {
+      "name": "Хелп по свагеру",
+      "url": "https://swagger.io/specification/"
+    },
+    "version": "0.11"
+  },
+  "paths": {
+    "/api/get-session": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Получение сессии по которой будут отправляться данные",
+        "operationId": "GetSession",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/GetSessionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Успешное создание сессии",
+            "content": {
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSessionResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Ощибка создания сессии",
+            "content": {
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMesageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/message-send-single": {
+      "post": {
+        "tags": [
+          "Message"
+        ],
+        "description": "Отправляем единичное дебаг сообщение",
+        "operationId": "MessageSendSingle",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/MessageSingleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Сообщение принято",
+            "content": {
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSessionResponse"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Ощибка сессии",
+            "content": {
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMesageResponse"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Ощибка отправки данных",
+            "content": {
+              "application/x-www-form-urlencoded": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorMesageResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GetSessionResponse": {
+        "properties": {
+          "sessionId": {
+            "description": "Ключ сессии. Нужно будет отправлять его во всех методах как токен",
+            "format": "string",
+            "default": "1::3616511357eb181886a316d1a0a7e96eNDE5NjIyMTI"
+          }
+        },
+        "type": "object"
+      },
+      "GetSessionRequest": {
+        "properties": {
+          "projectToken": {
+            "required": true,
+            "minLength": 3,
+            "description": "Токен проекта",
+            "format": "string",
+            "default": "1::3616511357eb181886a316d1a0a7e96eNDE5NjIyMTI"
+          },
+          "platformSDK": {
+            "description": "Ваш SDK. .mobile, .web",
+            "format": "string",
+            "default": "mobile"
+          },
+          "appName": {
+            "description": "Название приложение. Доп параметр для апи",
+            "format": "string",
+            "default": "Expermental Build Testfly 0.2525"
+          },
+          "test": {
+            "description": "Название приложение. Доп параметр для апи",
+            "$ref": "#/components/schemas/ErrorMesageResponse"
+          }
+        },
+        "type": "object"
+      },
+      "MessageSingleRequest": {
+        "properties": {
+          "message": {
+            "description": "Текст сообщения",
+            "format": "string",
+            "default": "Hello world litle dob biches"
+          },
+          "typeMessage": {
+            "description": "Тим сообщения",
+            "format": "string",
+            "default": "info",
+            "enum": [
+              "info",
+              "warning",
+              "error",
+              "debug"
+            ]
+          },
+          "sessionId": {
+            "description": "sessionId",
+            "format": "string",
+            "default": "SAGSAGASGWGEGEGAEGEGEASGEAGE"
+          },
+          "tag": {
+            "description": "Тег дебага",
+            "format": "string",
+            "default": "Swag"
+          },
+          "os": {
+            "description": "Название оси или юсер агент браузера",
+            "format": "string",
+            "default": "Chrome Webkit"
+          },
+          "osVersion": {
+            "description": "Версия системы, например IOS 13.1",
+            "format": "string",
+            "default": "13.1 Os"
+          },
+          "device": {
+            "description": "Хуй пизда ворона не понятно",
+            "format": "string",
+            "default": "Хуй пизда ворона"
+          },
+          "appVersion": {
+            "description": "Хуй пизда ворона не понятно",
+            "format": "string",
+            "default": "Хуй пизда ворона"
+          },
+          "appVersionCode": {
+            "description": "Хуй пизда ворона не понятно",
+            "format": "string",
+            "default": "Хуй пизда ворона"
+          },
+          "date": {
+            "description": "Дата этого дебага",
+            "format": "string",
+            "default": "Хуй пизда ворона"
+          },
+          "appId": {
+            "description": "Дата этого дебага",
+            "format": "string",
+            "default": "Хуй пизда ворона"
+          },
+          "domain": {
+            "description": "Дата этого дебага",
+            "format": "string",
+            "default": "Хуй пизда ворона"
+          },
+          "path": {
+            "description": "Дата этого дебага",
+            "format": "string",
+            "default": "Хуй пизда ворона"
+          },
+          "parametersNoWork": {
+            "description": "Параметры устройства и инфа всякая",
+            "$ref": "#/components/schemas/MessageParametersStruct"
+          }
+        },
+        "required": [
+          "message",
+          "typeMessage",
+          "sessionId"
+        ],
+        "type": "object"
+      },
+      "MessageParametersStruct": {
+        "properties": {
+          "sessionId": {
+            "description": "sessionId",
+            "format": "string",
+            "default": "SAGSAGASGWGEGEGAEGEGEASGEAGE"
+          },
+          "os": {
+            "description": "Название оси или юсер агент браузера",
+            "format": "string",
+            "default": "Chrome Webkit"
+          },
+          "osVersion": {
+            "description": "Версия системы, например IOS 13.1",
+            "format": "string",
+            "default": "13.1 Os"
+          },
+          "device": {
+            "description": "Хуй пизда ворона не понятно",
+            "format": "string",
+            "default": "Хуй пизда ворона"
+          },
+          "appVersion": {
+            "description": "Хуй пизда ворона не понятно",
+            "format": "string",
+            "default": "Хуй пизда ворона"
+          },
+          "appVersionCode": {
+            "description": "Хуй пизда ворона не понятно",
+            "format": "string",
+            "default": "Хуй пизда ворона"
+          },
+          "date": {
+            "description": "Дата этого дебага",
+            "format": "string",
+            "default": "Хуй пизда ворона"
+          },
+          "appId": {
+            "description": "Дата этого дебага",
+            "format": "string",
+            "default": "Хуй пизда ворона"
+          },
+          "domain": {
+            "description": "Дата этого дебага",
+            "format": "string",
+            "default": "Хуй пизда ворона"
+          },
+          "path": {
+            "description": "Дата этого дебага",
+            "format": "string",
+            "default": "Хуй пизда ворона"
+          }
+        },
+        "required": [
+          "message",
+          "typeMessage"
+        ],
+        "type": "object"
+      },
+      "ErrorMesageResponse": {
+        "properties": {
+          "message": {
+            "description": "Описание проблемы",
+            "format": "string",
+            "default": "Не верный токен проекта"
+          }
+        },
+        "type": "object"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Авторизация и различные сессии"
+    },
+    {
+      "name": "Message",
+      "description": "Оттправка сообщение и различного дебага"
+    }
+  ]
+}

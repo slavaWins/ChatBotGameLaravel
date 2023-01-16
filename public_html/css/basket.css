@@ -1,0 +1,13 @@
+.basketSmetaRow ._priceCol {
+    text-align: right;
+    opacity: 0.7;
+}
+
+.basketSmetaRow img {
+    height: 30px;
+    margin-top: -3px;
+}
+
+.basketSmetaRow {
+    font-size: 13px;
+}

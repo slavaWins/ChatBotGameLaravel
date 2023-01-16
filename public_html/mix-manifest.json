@@ -1,0 +1,10 @@
+{
+    "/js/mdb.min.js": "/js/mdb.min.js",
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css",
+    "/js/productController.js": "/js/productController.js",
+    "/js/jquery.mask.min.js": "/js/jquery.mask.min.js",
+    "/js/jquery-3.6.0.min.js": "/js/jquery-3.6.0.min.js",
+    "/js/BaseClass.js": "/js/BaseClass.js",
+    "/js/MApi.js": "/js/MApi.js"
+}

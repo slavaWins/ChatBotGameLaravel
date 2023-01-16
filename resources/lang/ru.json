@@ -1,0 +1,22 @@
+{
+    "Registration": "Регистрация",
+    "Register": "Зарегистрироваться",
+    "Name": "Имя и фамилия",
+    "E-Mail Address": "E-mail",
+    "E-Mail": "E-mail",
+    "Password": "Пароль",
+    "Confirm Password": "Подтверждение пароля",
+    "Login": "Войти",
+    "Login Form": "Вход",
+    "Remember Me": "Запомнить меня",
+    "Forgot Your Password?": "Забыли пароль?",
+    "Reset Password": "Восстановление пароля",
+    "Reset Password Link": "Восстановить пароль",
+    "Send Password Reset Link": "Восстановить пароль",
+    "New Password Creation": "Установка нового пароля",
+    "Create New Password": "Установить новый пароль",
+
+    "Hello!": "Здравствуйте!",
+    "Regards": "Спасибо!",
+    "Logout": "Выйти"
+}

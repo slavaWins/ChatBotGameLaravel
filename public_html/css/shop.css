@@ -1,0 +1,67 @@
+.sideProdCat .badge{
+
+    border-radius: 100%;
+    width: 28px;
+    height: 27px;
+    padding-top: 8px;
+    background: #ffffff;
+    color: #000;
+}
+.sideProdCat > a {
+    display: block;
+    margin-bottom: 10px;
+    color: #000;
+    background: #f1f1f1;
+    padding: 6px 12px;
+    border-radius: 19px;
+}
+
+.sideProdCat {
+
+}
+
+
+.shopItem ._img {
+    border-radius: 12px;
+    background-size: cover !important;
+
+    position: relative;
+    width: 100%;
+    height: 100%;
+    opacity: 0.95;
+}
+
+.shopItem .badge-secondary {
+    background: rgba(0, 0, 0, 0.62);
+    color: #fff;
+    font-weight: 500;
+    font-size: 14px;
+    float: right;
+    margin-left: 6px;
+    border-radius: 25px;
+}
+
+.shopItem ._name {
+    font-weight: 500;
+    color: #000;
+    font-size: 19px;
+}
+
+.shopItem:hover > .imgdiv > ._img {
+    transition: 0.1s;
+    opacity: 1;
+}
+
+.shopItem {
+    color: #000;
+}
+
+
+.big_shop_prview .badge {
+    background: #000;
+    color: #fff;
+}
+
+.big_shop_prview {
+    height: 310px;     position: relative;     border-radius: 38px; overflow: hidden;
+}
