@@ -78,11 +78,19 @@ class User extends Authenticatable
     /**
      * @return Character[]
      */
-    public function GetAllCharacters()
+    public function GetAllCharacters($byClass = null)
 
     {
         $list = [];
-        foreach (Character::where("user_id", $this->id)->get() as $char) {
+        $charList = Character::where("user_id", $this->id)->get();
+
+        if ($byClass) {
+            $charList = $charList->filter(function ($item) use ($byClass){
+                return $item->className == $byClass;
+            });
+        }
+
+        foreach ($charList as $char) {
             $character = $char->className::LoadCharacterById($char->id);
 
             $list[] = $character;

@@ -73,14 +73,14 @@ class Character extends Model
         return $AR;
     }
 
-    public function Render($isShort = false)
+    public function Render($isShort = false, $isShowDescr = false, $showSkill = false)
     {
-        $txt = $this->baseName;
+        $txt = $this->icon;
         if (!empty($this->name)) {
             $txt .= ' ' . $this->name;
         }
 
-        $txt .= $this->RenderStats();
+        $txt .= $this->RenderStats($isShort, $isShowDescr,$showSkill);
         return $txt;
     }
 

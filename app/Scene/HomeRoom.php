@@ -39,72 +39,42 @@ class HomeRoom extends BaseRoom
             return $this->SetRoom($room);
         }
 
-        if ($this->AddButton("Купить машину")) {
-            $room = ShopRoom::CreateShopRoomByCharacterType($this->user, CarCharacter::class, CarItemCharacterShop::class);
-            return $this->SetRoom($room);
+        if ($this->AddButton("Мои машины")) {
+            return $this->SetStep(1);
         }
+
 
         if ($isFullInfo) {
             $this->AddButton("Убрать описание");
         } else {
             $this->AddButton("?");
         }
+
         return $this->response;
     }
 
-    public function Step1_Info()
+    public function Step1_Cars()
     {
-        $stats = [
-            'Менеджер' => [
-                'descr' => "Умеете управлять командой",
-                'par' => [
-                    'skill_manager' => 2,
-                    'money' => 35000,
-                ]
-            ],
-            'Торговец' => [
-                'descr' => "Умеет сбивать цену, и находить более выгодные предложения",
-                'par' => [
-                    'skill_torg' => 2,
-                    'money' => 40000,
-                ]
-            ],
-            'Водитель' => [
-                'descr' => "Понимание устройства машины и навыки вождения",
-                'par' => [
-                    'skill_drive' => 2,
-                    'money' => 20000,
-                ]
-            ],
-        ];
 
-        $this->response->message = "Нужно понять ваши стартовые навыки. \n";
+        $cars = $this->user->GetAllCharacters(CarCharacter::class);
 
-        $select = null;
-        foreach ($stats as $K => $V) {
-            $this->response->message .= "\n" . $K . " - " . $V['descr'];
-            if ($this->AddButton($K)) {
-                $select = $K;
-            }
+        $this->response->message = "Ваши машины (".(count($cars))." шт.): \n";
+
+
+        foreach ($cars as $K=>$V){
+            $this->response->message .= "\n\n".$V->Render(true, false, false);
+        }
+        if ($this->AddButton("Назад")) {
+            return $this->SetStep(0);
         }
 
-        if ($select) {
-            $player = new  PlayerCharacter();
-            $player->user_id = $this->user->id;
-            $player->InitCharacter();
-
-            foreach ($stats[$select]['par'] as $K => $V) {
-                $player->$K = $V;
-            }
-
-            $player->save();
-
-
-            $this->user->player_id = $player->id;
-            $this->user->save();
-            $this->user->fresh();
-            return $this->NextStep();
+        if ($this->AddButton("Купить машину")) {
+            $room = ShopRoom::CreateShopRoomByCharacterType($this->user, CarCharacter::class, CarItemCharacterShop::class);
+            return $this->SetRoom($room);
         }
+
+
+
 
 
         return $this->response;
@@ -139,7 +109,7 @@ class HomeRoom extends BaseRoom
     public function Handle()
     {
         if ($this->GetStep() == 0) return $this->Step0();
-        if ($this->GetStep() == 1) return $this->Step1_Info();
+        if ($this->GetStep() == 1) return $this->Step1_Cars();
         if ($this->GetStep() == 2) return $this->Step2_Info();
 
         return $this->response;
