@@ -32,6 +32,13 @@
         "phpunit/phpunit": "^9.5.10"
     },
     "autoload": {
+        "files": [
+            "app/Helpers/PaginationHelper.php"
+        ],
+        "classmap": [
+            "database/seeds",
+            "database/factories"
+        ],
         "psr-4": {
             "SlavaWins\\Poli\\": "packages/slavawins/poli/src",
             "App\\": "app/",

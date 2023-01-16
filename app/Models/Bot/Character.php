@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property CharDataType $characterData
  * @property int $id
  * @property int $user_id
+ * @property int $parent_id родитель объекта. Например машина в гараже
  * @property user $user
  * @property string className
  * @property string name
@@ -92,7 +93,7 @@ class Character extends Model
         $isChange = false;
         foreach ($this->GetStats() as $K => $V) {
             if (!isset($this->characterData->$K)) {
-                $this->$K->value = $V->default;
+                $this->characterData->$K = $V->default;
                 $isChange = true;
             }
         }
@@ -107,13 +108,20 @@ class Character extends Model
         $this->StatsUpdateData();
 
 
+        /** @var StatStructure[] $statsTemplate */
         $statsTemplate = $this->GetStatsCalculate();
         $txt = '';
 
 
         foreach ($statsTemplate as $K => $V) {
             if (!isset($this->characterData->$K)) continue;
+            if ($V->is_hidden_property) continue;
+            if ($isShort && !$V->isShowShort) continue;
             if (!$showSkill && substr_count($K, "skill_")) continue;
+
+            if ($V->preapendLabel) {
+                $txt .= "\n\n " . $V->preapendLabel;
+            }
             $txt .= "\n " . $V->RenderLine($isShort, $isShowDescr);
         }
         return $txt;
@@ -130,7 +138,6 @@ class Character extends Model
                 $data[$K] = $V->value;
             }
             $this->characterData = $data;
-            //$this->save();
         }
     }
 
@@ -144,6 +151,26 @@ class Character extends Model
         /** @var Character $character */
         $character = Character::find($id);
         return $character->className::find($id);
+    }
+
+    public static function CreateCharacter($user_id = 0, $characterData = null)
+    {
+        $className = get_called_class(); //для статик класа так получается
+
+        /** @var Character $character */
+        $character = new $className();
+
+        $character->user_id = $user_id ?? 0;
+        $character->refresh();
+        $character->InitCharacter();
+
+        if ($characterData) {
+            $character->characterData = $characterData;
+        }
+
+        $character->save();
+
+        return $character;
     }
 
     public static function LoadFristCharacterByUser($user_id, $createIfNot = false)

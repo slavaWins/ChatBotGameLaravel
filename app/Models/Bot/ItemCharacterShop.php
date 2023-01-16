@@ -2,13 +2,14 @@
 
 namespace App\Models\Bot;
 
+use App\Characters\Struct\CarCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property PlayerCharacterDataStructure characterData
+ * @property CarCharacterDataStructure characterData
  * @property int $id
  * @property int price
  * @property int buy_count
@@ -21,6 +22,18 @@ class ItemCharacterShop extends Model
 
     public $icon = "X";
     public $baseName = "Предмет";
+
+    public $filter_by = "marka"; //позволяет выбрать как фильр в магазине по статкам
+
+    /**
+     * Какие статки показывать в превью магазина?
+     * @var string[]
+     */
+    public $showInShopPreview = [
+        "hp",
+        "power",
+    ];
+
 
     protected $casts = [
         'characterData' => PlayerCharacterDataStructure::class,

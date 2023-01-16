@@ -17,10 +17,9 @@
 
     <h1>{{$example->baseName}}: База товаров </h1>
 
-    <table class="table  bg-white">
-        <tr>
+    <table class="table  bg-white table-bordered">
+        <tr class="small">
             <td>ИД</td>
-            <td>Класс</td>
             <td>Название</td>
             <td>Цена</td>
 
@@ -43,7 +42,6 @@
                       action="{{route('admin.itemshop.edit', ['catClassName'=>$catClassNameOriginal, 'id'=> $item->id])}}">
                     @csrf
                     <td>{{$item->id}}</td>
-                    <td class="small">{{basename($item->className)}}</td>
                     <td>
                         @php
                             FElement::NewInputText()
@@ -69,15 +67,18 @@
                             @php
                                 FElement::NewInputText()
                                  ->SetName($K)
-                                 ->SetValue(old($K, $item->characterData->$K)  )
+                                 ->SetValue(old($K, $item->characterData->$K ?? 0)  )
                                  ->RenderHtml(true);
                             @endphp
                         </td>
                     @endforeach
 
                     <td>
+                        <button type="submit" class="btn btn-outline-dark btn-sm btn-cont">Сохранить</button>
+                    </td>
 
-                        <button type="submit" class="btn btn-outline-dark btn-sm">Сохранить</button>
+                    <td>
+                        <button type="submit" class="btn btn-outline-dark btn-sm btn-cont" name="doubleMake" value="1">Дубль</button>
                     </td>
                 </form>
             </tr>
@@ -87,20 +88,34 @@
     <a href="{{route("admin.itemshop.showCategory.create", $catClassNameOriginal)}}" class="btn btn-outline-dark">Создать {{$example->baseName}}</a>
 
     <style>
+        td {
+            padding: 0px !important;
+
+        }
+
         .formMini .btn {
             margin-top: -4px;
         }
 
+        .btn-cont {
+            font-size: 10px;
+            border-width: 1px;
+            padding: 4px !important;
+            margin: 0px !important;
+        }
+
         .formMini input {
             font-size: 12px;
-            padding: 3px 1px;
+            padding: 4px 2px;
             width: 100%;
+            border: none;
+            border-radius: 0px;
         }
 
         .formMini .form-group {
             padding: 0px;
             margin: 0px;
-            margin-top: -4px;
+            margin-top: 0px;
         }
     </style>
 

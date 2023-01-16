@@ -2,8 +2,11 @@
 
 namespace App\Scene;
 
+use App\Characters\CarCharacter;
 use App\Characters\GarageCharacter;
 use App\Characters\PlayerCharacter;
+use App\Characters\Shop\CarItemCharacterShop;
+use App\Scene\Core\ShopRoom;
 use App\Scene\Core\SkillRoom;
 
 class HomeRoom extends BaseRoom
@@ -33,6 +36,11 @@ class HomeRoom extends BaseRoom
 
         if ($this->AddButton("Прокачка гаража")) {
             $room = SkillRoom::CreateSkillRoomByCharacter($this->user, $garageCharacter);
+            return $this->SetRoom($room);
+        }
+
+        if ($this->AddButton("Купить машину")) {
+            $room = ShopRoom::CreateShopRoomByCharacterType($this->user, CarCharacter::class, CarItemCharacterShop::class);
             return $this->SetRoom($room);
         }
 
@@ -86,7 +94,7 @@ class HomeRoom extends BaseRoom
             $player->InitCharacter();
 
             foreach ($stats[$select]['par'] as $K => $V) {
-                $player->$K=$V;
+                $player->$K = $V;
             }
 
             $player->save();

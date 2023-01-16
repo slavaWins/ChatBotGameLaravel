@@ -19,4 +19,11 @@ class Scene extends Model
     protected $casts = [
         'sceneData' => 'array'
     ];
+
+    public function SetData($key, $val)
+    {
+        $data = $this->sceneData;
+        $data[$key] = $val;
+        $this->sceneData = $data;
+    }
 }

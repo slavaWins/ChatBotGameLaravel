@@ -23,9 +23,11 @@ class BaseRoom
     {
         return $this->request->message == $name;
     }
-    public function AddButton($name)
+
+
+    public function AddButton($name, $isNewLine = false)
     {
-        $this->response->btns[$name] = 1;
+        $this->response->btns[$name] = $isNewLine;
         return $this->IsBtn($name);
     }
 
@@ -65,9 +67,9 @@ class BaseRoom
 
     public function SetRoom($roomName): BotResponseStructure
     {
-        if( is_object($roomName)){
+        if (is_object($roomName)) {
             $this->DeleteRoom();
-            return  $roomName->Handle();
+            return $roomName->Handle();
         }
 
         $roomName = $roomName . '';
@@ -84,7 +86,8 @@ class BaseRoom
         return $sceneRoom->Handle();
     }
 
-    public function DeleteRoom(){
+    public function DeleteRoom()
+    {
         $this->scene->delete();
     }
 

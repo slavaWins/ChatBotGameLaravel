@@ -16,6 +16,12 @@ class CarItemCharacterShop extends ItemCharacterShop
     public $icon = "🚘";
     public $baseName = "Автомобиль";
 
+
+    public $showInShopPreview = [
+        "hp",
+        "power",
+    ];
+
     protected $casts = [
         'characterData' => CarCharacterDataStructure::class,
     ];

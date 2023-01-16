@@ -18,6 +18,7 @@ class CreateCharactersTable extends Migration
             $table->string('name')->nullable();
             $table->string('className')->nullable();
             $table->integer('user_id')->nullable();
+            $table->integer('parent_id')->nullable();
             $table->json('characterData');
             $table->timestamps();
         });

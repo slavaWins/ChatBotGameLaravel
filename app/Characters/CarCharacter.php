@@ -34,10 +34,14 @@ class CarCharacter extends Character
         $res = $this->GetStats();
 
         $basePower = $res->power->value;
-        $res->power->value += ($basePower * $res->skill_engine) / 10;
-        $res->power->value += ($basePower * $res->skill_kpp) / 14;
+        $res->power->value += ($basePower * $res->skill_engine->value) / 10;
+        $res->power->value += ($basePower * $res->skill_kpp->value) / 14;
 
         $res->razgon->value = $res->mass->value / $res->power->value;
+        $res->razgon->value  = round( $res->razgon->value , 2);
+
+        $res->hp->max = $res->hpMax->value;
+        $res->hp->value = min($res->hp->value, $res->hpMax->value);
 
         return $res;
     }

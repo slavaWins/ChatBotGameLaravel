@@ -25,21 +25,59 @@ class ItemCharacterShopAdminController extends Controller
 
     public function editSave($catClassName, $id, Request $request)
     {
+
         $data = $request->toArray();
-        /** @var  ItemCharacterShop $example */
+
+        /** @var  ItemCharacterShop $item */
         $catClassName = 'App\Characters\Shop\\' . $catClassName;
-        $example = $catClassName::find($id);
-        if (!$example) return redirect()->back();
+
+        $example = new $catClassName();
         $example->InitCastsStructure();
+
+        $item = $catClassName::find($id);
+        if (!$item) return redirect()->back();
+        $item->InitCastsStructure();
+
+
+        if ($data['doubleMake'] ?? false) {
+            $example = $item->replicate();
+
+
+            foreach ((array)$example->characterData as $K => $par) {
+                if (!isset($data[$K])) continue;
+
+                if ($example->characterData->$K > 2) {
+                    $valevel = $example->characterData->$K * 0.3;
+                    $valevel=round($valevel);
+                    $example->characterData->$K += rand(-$valevel, $valevel);
+
+                    $example->characterData->$K = max(0, $example->characterData->$K);
+
+                }
+            }
+
+            $example->push();
+            $example->save();
+
+            return redirect()->back();
+            /*
+            $example = new $catClassName();
+            $example->InitCastsStructure();
+            $example->name  =$item->name;
+            $example->price  =$item->price;
+            $example->price  =$item->c;
+        */
+        }
+
 
         foreach ((array)$example->characterData as $K => $par) {
             if (!isset($data[$K])) continue;
-            $example->characterData->$K = $data[$K];
+            $item->characterData->$K = $data[$K];
         }
 
-        $example->name = $data['name'] ?? $example->name;
-        $example->price = $data['price'] ?? $example->price;
-        $example->save();
+        $item->name = $data['name'] ?? $item->name;
+        $item->price = $data['price'] ?? $item->price;
+        $item->save();
 
         return redirect()->back();
     }

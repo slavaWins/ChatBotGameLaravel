@@ -19,6 +19,14 @@ class StatStructure
     private bool $isShowProgressBar = false;
     private $progressBarIcon_On = '▰';
     private $progressBarIcon_Off = '▱';
+    /**
+     * @var true
+     */
+    public bool $is_hidden_property = false;
+
+
+    public $preapendLabel; //добавить лейбл перед этим параметром
+    public bool $shopCategory = false;
 
     /**
      * @return StatStructure
@@ -61,10 +69,29 @@ class StatStructure
     }
 
 
+    public function PreapendLabel($val)
+    {
+
+        $this->preapendLabel = $val;
+        return $this;
+    }
+
     public function SetDefault($val)
     {
         $this->default = $val;
         $this->value = $val;
+        return $this;
+    }
+
+    public function Hidden()
+    {
+        $this->is_hidden_property = true;
+        return $this;
+    }
+
+    public function ShopCategory()
+    {
+        $this->shopCategory = true;
         return $this;
     }
 
