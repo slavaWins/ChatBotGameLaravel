@@ -19,8 +19,6 @@ class SkillRoom extends BaseRoom
     public function Step0()
     {
         $this->response->Reset();
-        $this->user->player->ReCalc();
-        $this->character->ReCalc();
 
         $this->response->message = $this->user->player->GetStats()->money->RenderLine(true, false);
         $this->response->message .= ' ' . $this->user->player->GetStats()->score_level->RenderLine(true, false);

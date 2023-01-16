@@ -20,6 +20,7 @@ class GarageCharacter extends Character
         'characterData' => GarageCharacterDataStructure::class
     ];
 
+
     /**
      * Получить стоимость проккачки скила
      * @param $skillInd
@@ -28,7 +29,6 @@ class GarageCharacter extends Character
      */
     public function GetSkillPrice($skillInd, $skillCurrentValue)
     {
-
         return [
             'money' => ($skillCurrentValue + 1) * 1000 * 2
         ];

@@ -32,8 +32,12 @@ class CarCharacter extends Character
     public function GetStatsCalculate()
     {
         $res = $this->GetStats();
-        
-        $res->razgon->value = $res->mass->value / $res->razgon->value;
+
+        $basePower = $res->power->value;
+        $res->power->value += ($basePower * $res->skill_engine) / 10;
+        $res->power->value += ($basePower * $res->skill_kpp) / 14;
+
+        $res->razgon->value = $res->mass->value / $res->power->value;
 
         return $res;
     }

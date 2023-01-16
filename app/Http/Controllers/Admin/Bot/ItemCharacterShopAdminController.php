@@ -81,7 +81,7 @@ class ItemCharacterShopAdminController extends Controller
     {
         /** @var Character $character */
         $character = $character->className::LoadCharacterById($character->id);
-        $character->ReCalc();
+
 
         $stats = $character->GetStats();
         $charData = [];

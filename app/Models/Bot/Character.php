@@ -35,7 +35,8 @@ class Character extends Model
 
 
     /**
-     * Вовзращает калькулируемую дату данных. Всякие шансы хуянсы и прочее
+     * Вовзращает калькулируемую дату данных. Всякие шансы хуянсы и прочее учитывается.
+     * Например если речь о машине, то может мощность вывестись уже с учетом скилов
      * @return CharDataType
      */
     public function GetStatsCalculate()
@@ -100,17 +101,13 @@ class Character extends Model
         }
     }
 
-    public function ReCalc()
-    {
-
-    }
 
     public function RenderStats($isShort = false, $isShowDescr = false, $showSkill = false)
     {
         $this->StatsUpdateData();
-        $this->ReCalc();
 
-        $statsTemplate = $this->GetStats();
+
+        $statsTemplate = $this->GetStatsCalculate();
         $txt = '';
 
 
@@ -160,7 +157,7 @@ class Character extends Model
                 /** @var Character $character */
                 $character = new $className();
                 $character->user_id = $user_id;
-                $character->ReCalc();
+
                 $character->refresh();
                 $character->InitCharacter();
                 $character->save();

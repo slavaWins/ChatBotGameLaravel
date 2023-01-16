@@ -26,7 +26,7 @@ class CharacterAdminController extends Controller
     {
 
         $character = $character->className::LoadCharacterById($character->id);
-        $character->ReCalc();
+
         return view('admin.character.show', compact('character'));
 
     }
@@ -35,7 +35,7 @@ class CharacterAdminController extends Controller
     {
         /** @var Character $character */
         $character = $character->className::LoadCharacterById($character->id);
-        $character->ReCalc();
+
 
         $stats = $character->GetStats();
         $charData = [];

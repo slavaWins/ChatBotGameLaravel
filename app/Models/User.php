@@ -84,7 +84,7 @@ class User extends Authenticatable
         $list = [];
         foreach (Character::where("user_id", $this->id)->get() as $char) {
             $character = $char->className::LoadCharacterById($char->id);
-            $character->ReCalc();
+
             $list[] = $character;
         }
         return $list;
