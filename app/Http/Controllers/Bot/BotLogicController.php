@@ -58,6 +58,7 @@ class BotLogicController extends Controller
         if ($user->scene_id == 0 || !$user->scene) {
             $response->message = "У вас нет сцены";
 
+            $isSceneId = $user->scene_id>0;
             Scene::where("user_id", $user->id)->delete();
 
             $scene = null;
@@ -68,12 +69,14 @@ class BotLogicController extends Controller
             }
             $user->refresh();
 
-            $response->Reset()
-                ->AddWarning("Ошибка бота. Потеряна игровая сцена. Сейчас ошибка будет автоматически исправлена.")
-                ->AddButton("Исправить");
-            $user->buttons = $response->btns;
-            $user->save();
-            return $response;
+            if($isSceneId) {
+                $response->Reset()
+                    ->AddWarning("Ошибка бота. Потеряна игровая сцена. Сейчас ошибка будет автоматически исправлена.")
+                    ->AddButton("Исправить");
+                $user->buttons = $response->btns;
+                $user->save();
+                return $response;
+            }
         }
 
         /** @var BaseRoom $sceneRoom */

@@ -2,14 +2,22 @@
 
 namespace App\Characters;
 
+use App\Characters\Struct\PlayerCharacterDataStructure;
 use App\Library\Structure\StatStructure;
 use App\Models\Bot\Character;
 
 
+/**
+ * @property PlayerCharacterDataStructure $characterData
+ */
 class PlayerCharacter extends Character
 {
     public $icon = "🧑‍";
     public $baseName = "Игрок";
+
+    protected $casts = [
+        'characterData' => PlayerCharacterDataStructure::class
+    ];
 
     public function GetSkillPrice($skillInd, $skillCurrentValue)
     {
@@ -21,7 +29,7 @@ class PlayerCharacter extends Character
     protected  function  GetStatsTemplate()
     {
 
-        $maxExpa = ($this->characterData['level'] ?? 1) * 3 * 3;
+        $maxExpa = ($this->characterData->level ?? 1) * 3 * 3;
 
         $res = [
             'money' => StatStructure::Make("Ваш баланс")->SetDefault(20000)->SetIcon("💵")->SetPostfix(' ₽')->FormatMoney(),

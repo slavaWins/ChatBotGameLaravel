@@ -42,7 +42,7 @@ class SkillRoom extends BaseRoom
                         if ($countNeededSkill) $this->response->message .= ' + ';
                         $this->response->message .= $this->user->player->GetStats()[$K]->RenderLine(true, false, $V);
                         $countNeededSkill++;
-                        if ($this->user->player->characterData[$K] < $V) $isCanPay = false;
+                        if ($this->user->player->characterData->$K < $V) $isCanPay = false;
                     }
                 }
 
@@ -53,9 +53,9 @@ class SkillRoom extends BaseRoom
                     //если требования выполнены предлагаем кнопку
                     foreach ($priceData as $K => $V) {
                         if ($K == 'money' || $K == 'score_level') { //эти параметры встроены в игрока
-                            $this->user->player->IncrementData($K, -$V);
+                            $this->user->player->characterData->$K -= $V;
                         }
-                        $this->character->IncrementData($ind, 1);
+                        $this->character->characterData->$ind +=1;
                         $this->character->save();
                         $this->user->player->save();
 

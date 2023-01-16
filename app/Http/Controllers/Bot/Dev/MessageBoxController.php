@@ -92,7 +92,8 @@ class MessageBoxController extends Controller
         History::where('user_id', $user->id)->delete();
         Character::where('user_id', $user->id)->delete();
         Scene::where('user_id', $user->id)->delete();
-        $user->scene_id = null;
+        $user->scene_id = 0;
+        $user->is_registration_end = false;
         $user->save();
         return redirect()->back();
     }

@@ -2,13 +2,14 @@
 
 namespace App\Models\Bot;
 
+use App\Characters\Struct\PlayerCharacterDataStructure;
 use App\Library\Structure\StatStructure;
 use App\Models\user;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property array $characterData
+ * @property PlayerCharacterDataStructure $characterData
  * @property int $id
  * @property int $user_id
  * @property user $user
@@ -23,30 +24,14 @@ class Character extends Model
     public $icon = "✨";
     public $baseName = "Предмет";
 
+
     protected $casts = [
-        'characterData' => 'array'
+        'characterData' => PlayerCharacterDataStructure::class
     ];
 
-    protected $attributes = [
-        'characterData' => '[]'
-    ];
     protected $table = 'characters';
 
-    /**
-     * @return StatStructure[]
-     */
-    public function IncrementData($key, $val)
-    {
-        $toval = $this->characterData[$key] + $val;
-        $this->SetData($key, $toval);
-    }
 
-    public function SetData($key, $val)
-    {
-        $data = $this->characterData;
-        $data[$key] = $val;
-        $this->characterData = $data;
-    }
 
 
     /**
@@ -84,7 +69,9 @@ class Character extends Model
     {
         $AR = $this->GetStatsTemplate();
         foreach ($AR as $K => $V) {
-            $V->value = $this->characterData[$K] ?? $V->value;
+
+
+            $V->value = $this->characterData->$K ?? $V->value;
         }
         return $AR;
     }
@@ -108,9 +95,9 @@ class Character extends Model
     {
         $isChange = false;
         foreach ($this->GetStats() as $K => $V) {
-            if (!isset($this->characterData[$K])) {
+            if (!isset($this->characterData->$K)) {
                 // dd($K);
-                $this->SetData($K, $V->default);
+                $this->$K=  $V->default;
                 $isChange = true;
             }
         }
@@ -134,10 +121,10 @@ class Character extends Model
 
 
         foreach ($statsTemplate as $K => $V) {
-            if (!isset($this->characterData [$K])) continue;
+            if (!isset($this->characterData->$K)) continue;
             if (!$showSkill && substr_count($K, "skill_")) continue;
 
-            $statsTemplate[$K]->value = $this->characterData[$K];
+            $statsTemplate[$K]->value = $this->characterData->$K;
             $txt .= "\n " . $V->RenderLine($isShort, $isShowDescr);
         }
         return $txt;

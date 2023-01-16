@@ -67,7 +67,7 @@ class StartHistoryRoom extends BaseRoom
             $player = PlayerCharacter::LoadFristCharacterByUser($this->user->id, true);
 
             foreach ($stats[$select]['par'] as $K => $V) {
-                $player->SetData($K, $V);
+                $player->characterData->$K = $V;
             }
 
             $player->save();
@@ -90,7 +90,7 @@ class StartHistoryRoom extends BaseRoom
 
         $this->response->AttachSound("start_history_1.opus");
 
-        $this->user->is_registration_end=true;
+        $this->user->is_registration_end = true;
         $this->user->save();
 
         if ($this->AddButton("Отлично!")) {

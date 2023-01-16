@@ -85,7 +85,7 @@ class HomeRoom extends BaseRoom
             $player->InitCharacter();
 
             foreach ($stats[$select]['par'] as $K => $V) {
-                $player->SetData($K, $V);
+                $player->$K=$V;
             }
 
             $player->save();
