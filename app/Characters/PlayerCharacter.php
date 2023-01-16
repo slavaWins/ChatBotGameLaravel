@@ -3,7 +3,7 @@
 namespace App\Characters;
 
 use App\Library\Structure\StatStructure;
-use App\Models\Character;
+use App\Models\Bot\Character;
 
 
 class PlayerCharacter extends Character

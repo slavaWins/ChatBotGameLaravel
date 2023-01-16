@@ -1,6 +1,6 @@
 @php
 
-    /** @var \App\Models\History[] $historys */
+    /** @var \App\Models\Bot\History[] $historys */
 
 @endphp
 

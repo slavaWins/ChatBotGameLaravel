@@ -1,6 +1,6 @@
 @php
 
-    /** @var \App\Models\History $history */
+    /** @var \App\Models\Bot\History $history */
 
 @endphp
 <div class="row mess_row mb-3">

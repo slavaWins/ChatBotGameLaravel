@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Characters\PlayerCharacter;
+use App\Models\Bot\Character;
+use App\Models\Bot\Scene;
 use app\Models\Trash\BasketItem;
 use app\Models\Trash\Order;
 use Illuminate\Contracts\Auth\MustVerifyEmail;

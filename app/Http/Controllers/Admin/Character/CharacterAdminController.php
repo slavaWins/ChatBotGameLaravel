@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Character;
 
 use App\Http\Controllers\Controller;
-use App\Models\Character;
+use App\Models\Bot\Character;
 use app\Models\Trash\Order;
 use app\Models\Trash\Shop;
 use App\Models\User;

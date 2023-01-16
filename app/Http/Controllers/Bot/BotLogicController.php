@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Bot;
 use App\Http\Controllers\Controller;
 use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
-use App\Models\Scene;
+use App\Models\Bot\Scene;
 use App\Models\User;
 use App\Scene\BaseRoom;
 use App\Scene\HomeRoom;

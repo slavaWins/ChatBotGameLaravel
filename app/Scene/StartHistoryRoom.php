@@ -4,7 +4,7 @@ namespace App\Scene;
 
 use App\Characters\GarageCharacter;
 use App\Characters\PlayerCharacter;
-use App\Models\Character;
+use App\Models\Bot\Character;
 use App\Scene\Core\SkillRoom;
 use Illuminate\Support\Facades\Validator;
 

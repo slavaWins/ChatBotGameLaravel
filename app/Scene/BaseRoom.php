@@ -4,7 +4,7 @@ namespace App\Scene;
 
 use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
-use App\Models\Scene;
+use App\Models\Bot\Scene;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 

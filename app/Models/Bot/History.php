@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Bot;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

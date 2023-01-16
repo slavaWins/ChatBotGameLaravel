@@ -2,7 +2,7 @@
     use SlavaWins\Formbuilder\Library\FElement;
 
    /*** @var $userShow \app\Models\User */
-   /*** @var $character \app\Models\Character */
+   /*** @var $character \App\Models\Bot\Character */
 @endphp
 
 

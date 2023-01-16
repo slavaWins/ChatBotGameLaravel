@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Bot;
 
 use App\Library\Structure\StatStructure;
+use App\Models\user;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

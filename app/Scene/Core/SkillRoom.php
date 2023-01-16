@@ -4,7 +4,7 @@ namespace App\Scene\Core;
 
 use App\Characters\PlayerCharacter;
 use App\Library\Structure\BotRequestStructure;
-use App\Models\Character;
+use App\Models\Bot\Character;
 use App\Models\User;
 use App\Scene\BaseRoom;
 use App\Scene\HomeRoom;
