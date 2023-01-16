@@ -4,17 +4,13 @@
 namespace App\Http\Controllers\Vk;
 
 
-use App\Http\Controllers\BotLogicController;
+use App\Http\Controllers\Bot\BotLogicController;
 use App\Http\Controllers\Controller;
 use App\Library\Structure\BotRequestStructure;
-use App\Library\Structure\BotResponseStructure;
 use App\Library\Vk\VkAction;
-use App\Models\History;
-use App\Models\Scene;
+use App\Models\ResponseApi;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\ResponseApi;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 

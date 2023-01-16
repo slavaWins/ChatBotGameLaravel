@@ -1,22 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Bot;
 
 
+use App\Http\Controllers\Controller;
 use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
-use App\Models\History;
 use App\Models\Scene;
-use app\Models\Trash\BaseRow;
 use App\Models\User;
 use App\Scene\BaseRoom;
 use App\Scene\HomeRoom;
 use App\Scene\RegistrationRoom;
-use Illuminate\Http\Request;
-use App\Models\ResponseApi;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use ParagonIE\Sodium\Core\Curve25519\H;
 
 
 class BotLogicController extends Controller

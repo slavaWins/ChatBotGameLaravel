@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Bot\Dev;
 
 
+use App\Http\Controllers\Bot\BotLogicController;
+use App\Http\Controllers\Controller;
 use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
 use App\Models\Character;
 use App\Models\History;
+use App\Models\ResponseApi;
 use App\Models\Scene;
-use app\Models\Trash\BaseRow;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Models\ResponseApi;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use ParagonIE\Sodium\Core\Curve25519\H;
 
 
 class MessageBoxController extends Controller
