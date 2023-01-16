@@ -17,7 +17,6 @@
         "laravel/ui": "^3.4",
         "livewire/livewire": "^2.10",
         "movemoveapp/laravel-dadata": "^1.0",
-        "pusher/pusher-php-server": "^7.0",
         "rennokki/laravel-eloquent-query-cache": "^3.3",
         "slavawins/authsms": "dev-master",
         "slavawins/formbuilder": "dev-master",

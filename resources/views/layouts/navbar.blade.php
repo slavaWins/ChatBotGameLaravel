@@ -80,10 +80,6 @@
 
             @auth
 
-
-                <livewire:notyfy-bell/>
-
-
                 <!-- Avatar -->
                 <div class="dropdown">
                     <a

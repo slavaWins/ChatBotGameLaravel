@@ -171,23 +171,6 @@
 
 @include("formbuilder::approved-modal")
 
-<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-<script>
-
-    // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = false;
-
-    var pusher = new Pusher('54c190c3c260b6e01cbb', {
-        cluster: 'us2'
-    });
-
-    var pusherChannel = pusher.subscribe('my-channel');
-    pusherChannel.bind('my-event', function (data) {
-        alert(JSON.stringify(data));
-
-    });
-
-</script>
 
 <script src="{{ asset('js/formbuilder/ApprovedModalController.js') }}"></script>
 <script src="{{ asset('js/jquery.mask.min.js') }}"></script>
