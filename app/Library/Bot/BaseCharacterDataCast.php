@@ -15,4 +15,13 @@ class BaseCharacterDataCast
         return [$key => json_encode($value)];
     }
 
+    public function UpdateValuesFromData($characterData)
+    {
+        $characterData = (array)$characterData;
+
+        foreach ((array)$this as $K => $V) {
+            if (!isset($characterData[$K])) continue;
+            $this->$K->value = $characterData[$K];
+        }
+    }
 }

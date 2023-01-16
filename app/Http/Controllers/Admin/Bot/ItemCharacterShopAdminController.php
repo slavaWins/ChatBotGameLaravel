@@ -86,10 +86,10 @@ class ItemCharacterShopAdminController extends Controller
         $stats = $character->GetStats();
         $charData = [];
         foreach ($request->toArray() as $K => $V) {
-            if (!isset($stats[$K])) continue;
-            $charData[$K] = $V;
+            if (!isset($stats->$K)) continue;
+            $character->characterData->$K = $V;
         }
-        $character->characterData = $charData;
+        //$character->characterData = $charData;
         $character->save();
         return redirect()->back();
 

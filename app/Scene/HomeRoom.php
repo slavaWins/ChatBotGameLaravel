@@ -22,6 +22,7 @@ class HomeRoom extends BaseRoom
         /** @var GarageCharacter $garageCharacter */
         $garageCharacter = GarageCharacter::LoadFristCharacterByUser($this->user->id, true);
         $this->response->message .= "\n\n " . $garageCharacter->icon . " Гараж";
+
         $this->response->message .= $garageCharacter->RenderStats(false, $isFullInfo, true);
 
 

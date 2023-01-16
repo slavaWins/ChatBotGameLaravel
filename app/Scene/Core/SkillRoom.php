@@ -22,8 +22,8 @@ class SkillRoom extends BaseRoom
         $this->user->player->ReCalc();
         $this->character->ReCalc();
 
-        $this->response->message = $this->user->player->GetStats()['money']->RenderLine(true, false);
-        $this->response->message .= ' ' . $this->user->player->GetStats()['score_level']->RenderLine(true, false);
+        $this->response->message = $this->user->player->GetStats()->money->RenderLine(true, false);
+        $this->response->message .= ' ' . $this->user->player->GetStats()->score_level->RenderLine(true, false);
 
         $this->response->message .= "\n " . $this->character->icon . " " . $this->character->baseName . ". Улучшения:";
 
@@ -40,7 +40,7 @@ class SkillRoom extends BaseRoom
                 foreach ($priceData as $K => $V) {
                     if ($K == 'money' || $K == 'score_level') { //эти параметры встроены в игрока
                         if ($countNeededSkill) $this->response->message .= ' + ';
-                        $this->response->message .= $this->user->player->GetStats()[$K]->RenderLine(true, false, $V);
+                        $this->response->message .= $this->user->player->GetStats()->$K->RenderLine(true, false, $V);
                         $countNeededSkill++;
                         if ($this->user->player->characterData->$K < $V) $isCanPay = false;
                     }
@@ -56,7 +56,9 @@ class SkillRoom extends BaseRoom
                             $this->user->player->characterData->$K -= $V;
                         }
                         $this->character->characterData->$ind +=1;
+
                         $this->character->save();
+                        $this->user->player->refresh();
                         $this->user->player->save();
 
                         $this->request->message = "";

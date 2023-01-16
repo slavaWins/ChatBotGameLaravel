@@ -40,7 +40,7 @@ class CharacterAdminController extends Controller
         $stats = $character->GetStats();
         $charData = [];
         foreach ($request->toArray() as $K => $V) {
-            if (!isset($stats[$K])) continue;
+            if (!isset($stats->$K)) continue;
             $charData[$K] = $V;
         }
         $character->characterData = $charData;

@@ -3,6 +3,7 @@
 namespace App\Models\Bot;
 
 use App\Characters\Struct\CarCalculateDataStructure;
+use App\Characters\Struct\CarCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
 use App\Library\Structure\StatStructure;
 use App\Models\user;
@@ -39,8 +40,7 @@ class Character extends Model
      */
     public function GetCalculateParameters()
     {
-        $res = new CarCalculateDataStructure();
-        return $res;
+        return $this->GetStats();
     }
 
     /**
@@ -56,30 +56,16 @@ class Character extends Model
         ];
     }
 
-    /**
-     * Это внурение метод который нужно переписывать в каждом чарактаре
-     * @return StatStructure[]
-     */
-    protected function GetStatsTemplate()
-    {
-        $AR = [
-            'level_game' => StatStructure::Make("x")->SetDescr("safsaf"),
-            'level_one' => StatStructure::Make("x")->SetDescr("safsaf"),
-        ];
-
-        return $AR;
-    }
 
     /**
      * Это публичный метод, он выводит уже реальные скилы с валую правильньыми
-     * @return StatStructure[]
+     * @return PlayerCharacterDataStructure
      */
     public function GetStats()
     {
-        $AR = $this->GetStatsTemplate();
+
+        $AR = new $this->casts['characterData']($this->characterData);;
         foreach ($AR as $K => $V) {
-
-
             $V->value = $this->characterData->$K ?? $V->value;
         }
         return $AR;
@@ -105,8 +91,7 @@ class Character extends Model
         $isChange = false;
         foreach ($this->GetStats() as $K => $V) {
             if (!isset($this->characterData->$K)) {
-                // dd($K);
-                $this->$K=  $V->default;
+                $this->$K->value = $V->default;
                 $isChange = true;
             }
         }
@@ -132,8 +117,6 @@ class Character extends Model
         foreach ($statsTemplate as $K => $V) {
             if (!isset($this->characterData->$K)) continue;
             if (!$showSkill && substr_count($K, "skill_")) continue;
-
-            $statsTemplate[$K]->value = $this->characterData->$K;
             $txt .= "\n " . $V->RenderLine($isShort, $isShowDescr);
         }
         return $txt;
@@ -166,14 +149,14 @@ class Character extends Model
         return $character->className::find($id);
     }
 
-    public static function LoadFristCharacterByUser($user_id, $createIfNot=false)
+    public static function LoadFristCharacterByUser($user_id, $createIfNot = false)
     {
 
         $className = get_called_class(); //для статик класа так получается
         /** @var Character $character */
         $character = Character::where('user_Id', $user_id)->where('className', $className)->first();
         if (!$character) {
-            if($createIfNot){
+            if ($createIfNot) {
                 /** @var Character $character */
                 $character = new $className();
                 $character->user_id = $user_id;

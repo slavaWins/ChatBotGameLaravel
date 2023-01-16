@@ -25,7 +25,7 @@
             <td>Цена</td>
 
 
-            @foreach((array)$example->characterData->GetStruct() as $K=>$parameter)
+            @foreach((array)$example->characterData as $K=>$parameter)
 
                 <td>
                     {{$parameter->icon}} {{$parameter->name}}
@@ -63,7 +63,7 @@
                         @endphp
                     </td>
 
-                    @foreach((array)$example->characterData->GetStruct() as $K=>$parameter)
+                    @foreach((array)$example->characterData as $K=>$parameter)
 
                         <td>
                             @php

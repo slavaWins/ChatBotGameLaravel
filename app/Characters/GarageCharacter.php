@@ -32,17 +32,5 @@ class GarageCharacter extends Character
         ];
     }
 
-    protected function GetStatsTemplate()
-    {
 
-        $data = new GarageCharacterDataStructure();
-
-        $data->skill_size = StatStructure::Make("Размер гаража")->SetDefault(1)
-            ->SetIcon("📙🕳")->SetMax(10)->SetShowInShort(false)->SetDescr("Чем больше гараж тем больше техники и машин можно в нем разместить");
-
-        $data->skill_teh = StatStructure::Make("Технологии гаража")->SetDefault(1)
-            ->SetIcon("📙")->SetMax(10)->SetShowInShort(false)->SetDescr("Улучшайте технические возможности гража");
-
-        return (array)$data;
-    }
 }

@@ -4,6 +4,7 @@ namespace App\Characters;
 
 use App\Characters\Struct\CarCalculateDataStructure;
 use App\Characters\Struct\CarCharacterDataStructure;
+use App\Characters\Struct\GarageCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
 use App\Library\Structure\StatStructure;
 use App\Models\Bot\Character;
@@ -31,24 +32,11 @@ class CarCharacter extends Character
 
     public function GetCalculateParameters()
     {
-        $res = new CarCalculateDataStructure();
-        $res->Init();
+        $res = $this->GetStats();
 
         $res->razgon->value = $res->mass->value / $res->razgon->value;
 
         return $res;
     }
 
-    protected function GetStatsTemplate()
-    {
-
-        $res = new CarCharacterDataStructure();
-        $res->GetStruct();
-
-
-
-       // $hpMax = $this->GetCalculateParameters()->hpMax->value;
-
-        return (array)$res;
-    }
 }

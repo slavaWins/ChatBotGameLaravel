@@ -7,7 +7,7 @@ use App\Library\Structure\StatStructure;
 
 class CarCharacterDataStructure extends BaseCharacterDataCast
 {
- 
+
     public $razgon = 13;
     public $power = 255;
     public $mass = 930;
@@ -17,7 +17,7 @@ class CarCharacterDataStructure extends BaseCharacterDataCast
     public $price = 1;
     public $hp = 1;
 
-    public function GetStruct()
+    public function __construct($characterData = [])
     {
         $this->hpMax = StatStructure::Make("Макс.состояние")->SetDefault(24)->SetIcon("");
         $this->mass = StatStructure::Make("Вес")->SetDefault(1200)->SetIcon("🚥")->SetPostfix(' кг.');
@@ -34,6 +34,8 @@ class CarCharacterDataStructure extends BaseCharacterDataCast
 
         $this->hp = StatStructure::Make("Состояние")->SetDefault(1)->SetProgressBarIcons('⚙', '⛭')
             ->SetIcon("⚙")->SetMax(100)->SetShowInShort(true)->SetDescr("Состояние машины. Транспорт может ломаться при его использование.")->SetPostfix(' lev.');
+
+        $this->UpdateValuesFromData($characterData);
 
         return $this;
     }
