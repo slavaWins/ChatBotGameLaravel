@@ -4,6 +4,8 @@ namespace App\Library\Bot;
 
 class BaseCharacterDataCast
 {
+
+
     public function get($model, $key, $value, $attributes)
     {
 

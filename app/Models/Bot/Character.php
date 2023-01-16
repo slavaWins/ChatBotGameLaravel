@@ -2,7 +2,6 @@
 
 namespace App\Models\Bot;
 
-use App\Characters\Struct\CarCalculateDataStructure;
 use App\Characters\Struct\CarCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
 use App\Library\Structure\StatStructure;
@@ -11,12 +10,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property PlayerCharacterDataStructure $characterData
+ * @property CharDataType $characterData
  * @property int $id
  * @property int $user_id
  * @property user $user
  * @property string className
  * @property string name
+ * @template CharDataType
  */
 class Character extends Model
 {
@@ -36,9 +36,9 @@ class Character extends Model
 
     /**
      * Вовзращает калькулируемую дату данных. Всякие шансы хуянсы и прочее
-     * @return CarCalculateDataStructure
+     * @return CharDataType
      */
-    public function GetCalculateParameters()
+    public function GetStatsCalculate()
     {
         return $this->GetStats();
     }
@@ -59,7 +59,7 @@ class Character extends Model
 
     /**
      * Это публичный метод, он выводит уже реальные скилы с валую правильньыми
-     * @return PlayerCharacterDataStructure
+     * @return CharDataType
      */
     public function GetStats()
     {

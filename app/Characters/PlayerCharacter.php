@@ -2,13 +2,14 @@
 
 namespace App\Characters;
 
+use App\Characters\Struct\GarageCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
 use App\Library\Structure\StatStructure;
 use App\Models\Bot\Character;
 
 
 /**
- * @property PlayerCharacterDataStructure $characterData
+ * @implements Character<PlayerCharacterDataStructure>
  */
 class PlayerCharacter extends Character
 {

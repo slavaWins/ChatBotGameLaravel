@@ -2,7 +2,6 @@
 
 namespace App\Characters;
 
-use App\Characters\Struct\CarCalculateDataStructure;
 use App\Characters\Struct\CarCharacterDataStructure;
 use App\Characters\Struct\GarageCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
@@ -11,7 +10,7 @@ use App\Models\Bot\Character;
 
 
 /**
- * @property CarCharacterDataStructure $characterData
+ * @implements Character<CarCharacterDataStructure>
  */
 class CarCharacter extends Character
 {
@@ -30,10 +29,10 @@ class CarCharacter extends Character
     }
 
 
-    public function GetCalculateParameters()
+    public function GetStatsCalculate()
     {
         $res = $this->GetStats();
-
+        
         $res->razgon->value = $res->mass->value / $res->razgon->value;
 
         return $res;
