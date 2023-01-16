@@ -17,6 +17,8 @@ class StatStructure
     private $postfix;
     private string $format = "";
     private bool $isShowProgressBar = false;
+    private $progressBarIcon_On = '▰';
+    private $progressBarIcon_Off = '▱';
 
     /**
      * @return StatStructure
@@ -33,6 +35,7 @@ class StatStructure
         $this->descr = $val;
         return $this;
     }
+
     public function ShowProgressBar()
     {
         $this->isShowProgressBar = true;
@@ -90,10 +93,17 @@ class StatStructure
         return $this;
     }
 
-    public function RenderLine($isShort = true, $isShowDescr= false, $asValue = null)
+    public function SetProgressBarIcons($on, $off)
+    {
+        $this->progressBarIcon_On = $on;
+        $this->progressBarIcon_Off = $off;
+        return $this;
+    }
+
+    public function RenderLine($isShort = true, $isShowDescr = false, $asValue = null)
     {
         $val = $this->value;
-        if($asValue<>null){
+        if ($asValue <> null) {
             $val = $asValue;
         }
 
@@ -124,8 +134,8 @@ class StatStructure
             $text .= " ";
             $percent = $val / $this->max * 10;
             $percent = floor($percent);
-            $text .= str_repeat("▰", $percent);
-            $text .= str_repeat("▱", 10 - $percent);
+            $text .= str_repeat($this->progressBarIcon_On, $percent);
+            $text .= str_repeat($this->progressBarIcon_Off, 10 - $percent);
         }
 
 

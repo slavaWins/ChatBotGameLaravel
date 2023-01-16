@@ -16,6 +16,16 @@
     <BR>
 
     <div class="col">
+        <span class="spanTitle">МАГАЗИН ИТЕМОВ  </span>
+
+        <div class="px-3 my-2 divHrefSide">
+            <a href="{{route("admin.itemshop.cat")}}">Категории</a>
+        </div>
+    </div>
+
+    <BR>
+
+    <div class="col">
         <span class="spanTitle">ОСНОВНОЕ  </span>
 
         <div class="px-3 my-2 divHrefSide">

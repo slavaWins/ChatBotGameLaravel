@@ -2,6 +2,7 @@
 
 namespace App\Models\Bot;
 
+use App\Characters\Struct\CarCalculateDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
 use App\Library\Structure\StatStructure;
 use App\Models\user;
@@ -32,7 +33,15 @@ class Character extends Model
     protected $table = 'characters';
 
 
-
+    /**
+     * Вовзращает калькулируемую дату данных. Всякие шансы хуянсы и прочее
+     * @return CarCalculateDataStructure
+     */
+    public function GetCalculateParameters()
+    {
+        $res = new CarCalculateDataStructure();
+        return $res;
+    }
 
     /**
      * Получить стоимость проккачки скила
