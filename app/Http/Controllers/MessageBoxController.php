@@ -163,7 +163,7 @@ class MessageBoxController extends Controller
 
         $user = Auth::user();
 
-        $historys = History::where('user_id', $user->id)->orderBy('id')->get();
+        $historys = History::where('user_id', $user->id)->orderByDesc('id')->limit(30)->get()->reverse();
         return view('messagebox.index', compact('historys', 'user'));
 
     }

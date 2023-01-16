@@ -90,6 +90,8 @@ class StartHistoryRoom extends BaseRoom
 
         $this->response->AttachSound("start_history_1.opus");
 
+        $this->user->is_registration_end=true;
+        $this->user->save();
 
         if ($this->AddButton("Отлично!")) {
             return $this->SetRoom(HomeRoom::class);

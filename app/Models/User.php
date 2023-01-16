@@ -32,7 +32,6 @@ class User extends Authenticatable
 
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    const START_ROOM = "RegistrationRoom";
 
     /**
      * Если пользователь новичек и только что зарегался

@@ -10,6 +10,7 @@ use App\Models\Scene;
 use app\Models\Trash\BaseRow;
 use App\Models\User;
 use App\Scene\BaseRoom;
+use App\Scene\HomeRoom;
 use App\Scene\RegistrationRoom;
 use Illuminate\Http\Request;
 use App\Models\ResponseApi;
@@ -63,15 +64,29 @@ class BotLogicController extends Controller
         if ($user->scene_id == 0 || !$user->scene) {
             $response->message = "У вас нет сцены";
 
-            $scene = new RegistrationRoom($botRequestStructure);
-            $user = User::find($user->id);
+            Scene::where("user_id", $user->id)->delete();
+
+            $scene = null;
+            if ($user->is_registration_end) {
+                $scene = new HomeRoom($botRequestStructure);
+            } else {
+                $scene = new RegistrationRoom($botRequestStructure);
+            }
+            $user->refresh();
+
+            $response->Reset()
+                ->AddWarning("Ошибка бота. Потеряна игровая сцена. Сейчас ошибка будет автоматически исправлена.")
+                ->AddButton("Исправить");
+            $user->buttons = $response->btns;
+            $user->save();
+            return $response;
         }
 
         /** @var BaseRoom $sceneRoom */
         $cnm = "\App\Scene\\NoClassGavna";
 
         if ($user->scene) {
-            $cnm =   $user->scene->className;
+            $cnm = $user->scene->className;
         }
 
         if (!class_exists($cnm)) {
