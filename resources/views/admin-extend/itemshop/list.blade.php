@@ -8,7 +8,7 @@
 @endphp
 
 
-@extends('admin.screen')
+@extends('adminwinda::screen')
 
 
 
@@ -72,12 +72,23 @@
                     @foreach((array)$example->characterData as $K=>$parameter)
 
                         <td>
-                            @php
-                                FElement::NewInputText()
-                                 ->SetName($K)
-                                 ->SetValue(old($K, $item->characterData->$K ?? 0)  )
-                                 ->RenderHtml(true);
-                            @endphp
+                            @if($parameter->options ?? false)
+                                @php
+                                    FElement::New()->SetView()->InputSelect()
+                                     ->SetName($K)
+                                      ->AddOptionFromArray($parameter->options)
+                                     ->SetValue(old($K, $item->characterData->$K ?? 0)  )
+                                      ->RenderHtml(true);
+                                @endphp
+                            @else
+                                @php
+                                    FElement::NewInputText()
+                                     ->SetName($K)
+                                     ->SetValue(old($K, $item->characterData->$K ?? 0)  )
+                                     ->RenderHtml(true);
+                                @endphp
+                            @endif
+
                         </td>
                     @endforeach
 
@@ -115,7 +126,18 @@
             margin: 0px !important;
         }
 
-        .formMini input {
+        .formMini input, .formMini select {
+            font-size: 12px;
+            padding: 4px 2px;
+            width: 100%;
+            border: none;
+            border-radius: 0px;
+        }
+        .formMini  label {
+            display: none;
+        }
+
+        .formMini select {
             font-size: 12px;
             padding: 4px 2px;
             width: 100%;

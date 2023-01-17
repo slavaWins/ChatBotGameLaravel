@@ -27,6 +27,7 @@ class StatStructure
 
     public $preapendLabel; //добавить лейбл перед этим параметром
     public bool $shopCategory = false;
+    public array $options;
 
     /**
      * @return StatStructure
@@ -68,6 +69,12 @@ class StatStructure
         return $this;
     }
 
+
+    public function SetOptions(array $val)
+    {
+        $this->options = $val;
+        return $this;
+    }
 
     public function PreapendLabel($val)
     {

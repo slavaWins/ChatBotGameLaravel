@@ -1,10 +1,9 @@
 <?php
 
-    namespace App\Http\Controllers\Admin;
+    namespace App\Http\Controllers;
 
     use App\Http\Controllers\Controller;
     use App\Models\ResponseApi;
-    use app\Models\Trash\Order;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Validator;
 

@@ -12,14 +12,22 @@ use Illuminate\Http\Request;
 class ItemCharacterShopAdminController extends Controller
 {
 
+    public static function GetCategories()
+    {
+        $list = [];
+        foreach (scandir(app_path("Characters/Shop")) as $K => $V) if ($K > 1) {
+            $V = str_replace(".php", "", $V);
+            $V = 'App\Characters\Shop\\' . $V;
+            $list[] = new $V();
+        }
+        return  $list;
+    }
+
     public function categorys()
     {
 
 
-        $categorys = [
-            new  CarItemCharacterShop(),
-            new  GarageItemCharacterShop(),
-        ];
+        $categorys = self::GetCategories();
 
         return view('admin-extend.itemshop.cat', compact('categorys'));
 
@@ -91,9 +99,8 @@ class ItemCharacterShopAdminController extends Controller
         $example->InitCastsStructure();
 
 
-
         $res = [];
-        foreach ((array) $example->characterData as $K => $V) {
+        foreach ((array)$example->characterData as $K => $V) {
             $res[$K] = $V->value;
         }
 

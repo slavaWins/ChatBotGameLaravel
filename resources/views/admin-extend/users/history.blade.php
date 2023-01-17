@@ -6,7 +6,7 @@
 @endphp
 
 
-@extends('admin.screen')
+@extends('adminwinda::screen')
 
 
 

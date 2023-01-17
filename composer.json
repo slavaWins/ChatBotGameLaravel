@@ -18,6 +18,7 @@
         "livewire/livewire": "^2.10",
         "movemoveapp/laravel-dadata": "^1.0",
         "rennokki/laravel-eloquent-query-cache": "^3.3",
+        "slavawins/adminwinda": "dev-master",
         "slavawins/authsms": "dev-master",
         "slavawins/formbuilder": "dev-master",
         "spatie/laravel-permission": "^5.5"
@@ -36,7 +37,7 @@
             "app/Helpers/PaginationHelper.php"
         ],
         "classmap": [
-            "database/seeds",
+            "database/seeders",
             "database/factories"
         ],
         "psr-4": {

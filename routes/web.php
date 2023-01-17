@@ -20,8 +20,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::any('/api/messagebox/send', [\App\Http\Controllers\Bot\Dev\MessageBoxController::class, 'SendMessage']);
 
 
-    Route::get('/admin', [App\Http\Controllers\Admin\AdminPageController::class, 'index'])->name('admin');
 
+
+
+    Route::get('/admin', [\App\Http\Controllers\AdminPageController::class, 'index'])->name('admin');
 
     Route::get('/admin/users/list', [\App\Http\Controllers\Bot\Admin\Users\UsersAdminController::class, 'index'])->name('admin.user.list');
     Route::get('/admin/users/show/{userShow}', [\App\Http\Controllers\Bot\Admin\Users\UsersAdminController::class, 'show'])->name('admin.user.show');
@@ -35,10 +37,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/admin/itemshop/edit/cat/{catClassName}/to/{id}', [\App\Http\Controllers\Bot\Admin\Bot\ItemCharacterShopAdminController::class, 'editSave'])->name('admin.itemshop.edit');
 
     /*
-    Route::get('/admin/orders/list', [App\Http\Controllers\Admin\AdminPageController::class, 'OrderList'])->name('admin.order.list');
-    Route::get('/admin/orders/edit/{order}', [App\Http\Controllers\Admin\AdminPageController::class, 'OrderDeteils'])->name('admin.order.edit');
-    Route::post('/admin/orders/edit/{order}', [App\Http\Controllers\Admin\AdminPageController::class, 'OrderEditSave'])->name('admin.order.edit.save');
-    Route::post('/admin/orders/statusedit/{order}', [App\Http\Controllers\Admin\AdminPageController::class, 'OrderEditStatus'])->name('admin.order.edit.status');
+    Route::get('/admin/orders/list', [App\Http\Controllers\AdminWinda\AdminPageController::class, 'OrderList'])->name('admin.order.list');
+    Route::get('/admin/orders/edit/{order}', [App\Http\Controllers\AdminWinda\AdminPageController::class, 'OrderDeteils'])->name('admin.order.edit');
+    Route::post('/admin/orders/edit/{order}', [App\Http\Controllers\AdminWinda\AdminPageController::class, 'OrderEditSave'])->name('admin.order.edit.save');
+    Route::post('/admin/orders/statusedit/{order}', [App\Http\Controllers\AdminWinda\AdminPageController::class, 'OrderEditStatus'])->name('admin.order.edit.status');
 */
 
 
