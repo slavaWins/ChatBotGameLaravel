@@ -22,6 +22,7 @@ class ItemCharacterShop extends Model
 
     public $icon = "X";
     public $baseName = "Предмет";
+    public $titleShop = "Магазин предметов";
 
     public $filter_by = null; //позволяет выбрать как фильр в магазине по статкам. Нужно написать название статки marka например
 

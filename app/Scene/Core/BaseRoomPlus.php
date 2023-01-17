@@ -24,7 +24,7 @@ class BaseRoomPlus extends BaseRoom
         /** @var CarCharacter[] $items */
         $items = $this->user->GetAllCharacters($characterClass);
 
-        $this->response->message = $title . " (" . (count($items)) . " шт): \n";
+        $this->response->message .= $title . " (" . (count($items)) . " шт): \n";
 
         $isRedirect = $this->PaginateCollection(collect($items), 4, function ($item) use ($moveToStep) {
             $this->response->message .= "\n\n" . $item->Render(true, false, false);

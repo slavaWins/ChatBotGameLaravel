@@ -67,19 +67,41 @@ class Character extends Model
     {
 
         $AR = new $this->casts['characterData']($this->characterData);;
+
+        foreach ($AR as $K => $V) {
+            if (!is_object($V)) {
+                dd("ERROR ");
+            }
+        }
+
         foreach ($AR as $K => $V) {
             $V->value = $this->characterData->$K ?? $V->value;
         }
         return $AR;
     }
 
+    public function GetName()
+    {
+        return $this->icon . ' ' . ($this->name ?? $this->baseName);
+    }
+
     public function Render($isShort = false, $isShowDescr = false, $showSkill = false)
     {
-        $txt = $this->icon;
-        $txt .= ' ' . ($this->name ?? $this->baseName);
+        $txt = $this->GetName();
 
-        $txt .= $this->RenderStats($isShort, $isShowDescr,$showSkill);
+        $txt .= $this->RenderStats($isShort, $isShowDescr, $showSkill);
+
+        $txt .= $this->RenderAppend($isShort, $isShowDescr, $showSkill);
         return $txt;
+    }
+
+    /**
+     * Добавить в конец рендера эту строку
+     * @return string
+     */
+    public function RenderAppend($isShort = false, $isShowDescr = false, $showSkill = false)
+    {
+        return "";
     }
 
     /**

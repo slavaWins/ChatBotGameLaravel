@@ -17,6 +17,8 @@ class WorkbenchShop extends ItemCharacterShop
     public $icon = "🛠️";
     public $baseName = "Верстак";
 
+    public $filter_by = "workTo";
+    public $titleShop = "Магазин верстаков";
 
     public $showInShopPreview = [
         "skill_size",

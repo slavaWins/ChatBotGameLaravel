@@ -28,9 +28,8 @@ class HomeRoom extends BaseRoom
 
         if ($this->AddButton("Прокачка персонажа")) {
             $room = SkillRoom::CreateSkillRoomByCharacter($this->user, $this->user->player);
-            return $this->SetRoom($room);
+            return $this->SetRoom($room, [], true);
         }
-
 
         if ($this->AddButton("Мои машины")) {
             return $this->SetRoom(CarRoom::class);

@@ -23,7 +23,10 @@ class ShopRoom extends BaseRoomPlus
     {
         $this->response->Reset();
 
-        $this->response->message = "МАГАЗИН МАШИН \n";
+
+        $clasExample = new $this->itemShopClass();
+
+        $this->response->message = $clasExample->titleShop . " \n";
         $this->response->message .= $this->user->player->GetStats()->money->RenderLine(false, false);
         $this->response->message .= "\n Выберите по каким параметрам отображать товары.";
 
@@ -33,7 +36,6 @@ class ShopRoom extends BaseRoomPlus
             $this->scene->save();
         }
 
-        $clasExample = new $this->itemShopClass();
 
         $catKey = $clasExample->filter_by;
 
@@ -96,10 +98,16 @@ class ShopRoom extends BaseRoomPlus
             return null;
         }
 
-        if ($this->AddButton("Показать")) {
-            $this->scene->SetData('page', 1);
-            $this->scene->save();
-            return $this->NextStep();
+        if (!$items->count()) {
+            $this->response->AddWarning("Ничего не найдено. Поменяйте фильтр.");
+        }
+
+        if ($items->count()) {
+            if ($this->AddButton("Показать")) {
+                $this->scene->SetData('page', 1);
+                $this->scene->save();
+                return $this->NextStep();
+            }
         }
 
         return $this->response;
@@ -108,18 +116,19 @@ class ShopRoom extends BaseRoomPlus
 
     public function Step1_ShopList()
     {
+        $clasExample = new $this->itemShopClass();
+
         $this->response->Reset();
 
-        $this->response->message = "МАГАЗИН МАШИН \n";
+        $this->response->message = $clasExample->titleShop . " \n";
         $this->response->message .= $this->user->player->GetStats()->money->RenderLine(false, false);
         $this->response->message .= "\n Выберите машину которые вы хотите посмотреть";
 
         $items = $this->GetItems();
+
         $isRefreshPage = $this->PaginateCollection(collect($items), 4, function (ItemCharacterShop $V) {
-
-
             $this->response->message .= "\n\n";
-            $this->response->message .= $V->icon . ' [' . $V->id . '] ' . $V->name;
+            $this->response->message .= $V->GetName() . ' [' . $V->id . '] ' ;
             $this->response->message .= ' 💵 ' . number_format($V->price) . ' ₽' . "\n";
 
             /** @var Character $character */
@@ -185,8 +194,8 @@ class ShopRoom extends BaseRoomPlus
                 $character->save();
 
                 $this->response->Reset()->AddWarning("Покупка выполнена", "✅");
-                $this->SetRoom(HomeRoom::class);
-                return $this->response;
+                $this->DeleteRoom();
+                return null;
             }
         }
 

@@ -74,9 +74,12 @@
                         <td>
                             @if($parameter->options ?? false)
                                 @php
+                                $options = [];
+                                foreach ($parameter->options as $variant)$options[$variant]=$variant;
+
                                     FElement::New()->SetView()->InputSelect()
                                      ->SetName($K)
-                                      ->AddOptionFromArray($parameter->options)
+                                      ->AddOptionFromArray($options)
                                      ->SetValue(old($K, $item->characterData->$K ?? 0)  )
                                       ->RenderHtml(true);
                                 @endphp

@@ -22,6 +22,8 @@ class WorkbenchCharacter extends Character
     ];
 
 
+
+
     /**
      * Получить стоимость проккачки скила
      * @param $skillInd

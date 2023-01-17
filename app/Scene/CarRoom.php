@@ -40,7 +40,7 @@ class CarRoom extends BaseRoomPlus
         $car = CarCharacter::LoadCharacterById($this->scene->sceneData['id']);
 
 
-        $this->response->message = "Вы смотрите машину: " . $car->icon . ' ' . $car->name;
+        $this->response->message = "Вы смотрите машину: " . $car->GetName();
 
         $this->response->message .= "\n " . $car->RenderStats(false, false, true);
 

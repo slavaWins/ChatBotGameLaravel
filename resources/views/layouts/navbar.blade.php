@@ -54,7 +54,7 @@
 
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('messagebox.index') }}"> Админка
+                        <a class="nav-link" href="{{ route('admin') }}"> Админка
                         </a>
                     </li>
 

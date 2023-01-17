@@ -21,6 +21,16 @@ class GarageCharacter extends Character
     ];
 
 
+    function RenderAppend($isShort = false, $isShowDescr = false, $showSkill = false)
+    {
+        $c = WorkbenchCharacter::where("parent_id", $this->id)->count();
+        if ($c) {
+            return "\n 🛠️ Верстаков: " . $c;
+        } else {
+            return "\n Нет верстаков";
+        }
+    }
+
     /**
      * Получить стоимость проккачки скила
      * @param $skillInd
