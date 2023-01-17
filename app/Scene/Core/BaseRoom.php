@@ -26,6 +26,7 @@ class BaseRoom
 
     public function AddButton($name, $isNewLine = false)
     {
+        $name= mb_substr($name, 0, 25);
         if (isset($this->response->btns[$name])) {
             $name .= ' #2';
         }

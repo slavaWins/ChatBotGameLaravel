@@ -1,28 +1,5 @@
-<style>
-    .textDotLimiter {
-        display: inline-block;
-        width: 180px;
-        white-space: nowrap;
-        overflow: hidden !important;
-        text-overflow: ellipsis;
-    }
 
-    .sidebarFloatind {
-        margin-bottom: 25px;
-        background: #F4F3F7;
-    }
-
-    @media (min-width: 1200px) {
-        .sidebarFloatind {
-            max-width: 270px;
-        }
-    }
-
-
-
-</style>
-<div class="col-md-4   sidebarFloatind  py-4 px-4" style="    ">
-    <div class="  " style="  ">
+<div class="col-md-4   sidebarFloatind px-0 py-4  "  >
 
 
         @yield("sidebar")
@@ -42,5 +19,4 @@
             </div>
         </div>
 
-    </div>
 </div>

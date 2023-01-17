@@ -31,13 +31,13 @@ class HomeRoom extends BaseRoom
             return $this->SetRoom($room);
         }
 
-        if ($this->AddButton("Прокачка гаража")) {
-            $room = SkillRoom::CreateSkillRoomByCharacter($this->user, $garageCharacter);
-            return $this->SetRoom($room);
-        }
 
         if ($this->AddButton("Мои машины")) {
             return $this->SetRoom(CarRoom::class);
+        }
+
+        if ($this->AddButton("Мои гаражи")) {
+            return $this->SetRoom(GarageRoom::class);
         }
 
 

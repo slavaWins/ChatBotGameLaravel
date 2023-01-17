@@ -10,7 +10,7 @@ use App\Models\User;
 use App\Scene\HomeRoom;
 use PhpParser\Builder\Class_;
 
-class ShopRoom extends BaseRoom
+class ShopRoom extends BaseRoomPlus
 {
 
     /** @var Character $character */

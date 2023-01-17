@@ -15,7 +15,15 @@
 
 @section('content')
 
-    <h1>{{$example->baseName}}: База товаров </h1>
+    <h4 class="mb-0"> База товаров </h4>
+    <h1> {{$example->baseName}}</h1>
+
+    <p>
+        Когда вы создаете новый класс пространственных объектов магазины или таблицу в базе магазина с помощью
+        инструментов редактора - можно управлять их значениями.
+        Можно использовать специальные кнопки панели инструментов: Дублировать, Удалить, Сохранить. Эти операции можно
+        осуществить с любыми элементами.
+    </p>
 
     <table class="table  bg-white table-bordered">
         <tr class="small">
@@ -78,14 +86,17 @@
                     </td>
 
                     <td>
-                        <button type="submit" class="btn btn-outline-dark btn-sm btn-cont" name="doubleMake" value="1">Дубль</button>
+                        <button type="submit" class="btn btn-outline-dark btn-sm btn-cont" name="doubleMake" value="1">
+                            Дубль
+                        </button>
                     </td>
                 </form>
             </tr>
         @endforeach
     </table>
 
-    <a href="{{route("admin.itemshop.showCategory.create", $catClassNameOriginal)}}" class="btn btn-outline-dark">Создать {{$example->baseName}}</a>
+    <a href="{{route("admin.itemshop.showCategory.create", $catClassNameOriginal)}}"
+       class="btn btn-primary">Создать {{$example->baseName}}</a>
 
     <style>
         td {

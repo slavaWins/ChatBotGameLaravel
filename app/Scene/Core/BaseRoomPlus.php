@@ -30,7 +30,7 @@ class BaseRoomPlus extends BaseRoom
             $this->response->message .= "\n\n" . $item->Render(true, false, false);
 
             if ($moveToStep) {
-                if ($this->AddButton($item->name)) {
+                if ($this->AddButton($item->name ?? $item->baseName)) {
                     $this->scene->SetData('id', $item->id);
                     $this->scene->save();
                     return $this->SetStep($moveToStep);

@@ -76,9 +76,7 @@ class Character extends Model
     public function Render($isShort = false, $isShowDescr = false, $showSkill = false)
     {
         $txt = $this->icon;
-        if (!empty($this->name)) {
-            $txt .= ' ' . $this->name;
-        }
+        $txt .= ' ' . ($this->name ?? $this->baseName);
 
         $txt .= $this->RenderStats($isShort, $isShowDescr,$showSkill);
         return $txt;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Bot;
 
 use App\Characters\Shop\CarItemCharacterShop;
+use App\Characters\Shop\GarageItemCharacterShop;
 use App\Http\Controllers\Controller;
 use App\Models\Bot\Character;
 use App\Models\Bot\ItemCharacterShop;
@@ -16,7 +17,8 @@ class ItemCharacterShopAdminController extends Controller
 
 
         $categorys = [
-            new  CarItemCharacterShop()
+            new  CarItemCharacterShop(),
+            new  GarageItemCharacterShop(),
         ];
 
         return view('admin.itemshop.cat', compact('categorys'));
@@ -48,7 +50,7 @@ class ItemCharacterShopAdminController extends Controller
 
                 if ($example->characterData->$K > 2) {
                     $valevel = $example->characterData->$K * 0.3;
-                    $valevel=round($valevel);
+                    $valevel = round($valevel);
                     $example->characterData->$K += rand(-$valevel, $valevel);
 
                     $example->characterData->$K = max(0, $example->characterData->$K);
@@ -87,6 +89,15 @@ class ItemCharacterShopAdminController extends Controller
         $catClassName = 'App\Characters\Shop\\' . $catClassName;
         $example = new $catClassName();
         $example->InitCastsStructure();
+
+
+
+        $res = [];
+        foreach ((array) $example->characterData as $K => $V) {
+            $res[$K] = $V->value;
+        }
+
+        $example->characterData = $res;
         $example->className = $catClassName;
         $example->name = "Новый";
         $example->save();

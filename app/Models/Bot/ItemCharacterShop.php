@@ -23,7 +23,7 @@ class ItemCharacterShop extends Model
     public $icon = "X";
     public $baseName = "Предмет";
 
-    public $filter_by = "marka"; //позволяет выбрать как фильр в магазине по статкам
+    public $filter_by = null; //позволяет выбрать как фильр в магазине по статкам. Нужно написать название статки marka например
 
     /**
      * Какие статки показывать в превью магазина?
@@ -44,7 +44,8 @@ class ItemCharacterShop extends Model
     public function InitCastsStructure()
     {
         if (!$this->characterData) {
-            $this->characterData = new $this->casts['characterData']();
+            $this->characterData=  new $this->casts['characterData']();
         }
+
     }
 }
