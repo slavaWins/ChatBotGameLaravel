@@ -21,14 +21,40 @@ class GarageCharacter extends Character
     ];
 
 
+    function GetStatsCalculate()
+    {
+
+        if(!$this->id) return $this->GetStats();
+
+        $stats = $this->GetStats();
+        $stats->inner->max = $stats->size->value;
+
+        $c = Character::where("parent_id", $this->id)->count();
+        $stats->inner->value = $c;
+
+        return $stats;
+    }
+
     function RenderAppend($isShort = false, $isShowDescr = false, $showSkill = false)
     {
-        $c = WorkbenchCharacter::where("parent_id", $this->id)->count();
+        $items = WorkbenchCharacter::where("parent_id", $this->id)->get();
+        $c = $items->filter(function ($item){return $item->className=="App\Characters\WorkbenchCharacter";})->count();
+
+        $text = "";
         if ($c) {
-            return "\n 🛠️ Верстаков: " . $c;
+            $text .= "\n 🛠️ Верстаков: " . $c;
         } else {
-            return "\n Нет верстаков";
+            $text .= "\n Нет верстаков";
         }
+
+        $c = $items->filter(function ($item){return $item->className=="App\Characters\CarCharacter";})->count();
+        if ($c) {
+            $text .= "\n 🚘 Машин: " . $c;
+        } else {
+            $text .= "\n Нет машин";
+        }
+
+        return $text;
     }
 
     /**

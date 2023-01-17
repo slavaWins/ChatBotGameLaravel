@@ -39,7 +39,7 @@ class RegistrationRoom extends BaseRoom
             $this->user->name = $this->request->message;
             $this->user->save();
 
-            return $this->SetStep(3);
+            return $this->SetRoom(StartHistoryRoom::class);
         }
 
         return $this->response;
@@ -47,18 +47,7 @@ class RegistrationRoom extends BaseRoom
 
     public function Step3_Info()
     {
-        $this->response->Reset();
-        $this->response->message = "Итак " . $this->user->name . ' Вы готовы?';
 
-        if ($this->AddButton("Ну да")) {
-            return $this->SetRoom(StartHistoryRoom::class);
-        }
-/*
-        if ($this->AddButton("Сначала")) {
-            return $this->SetStep(1);
-        }
-*/
-        return $this->response;
     }
 
 

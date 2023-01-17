@@ -128,7 +128,7 @@ class ShopRoom extends BaseRoomPlus
 
         $isRefreshPage = $this->PaginateCollection(collect($items), 4, function (ItemCharacterShop $V) {
             $this->response->message .= "\n\n";
-            $this->response->message .= $V->GetName() . ' [' . $V->id . '] ' ;
+            $this->response->message .= $V->icon . ' [' . $V->id . '] ' . $V->name;
             $this->response->message .= ' 💵 ' . number_format($V->price) . ' ₽' . "\n";
 
             /** @var Character $character */
@@ -142,7 +142,7 @@ class ShopRoom extends BaseRoomPlus
                 $this->response->message .= "  " . $stat->$ind->RenderLine(true, false);
             }
 
-            if ($this->AddButton('[' . $V->id . ']')) {
+            if ($this->AddButton($V->id . '')) {
                 $this->scene->SetData('selectId', $V->id);
                 return $this->NextStep();
             }
@@ -174,8 +174,8 @@ class ShopRoom extends BaseRoomPlus
         $this->response->message = $this->user->player->GetStats()->money->RenderLine(false, false);
 
 
-        $this->response->message .= "\n ВЫ СМОТРИТЕ ТОВАР:";
-        $this->response->message .= "\n" . $item->name;
+        //$this->response->message .= "\n ВЫ СМОТРИТЕ ТОВАР:";
+        $this->response->message .= "\n\n" . $item->icon . ' ' . $item->name;
 
         /** @var Character $character */
         $character = new $this->characterClass();
@@ -183,9 +183,13 @@ class ShopRoom extends BaseRoomPlus
 
         $this->response->message .= "\n" . $character->RenderStats(false, false, true);
 
+        $this->response->message .= "\n\n 💵 Цена: " . number_format($item->price) . ' ₽' . "\n";
 
         if ($this->user->player->characterData->money >= $item->price) {
             if ($this->AddButton('Купить')) {
+                $item->buy_count += 1;
+                $item->save();
+
                 $this->user->player->characterData->money -= $item->price;
                 $this->user->player->save();
                 $character = $this->characterClass::CreateCharacter($this->user->id, $item->characterData);
@@ -193,9 +197,10 @@ class ShopRoom extends BaseRoomPlus
                 $character->parent_id = $this->scene->sceneData['forParentId'];
                 $character->save();
 
-                $this->response->Reset()->AddWarning("Покупка выполнена", "✅");
                 $this->DeleteRoom();
-                return null;
+                return $this->response->Reset()->AddWarning("Покупка выполнена", "✅")->AddButton("...");
+
+                // return null;
             }
         }
 

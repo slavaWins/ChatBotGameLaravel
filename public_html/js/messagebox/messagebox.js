@@ -27,6 +27,7 @@ Messagebox.Sendmessage = function (cmdBtn = "") {
         console.log(response.response);
         $('.mess_scroll').append(response.response.html)
         $('.mess_row_btns').html(response.response.buttons_html)
+        $('.debugInfoBot').html(response.response.debugInfoBot)
         Messagebox.Bottom();
     });
 

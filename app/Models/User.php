@@ -20,6 +20,8 @@ use Spatie\Permission\Traits\HasRoles;
  * @property Scene scene
  * @property string name
  * @property string message_last
+ * @property string tutorial_class
+ * @property int tutorial_step
  * @property int $id
  * @property int player_id
  * @property boolean is_registration_end

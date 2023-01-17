@@ -18,8 +18,7 @@ class GarageItemCharacterShop extends ItemCharacterShop
 
 
     public $showInShopPreview = [
-        "skill_size",
-        "skill_teh",
+        "size",
     ];
 
     protected $casts = [

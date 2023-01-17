@@ -8,6 +8,7 @@ use App\Library\Structure\StatStructure;
 use App\Models\user;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 /**
  * @property CharDataType $characterData
@@ -68,13 +69,13 @@ class Character extends Model
 
         $AR = new $this->casts['characterData']($this->characterData);;
 
-        foreach ($AR as $K => $V) {
-            if (!is_object($V)) {
-                dd("ERROR ");
-            }
-        }
+
 
         foreach ($AR as $K => $V) {
+            if (!is_object($V)) {
+                Log::error("В структуре чара ".$this->casts['characterData'].' Параметр '.$K.' Не правильно прописан! Там его в констуктор класса надо занести!');
+                continue;
+            }
             $V->value = $this->characterData->$K ?? $V->value;
         }
         return $AR;
@@ -113,6 +114,7 @@ class Character extends Model
         $isChange = false;
         foreach ($this->GetStats() as $K => $V) {
             if (!isset($this->characterData->$K)) {
+                if (!is_object($V)) continue;
                 $this->characterData->$K = $V->default;
                 $isChange = true;
             }

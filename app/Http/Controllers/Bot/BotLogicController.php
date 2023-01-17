@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Bot;
 
 
+use App\BotTutorials\BotTutorialBase;
+use App\BotTutorials\StartTutorial;
 use App\Http\Controllers\Controller;
 use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
@@ -13,9 +15,13 @@ use App\Scene\HomeRoom;
 use App\Scene\RegistrationRoom;
 
 
+/**
+ * @property BaseRoom $sceneRoom
+ */
 class BotLogicController extends Controller
 {
     public $repeatNullResponse = 0; //количество возвратов null в респонсе
+    private User $user;
 
     public static function Logic(User $user, $message)
     {
@@ -44,6 +50,33 @@ class BotLogicController extends Controller
 
     }
 
+    public function GetDebugInfo(): string
+    {
+        if (!$this->sceneRoom) {
+            return "НЕТ КОМНАТЫ";
+        }
+        $text = "";
+        $text .= " " . get_class($this->sceneRoom);
+        $text .= "\n Название: " . $this->sceneRoom->name;
+        $text .= "\n roomType: " . $this->sceneRoom->roomType;
+        $text .= "\n ID: " . ($this->sceneRoom->scene->id ?? "N/A");
+        $text .= "\n step: " . ($this->sceneRoom->scene->step ?? "N/A");
+
+        if ($this->sceneRoom->scene) {
+            if ($this->sceneRoom->scene->sceneData) {
+                $text .= "\n sceneData: \n " . json_encode($this->sceneRoom->scene->sceneData);
+            }
+        }
+
+
+        $text .= "\n\n Туториал: ";
+        $text .= "\n Этап: " . ($this->user->tutorial_step ?? "НЕТ");
+        $text .= "\n Класс: " . ($this->user->tutorial_class ?? "НЕТ");
+
+        return $text;
+
+    }
+
     /**
      * @param User $user
      * @param BotRequestStructure $botRequestStructure
@@ -51,6 +84,7 @@ class BotLogicController extends Controller
      */
     public function Message(User $user, BotRequestStructure $botRequestStructure)
     {
+        $this->user = $user;
 
         $response = new BotResponseStructure();
         $response->message = "ERROR BOT";
@@ -71,19 +105,22 @@ class BotLogicController extends Controller
             $user->refresh();
 
 
-            $response->Reset()
-                ->AddWarning("Ошибка бота. Потеряна игровая сцена. Сейчас ошибка будет автоматически исправлена.")
-                ->AddButton("Исправить");
+            if($user->is_registration_end) {
+                $response->Reset()
+                    ->AddWarning("Ошибка бота. Потеряна игровая сцена. Сейчас ошибка будет автоматически исправлена.")
+                    ->AddButton("Исправить");
+            }
 
             if ($botRequestStructure->messageFrom == "local") {
                 $user->buttons = $response->btns;
                 $user->save();
             }
-            return $response;
+          //  return $response;
         }
 
         /** @var BaseRoom $sceneRoom */
         $cnm = $user->scene()->className;
+        $sceneRoom = null;
 
         if (!class_exists($cnm)) {
 
@@ -96,6 +133,8 @@ class BotLogicController extends Controller
         } else {
 
             $sceneRoom = new $cnm($botRequestStructure, $user->scene());
+            $this->sceneRoom = $sceneRoom;
+
             $response = $sceneRoom->Handle();
 
         }
@@ -111,15 +150,18 @@ class BotLogicController extends Controller
             return $this->Message($user, $botRequestStructure);
         }
 
+        $response = StartTutorial::Run($user, $sceneRoom, $botRequestStructure, $response);
 
         if (count($response->btns) == 0) {
             $response->AddButton("...");
         }
 
+
         if ($botRequestStructure->messageFrom == "local") {
             $user->buttons = $response->btns;
             $user->save();
         }
+
 
         return $response;
     }

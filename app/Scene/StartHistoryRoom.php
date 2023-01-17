@@ -2,8 +2,11 @@
 
 namespace App\Scene;
 
+use App\Characters\GarageCharacter;
 use App\Characters\PlayerCharacter;
+use App\Characters\Shop\GarageItemCharacterShop;
 use App\Scene\Core\BaseRoom;
+use App\Scene\Core\ShopRoom;
 
 class StartHistoryRoom extends BaseRoom
 {
@@ -82,16 +85,23 @@ class StartHistoryRoom extends BaseRoom
 
     public function Step2_Info()
     {
-        $this->response->message = "Вот ваши стартовые данные:";
+        $this->response->message = "Вот ваши стартовые данные: \n\n ";
         $this->response->message .= $this->user->player->RenderStats(false, true);
+
+
+        $this->response->message .= "\n\n Теперь нужно купить ваш первый гараж!";
 
         $this->response->AttachSound("start_history_1.opus");
 
         $this->user->is_registration_end = true;
         $this->user->save();
 
-        if ($this->AddButton("Отлично!")) {
-            return $this->SetRoom(HomeRoom::class);
+
+        if ($this->AddButton("Смотреть гаражи")) {
+            $this->SetRoom(GarageRoom::class);
+
+            $room = ShopRoom::CreateShopRoomByCharacterType($this->user, GarageCharacter::class, GarageItemCharacterShop::class);
+            return $this->SetRoom($room, null, true);
         }
 
 

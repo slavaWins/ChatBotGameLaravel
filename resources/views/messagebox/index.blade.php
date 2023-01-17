@@ -38,7 +38,7 @@
         </div>
 
 
-        <div class="col-3 ">
+        <div class="col-3 px-4 ">
             <a class="btn btn-outline-dark col-12"
                href="{{route('messagebox.action.clearmessage')  }}">Удалить
                 историю</a>
@@ -51,6 +51,13 @@
             <a class="btn btn-outline-dark col-12"
                href="{{route('messagebox.action.resetuser')  }}">Ресет ака</a>
 
+            <BR>
+            <BR>
+            <BR>
+            <H4>Дебаг</H4>
+            <div class="debugInfoBot col-12">
+
+            </div>
         </div>
     </div>
 @endsection

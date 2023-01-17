@@ -47,7 +47,7 @@ class MessageBoxController extends Controller
         $botLogic = new BotLogicController();
         $botResponse = $botLogic->Message($user, $botRequest);
 
-        if($request->has('onlytext')){
+        if ($request->has('onlytext')) {
             return nl2br($botResponse->message);
         }
 
@@ -75,9 +75,11 @@ class MessageBoxController extends Controller
         $buttons_html = view("messagebox.keyboard", compact('buttons')) . ' ';
         // return $buttons_html;
 
+        $debugInfoBot = nl2br($botLogic->GetDebugInfo());
 
         return ResponseApi::Data(
             [
+                'debugInfoBot' => $debugInfoBot,
                 'buttons_html' => $buttons_html,
                 'html' => $html,
             ]
@@ -93,6 +95,8 @@ class MessageBoxController extends Controller
         Character::where('user_id', $user->id)->delete();
         Scene::where('user_id', $user->id)->delete();
         $user->is_registration_end = false;
+        $user->tutorial_step = null;
+        $user->tutorial_class = null;
         $user->save();
         return redirect()->back();
     }

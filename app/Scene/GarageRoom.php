@@ -53,6 +53,11 @@ class GarageRoom extends BaseRoomPlus
         }
 
 
+        if ($this->AddButton("Машины")) {
+            return $this->SetStep(3);
+        }
+
+
         if ($this->AddButton("Назад")) {
             return $this->SetStep(0);
         }
@@ -96,7 +101,7 @@ class GarageRoom extends BaseRoomPlus
 
 
         if ($this->AddButton("< Назад")) {
-            return $this->SetStep($this->scene->step - 1);
+            return $this->SetStep(1);
         }
 
 
@@ -104,11 +109,50 @@ class GarageRoom extends BaseRoomPlus
     }
 
 
+    public function Step3_Cars()
+    {
+        $this->response->Reset();
+
+        if ($this->AddButton("Купить машину")) {
+            $room = ShopRoom::CreateShopRoomByCharacterType($this->user, CarCharacter::class, CarItemCharacterShop::class, $this->scene->sceneData['id']);
+            return $this->SetRoom($room, null, true);
+        }
+
+
+        /** @var CarCharacter[] $items */
+        $items = collect($this->user->GetAllCharacters(CarCharacter::class))->filter(function ($item) {
+            return $item->parent_id == $this->scene->sceneData['id'];
+        });
+
+        $this->response->message = "Машины в этом гараже" . " (" . (count($items)) . " шт): \n";
+
+        $isRedirect = $this->PaginateCollection($items, 4, function ($item) {
+            $this->response->message .= "\n\n" . $item->Render(true, false, false);
+
+            if ($this->AddButton($item->name ?? $item->baseName)) {
+                // $this->scene->SetData('id', $item->id);
+                // $this->scene->save();
+               // return $this->SetStep(1);
+            }
+
+        });
+
+        if ($isRedirect) return $isRedirect;
+
+
+        if ($this->AddButton("< Назад")) {
+            return $this->SetStep(1);
+        }
+
+        return $this->response;
+    }
+
     public function Handle()
     {
         if ($this->GetStep() == 0) return $this->Step0_List();
         if ($this->GetStep() == 1) return $this->Step1_Show();
         if ($this->GetStep() == 2) return $this->Step2_Workbrencs();
+        if ($this->GetStep() == 3) return $this->Step3_Cars();
 
         return $this->response;
     }
