@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\Vk;
 
 
+use App\BotTutorials\StartTutorial;
 use App\Http\Controllers\Bot\BotLogicController;
 use App\Http\Controllers\Controller;
 use App\Library\Structure\BotRequestStructure;
@@ -65,10 +66,12 @@ class VkController extends Controller
                 $user = new User();
                 $user->vk_id = $from_id;
                 $user->name = "Игрок";
+                $user->tutorial_class = StartTutorial::class.'';
+                $user->tutorial_step = 0;
                 $user->save();
             }
 
-            if($user->last_message_time>$dateUnix){
+            if ($user->last_message_time > $dateUnix) {
                 die("ok");
             }
 

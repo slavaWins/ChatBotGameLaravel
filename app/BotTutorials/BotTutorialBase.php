@@ -111,20 +111,23 @@ class BotTutorialBase
             return $response;
         }
 
-        $response = $tutorial->Handle();
 
-        if ($tutorial->request->message == "Закончить") {
-            $response->btns = [];
-            $response->message = "Давайте вы всё таки пройдет обучение до конца...";
+
+        if ($tutorial->request->message == "Закончить обучение!") {
+            $user->tutorial_class = null;
+            $user->tutorial_step = 0;
+            $user->save();
+            return $response;
         }
-
+        
+        $response = $tutorial->Handle();
 
         $tutorial->response->AddButton("Закончить обучение");
 
         if ($tutorial->request->message == ("Закончить обучение")) {
             $response->btns = [];
             $response->message = "Вы уверены что хотите закончить обучение? \n\n В игре много интересных вещей которые мы хотели бы показать.";
-            $tutorial->response->AddButton("Закончить");
+            $tutorial->response->AddButton("Закончить обучение!");
             $tutorial->response->AddButton("Продолжить обучение...");
         }
 

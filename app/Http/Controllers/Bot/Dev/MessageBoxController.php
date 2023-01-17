@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Bot\Dev;
 
 
+use App\BotTutorials\StartTutorial;
 use App\Http\Controllers\Bot\BotLogicController;
 use App\Http\Controllers\Controller;
 use App\Library\Structure\BotRequestStructure;
@@ -95,8 +96,8 @@ class MessageBoxController extends Controller
         Character::where('user_id', $user->id)->delete();
         Scene::where('user_id', $user->id)->delete();
         $user->is_registration_end = false;
-        $user->tutorial_step = null;
-        $user->tutorial_class = null;
+        $user->tutorial_step = 0;
+        $user->tutorial_class = StartTutorial::class.'';
         $user->save();
         return redirect()->back();
     }
@@ -118,7 +119,7 @@ class MessageBoxController extends Controller
             if (!empty($response->btns) && count($response->btns) > 0) {
                 $option = [];
                 foreach ($response->btns as $K => $V) if ($K <> "Закончить обучение") $option[] = $K;
- 
+
 
                 if (count($option) > 1) {
                     $mess = $option[rand(0, count($option) - 1)];

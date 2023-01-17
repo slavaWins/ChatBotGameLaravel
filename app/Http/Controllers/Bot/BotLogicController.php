@@ -150,7 +150,11 @@ class BotLogicController extends Controller
             return $this->Message($user, $botRequestStructure);
         }
 
-        $response = StartTutorial::Run($user, $sceneRoom, $botRequestStructure, $response);
+        if($user->tutorial_class) {
+            if(class_exists($user->tutorial_class)) {
+                $response = $user->tutorial_class::Run($user, $sceneRoom, $botRequestStructure, $response);
+            }
+        }
 
         if (count($response->btns) == 0) {
             $response->AddButton("...");
