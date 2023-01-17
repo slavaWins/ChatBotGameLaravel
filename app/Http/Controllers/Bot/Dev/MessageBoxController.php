@@ -113,10 +113,12 @@ class MessageBoxController extends Controller
             $botLogic = new BotLogicController();
             $botRequest = new BotRequestStructure();
 
+
             $mess = "Начать";
             if (!empty($response->btns) && count($response->btns) > 0) {
                 $option = [];
-                foreach ($response->btns as $K => $V) $option[] = $K;
+                foreach ($response->btns as $K => $V) if ($K <> "Закончить обучение") $option[] = $K;
+ 
 
                 if (count($option) > 1) {
                     $mess = $option[rand(0, count($option) - 1)];
