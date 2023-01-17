@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Bot;
+namespace App\Http\Controllers\Bot\Admin\Bot;
 
 use App\Characters\Shop\CarItemCharacterShop;
 use App\Characters\Shop\GarageItemCharacterShop;
@@ -21,7 +21,7 @@ class ItemCharacterShopAdminController extends Controller
             new  GarageItemCharacterShop(),
         ];
 
-        return view('admin.itemshop.cat', compact('categorys'));
+        return view('admin-extend.itemshop.cat', compact('categorys'));
 
     }
 
@@ -122,7 +122,7 @@ class ItemCharacterShopAdminController extends Controller
         $example = new $catClassName();
         $example->InitCastsStructure();
 
-        return view('admin.itemshop.list', compact('items', 'catClassNameOriginal', 'example'));
+        return view('admin-extend.itemshop.list', compact('items', 'catClassNameOriginal', 'example'));
 
     }
 

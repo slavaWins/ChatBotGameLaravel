@@ -23,16 +23,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/admin', [App\Http\Controllers\Admin\AdminPageController::class, 'index'])->name('admin');
 
 
-    Route::get('/admin/users/list', [App\Http\Controllers\Admin\Users\UsersAdminController::class, 'index'])->name('admin.user.list');
-    Route::get('/admin/users/show/{userShow}', [App\Http\Controllers\Admin\Users\UsersAdminController::class, 'show'])->name('admin.user.show');
-    Route::get('/admin/users/history/{userShow}', [App\Http\Controllers\Admin\Users\UsersAdminController::class, 'history'])->name('admin.user.history');
-    Route::get('/admin/character/show/{character}', [App\Http\Controllers\Admin\Character\CharacterAdminController::class, 'show'])->name('admin.character.show');
-    Route::post('/admin/character/edit/{character}', [App\Http\Controllers\Admin\Character\CharacterAdminController::class, 'update'])->name('admin.character.edit');
+    Route::get('/admin/users/list', [\App\Http\Controllers\Bot\Admin\Users\UsersAdminController::class, 'index'])->name('admin.user.list');
+    Route::get('/admin/users/show/{userShow}', [\App\Http\Controllers\Bot\Admin\Users\UsersAdminController::class, 'show'])->name('admin.user.show');
+    Route::get('/admin/users/history/{userShow}', [\App\Http\Controllers\Bot\Admin\Users\UsersAdminController::class, 'history'])->name('admin.user.history');
+    Route::get('/admin/character/show/{character}', [\App\Http\Controllers\Bot\Admin\Character\CharacterAdminController::class, 'show'])->name('admin.character.show');
+    Route::post('/admin/character/edit/{character}', [\App\Http\Controllers\Bot\Admin\Character\CharacterAdminController::class, 'update'])->name('admin.character.edit');
 
-    Route::get('/admin/itemshop/cat', [App\Http\Controllers\Admin\Bot\ItemCharacterShopAdminController::class, 'categorys'])->name('admin.itemshop.cat');
-    Route::get('/admin/itemshop/cat/{catClassName}', [App\Http\Controllers\Admin\Bot\ItemCharacterShopAdminController::class, 'showCategory'])->name('admin.itemshop.showCategory');
-    Route::get('/admin/itemshop/cat/{catClassName}/create', [App\Http\Controllers\Admin\Bot\ItemCharacterShopAdminController::class, 'create'])->name('admin.itemshop.showCategory.create');
-    Route::post('/admin/itemshop/edit/cat/{catClassName}/to/{id}', [App\Http\Controllers\Admin\Bot\ItemCharacterShopAdminController::class, 'editSave'])->name('admin.itemshop.edit');
+    Route::get('/admin/itemshop/cat', [\App\Http\Controllers\Bot\Admin\Bot\ItemCharacterShopAdminController::class, 'categorys'])->name('admin.itemshop.cat');
+    Route::get('/admin/itemshop/cat/{catClassName}', [\App\Http\Controllers\Bot\Admin\Bot\ItemCharacterShopAdminController::class, 'showCategory'])->name('admin.itemshop.showCategory');
+    Route::get('/admin/itemshop/cat/{catClassName}/create', [\App\Http\Controllers\Bot\Admin\Bot\ItemCharacterShopAdminController::class, 'create'])->name('admin.itemshop.showCategory.create');
+    Route::post('/admin/itemshop/edit/cat/{catClassName}/to/{id}', [\App\Http\Controllers\Bot\Admin\Bot\ItemCharacterShopAdminController::class, 'editSave'])->name('admin.itemshop.edit');
 
     /*
     Route::get('/admin/orders/list', [App\Http\Controllers\Admin\AdminPageController::class, 'OrderList'])->name('admin.order.list');
