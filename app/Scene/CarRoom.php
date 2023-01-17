@@ -22,7 +22,7 @@ class CarRoom extends BaseRoomPlus
 
         if ($this->AddButton("Купить машину")) {
             $room = ShopRoom::CreateShopRoomByCharacterType($this->user, CarCharacter::class, CarItemCharacterShop::class);
-            return $this->SetRoom($room);
+            return $this->SetRoom($room, null, true);
         }
 
 

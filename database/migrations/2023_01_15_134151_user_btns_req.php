@@ -15,7 +15,7 @@ class UserBtnsReq extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->json('buttons')->nullable()->comment("Дата с кнопками");
-            $table->integer('scene_id')->nullable()->comment("Ид сцены");
+           // $table->integer('scene_id')->nullable()->comment("Ид сцены");
             $table->boolean('is_registration_end')->default(false)->comment("Прошел ли игрок регистрацию");
         });
     }

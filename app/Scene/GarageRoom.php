@@ -22,7 +22,7 @@ class GarageRoom extends BaseRoomPlus
 
         if ($this->AddButton("Купить гараж")) {
             $room = ShopRoom::CreateShopRoomByCharacterType($this->user, GarageCharacter::class, Shop\GarageItemCharacterShop::class);
-            return $this->SetRoom($room);
+            return $this->SetRoom($room, null, true);
         }
 
 

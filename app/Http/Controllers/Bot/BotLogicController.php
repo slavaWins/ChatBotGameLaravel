@@ -15,6 +15,7 @@ use App\Scene\RegistrationRoom;
 
 class BotLogicController extends Controller
 {
+    public $repeatNullResponse = 0; //количество возвратов null в респонсе
 
     public static function Logic(User $user, $message)
     {
@@ -55,10 +56,10 @@ class BotLogicController extends Controller
         $response->message = "ERROR BOT";
 
 
-        if ($user->scene_id == 0 || !$user->scene) {
+        if (!$user->scene()) {
             $response->message = "У вас нет сцены";
 
-            $isSceneId = $user->scene_id>0;
+
             Scene::where("user_id", $user->id)->delete();
 
             $scene = null;
@@ -69,43 +70,56 @@ class BotLogicController extends Controller
             }
             $user->refresh();
 
-            if($isSceneId) {
-                $response->Reset()
-                    ->AddWarning("Ошибка бота. Потеряна игровая сцена. Сейчас ошибка будет автоматически исправлена.")
-                    ->AddButton("Исправить");
+
+            $response->Reset()
+                ->AddWarning("Ошибка бота. Потеряна игровая сцена. Сейчас ошибка будет автоматически исправлена.")
+                ->AddButton("Исправить");
+
+            if ($botRequestStructure->messageFrom == "local") {
                 $user->buttons = $response->btns;
                 $user->save();
-                return $response;
             }
+            return $response;
         }
 
         /** @var BaseRoom $sceneRoom */
-        $cnm = "\App\Scene\\NoClassGavna";
-
-        if ($user->scene) {
-            $cnm = $user->scene->className;
-        }
+        $cnm = $user->scene()->className;
 
         if (!class_exists($cnm)) {
 
             $response->Reset()
-                ->AddWarning("Ошибка. Бот не может найти игровую сцену " . $user->scene->className)
+                ->AddWarning("Ошибка. Бот не может найти игровую сцену " . $user->scene()->className)
                 ->AddButton("Исправить");
 
-            Scene::where("user_id", $user->id)->delete();
+            $user->scene()->delete();
 
         } else {
 
-            $sceneRoom = new $cnm($botRequestStructure, $user->scene);
+            $sceneRoom = new $cnm($botRequestStructure, $user->scene());
             $response = $sceneRoom->Handle();
 
         }
 
+        if ($response == null) {
+            $this->repeatNullResponse += 1;
+            if ($this->repeatNullResponse > 2) {
+                Scene::where("user_id", $user->id)->delete();
+                return $response->Reset()
+                    ->AddWarning("Ошибка бота. Бот ушел в бесконечный цикл. Сейчас бот попробует исправить проблему самостоятельно. ")
+                    ->AddButton("Исправить проблему");
+            }
+            return $this->Message($user, $botRequestStructure);
+        }
+
+
         if (count($response->btns) == 0) {
             $response->AddButton("...");
         }
-        $user->buttons = $response->btns;
-        $user->save();
+
+        if ($botRequestStructure->messageFrom == "local") {
+            $user->buttons = $response->btns;
+            $user->save();
+        }
 
         return $response;
     }

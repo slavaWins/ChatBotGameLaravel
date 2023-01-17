@@ -53,8 +53,6 @@ class BaseRoom
 
             $scene->sceneData = $this->data;
             $scene->save();
-            $this->user->scene_id = $scene->id;
-            $this->user->save();
         }
 
         $this->scene = $scene;
@@ -71,7 +69,7 @@ class BaseRoom
 
     /**
      * Перенестись в другую команту. Либо создать и перенестись в неё по классу
-     * @param string $roomName класс команты либо его название
+     * @param mixed|string|class-string $roomName класс команты либо его название
      * @param array $data дата которую нужно вставить в данные комнаты
      * @param bool $isOverModal открыть комнату поверх текущей, типа не удалять
      * @return BotResponseStructure

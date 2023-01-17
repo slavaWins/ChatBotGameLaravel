@@ -17,7 +17,6 @@ use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @property int $current_shop
- * @property int scene_id
  * @property Scene scene
  * @property string name
  * @property string message_last
@@ -67,7 +66,7 @@ class User extends Authenticatable
 
     public function scene()
     {
-        return $this->belongsTo(Scene::class, "scene_id");
+        return Scene::where("user_id", $this->id)->orderBy('id', 'desc')->first();
     }
 
     public function player()
@@ -85,7 +84,7 @@ class User extends Authenticatable
         $charList = Character::where("user_id", $this->id)->get();
 
         if ($byClass) {
-            $charList = $charList->filter(function ($item) use ($byClass){
+            $charList = $charList->filter(function ($item) use ($byClass) {
                 return $item->className == $byClass;
             });
         }

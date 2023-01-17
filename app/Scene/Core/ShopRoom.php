@@ -92,7 +92,8 @@ class ShopRoom extends BaseRoomPlus
         }
 
         if ($this->AddButton("Выход")) {
-            return $this->SetRoom(HomeRoom::class);
+            $this->DeleteRoom();
+            return null;
         }
 
         if ($this->AddButton("Показать")) {
@@ -146,8 +147,9 @@ class ShopRoom extends BaseRoomPlus
         }
 
 
-        if ($this->AddButton("Выход", true)) {
-            return $this->SetRoom(HomeRoom::class);
+        if ($this->AddButton("Выход")) {
+            $this->DeleteRoom();
+            return null;
         }
         return $this->response;
     }
@@ -193,7 +195,8 @@ class ShopRoom extends BaseRoomPlus
         }
 
         if ($this->AddButton("Выход")) {
-            return $this->SetRoom(HomeRoom::class);
+            $this->DeleteRoom();
+            return null;
         }
 
         return $this->response;
