@@ -8,7 +8,7 @@ use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
 use App\Models\Bot\Scene;
 use App\Models\User;
-use App\Scene\BaseRoom;
+use App\Scene\Core\BaseRoom;
 use App\Scene\HomeRoom;
 use App\Scene\RegistrationRoom;
 

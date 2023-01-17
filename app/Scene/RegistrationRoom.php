@@ -2,6 +2,7 @@
 
 namespace App\Scene;
 
+use App\Scene\Core\BaseRoom;
 use Illuminate\Support\Facades\Validator;
 
 class RegistrationRoom extends BaseRoom

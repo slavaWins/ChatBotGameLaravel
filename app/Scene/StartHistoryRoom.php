@@ -2,11 +2,8 @@
 
 namespace App\Scene;
 
-use App\Characters\GarageCharacter;
 use App\Characters\PlayerCharacter;
-use App\Models\Bot\Character;
-use App\Scene\Core\SkillRoom;
-use Illuminate\Support\Facades\Validator;
+use App\Scene\Core\BaseRoom;
 
 class StartHistoryRoom extends BaseRoom
 {

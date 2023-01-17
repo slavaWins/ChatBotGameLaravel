@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Scene;
+namespace App\Scene\Core;
 
-use App\Helpers\PaginationHelper;
 use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
 use App\Models\Bot\Scene;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
 
 class BaseRoom
 {
@@ -25,49 +23,6 @@ class BaseRoom
         return $this->request->message == $name;
     }
 
-    public function PaginateCollection($listCollection, $inPage, $callback)
-    {
-        if (!isset($this->scene->sceneData['page'])) {
-            $this->scene->SetData('page', 1);
-            $this->scene->save();
-        }
-
-        $pageCurent = $this->scene->sceneData['page'];
-        $pageCountMax = ceil($listCollection->count() / $inPage);
-
-        $paginated = PaginationHelper::paginate($listCollection, $inPage, $pageCurent);
-
-        foreach ($paginated as $item) {
-            $callback($item);
-        }
-
-        if ($pageCountMax > 1) {
-            if ($pageCurent > 1) {
-                if ($this->AddButton("<")) {
-                    $this->scene->SetData('page', $pageCurent - 1);
-                    $this->scene->save();
-                    $this->response->Reset();
-                    return true;
-                }
-            }
-        }
-
-
-        if ($pageCountMax > 1) {
-            if ($pageCurent < $pageCountMax) {
-                if ($this->AddButton(">")) {
-                    $pageCurent += 1;
-                    $this->scene->SetData('page', $pageCurent);
-                    $this->scene->save();
-                    $this->response->Reset();
-                    return true;
-                }
-            }
-            $this->response->message .= "\n\n Страница " . ($pageCurent) . " / " . ($pageCountMax) . "";
-        }
-
-        return false;
-    }
 
     public function AddButton($name, $isNewLine = false)
     {
@@ -113,10 +68,16 @@ class BaseRoom
         return $this->SetStep($this->scene->step + 1);
     }
 
-    public function SetRoom($roomName): BotResponseStructure
+    public function SetRoom($roomName, $data = []): BotResponseStructure
     {
         if (is_object($roomName)) {
             $this->DeleteRoom();
+
+            if (!empty($data)) {
+                foreach ($data as $K => $V) $roomName->scene->SetData($K, $V);
+                $roomName->scene->save();
+            }
+
             return $roomName->Handle();
         }
 
@@ -131,6 +92,12 @@ class BaseRoom
 
         /** @var BaseRoom $sceneRoom */
         $sceneRoom = new $roomName($this->request);
+
+        if (!empty($data)) {
+            foreach ($data as $K => $V) $sceneRoom->scene->SetData($K, $V);
+            $sceneRoom->scene->save();
+        }
+
         return $sceneRoom->Handle();
     }
 
@@ -165,4 +132,6 @@ class BaseRoom
 
         return $this->response;
     }
+
+
 }
