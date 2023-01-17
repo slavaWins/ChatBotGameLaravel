@@ -69,10 +69,17 @@ class BaseRoom
         return $this->SetStep($this->scene->step + 1);
     }
 
-    public function SetRoom($roomName, $data = []): BotResponseStructure
+    /**
+     * Перенестись в другую команту. Либо создать и перенестись в неё по классу
+     * @param string $roomName класс команты либо его название
+     * @param array $data дата которую нужно вставить в данные комнаты
+     * @param bool $isOverModal открыть комнату поверх текущей, типа не удалять
+     * @return BotResponseStructure
+     */
+    public function SetRoom($roomName, $data = [], $isOverModal = false): BotResponseStructure
     {
         if (is_object($roomName)) {
-            $this->DeleteRoom();
+            if(!$isOverModal)$this->DeleteRoom();
 
             if (!empty($data)) {
                 foreach ($data as $K => $V) $roomName->scene->SetData($K, $V);
@@ -89,7 +96,7 @@ class BaseRoom
             return $this->response;
         }
 
-        $this->DeleteRoom();
+        if(!$isOverModal)$this->DeleteRoom();
 
         /** @var BaseRoom $sceneRoom */
         $sceneRoom = new $roomName($this->request);
