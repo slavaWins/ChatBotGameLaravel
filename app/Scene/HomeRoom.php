@@ -6,6 +6,8 @@ use App\Characters\CarCharacter;
 use App\Characters\GarageCharacter;
 use App\Characters\PlayerCharacter;
 use App\Characters\Shop\CarItemCharacterShop;
+use App\Helpers\PaginationHelper;
+use App\Models\Bot\ItemCharacterShop;
 use App\Scene\Core\ShopRoom;
 use App\Scene\Core\SkillRoom;
 
@@ -53,17 +55,26 @@ class HomeRoom extends BaseRoom
         return $this->response;
     }
 
+
     public function Step1_Cars()
     {
 
+        /** @var CarCharacter[] $cars */
         $cars = $this->user->GetAllCharacters(CarCharacter::class);
 
-        $this->response->message = "Ваши машины (".(count($cars))." шт.): \n";
+        $this->response->message = "Ваши машины (" . (count($cars)) . " шт): \n";
 
 
-        foreach ($cars as $K=>$V){
-            $this->response->message .= "\n\n".$V->Render(true, false, false);
-        }
+        $isRefreshPage = $this->PaginateCollection(collect($cars), 2, function (CarCharacter $car) {
+            $this->response->message .= "\n\n" . $car->Render(true, false, false);
+
+            if ($this->AddButton($car->name)) {
+            }
+        });
+
+        if ($isRefreshPage) return $this->Handle();
+
+
         if ($this->AddButton("Назад")) {
             return $this->SetStep(0);
         }
@@ -72,9 +83,6 @@ class HomeRoom extends BaseRoom
             $room = ShopRoom::CreateShopRoomByCharacterType($this->user, CarCharacter::class, CarItemCharacterShop::class);
             return $this->SetRoom($room);
         }
-
-
-
 
 
         return $this->response;

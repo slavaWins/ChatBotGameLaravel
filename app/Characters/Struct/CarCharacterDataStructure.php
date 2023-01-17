@@ -26,8 +26,8 @@ class CarCharacterDataStructure extends BaseCharacterDataCast
             ->SetIcon("⚙")->SetMax(100)->SetShowInShort(true)->SetDescr("Состояние машины. Транспорт может ломаться при его использование.");
 
         $this->hpMax = StatStructure::Make("Макс.состояние")->SetDefault(24)->SetIcon("")->SetShowInShort(false)->Hidden();
-        $this->mass = StatStructure::Make("Вес")->SetDefault(1200)->SetIcon("🚥")->SetPostfix(' кг.');
-        $this->power = StatStructure::Make("Мощность")->SetDefault(78)->SetIcon("🚥")->SetPostfix(' л.с.');
+        $this->mass = StatStructure::Make("Вес")->SetDefault(1200)->SetIcon("🛎️")->SetPostfix(' кг.');
+        $this->power = StatStructure::Make("Мощность")->SetDefault(78)->SetIcon("🔩")->SetPostfix(' л.с.');
         $this->razgon = StatStructure::Make("Разгон 0-100км")->SetDefault(17.5)->SetIcon("🚥")->SetPostfix(' сек.');
 
         $this->price = StatStructure::Make("Цена")->SetDefault(0)->SetIcon("💵")->SetPostfix(' ₽')->FormatMoney()->SetShowInShort(false);

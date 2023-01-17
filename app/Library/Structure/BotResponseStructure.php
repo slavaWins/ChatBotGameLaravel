@@ -35,8 +35,8 @@ class BotResponseStructure
         return $this;
     }
 
-    public function AddButton($name){
-        $this->btns[$name] = 1;
+    public function AddButton($name, $isNewLine = false){
+        $this->btns[$name] = $isNewLine;
         return $this;
     }
 

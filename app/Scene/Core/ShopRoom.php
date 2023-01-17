@@ -2,6 +2,7 @@
 
 namespace App\Scene\Core;
 
+use App\Characters\CarCharacter;
 use App\Characters\PlayerCharacter;
 use App\Helpers\PaginationHelper;
 use App\Library\Structure\BotRequestStructure;
@@ -116,7 +117,17 @@ class ShopRoom extends BaseRoom
         $this->response->message = "МАГАЗИН МАШИН \n";
         $this->response->message .= $this->user->player->GetStats()->money->RenderLine(false, false);
         $this->response->message .= "\n Выберите машину которые вы хотите посмотреть";
+/*
+        $items = $this->GetItems();
+        $isRefreshPage = $this->PaginateCollection(collect($items), 2, function (CarCharacter $car) {
+            $this->response->message .= "\n\n" . $car->Render(true, false, false);
 
+            if ($this->AddButton($car->name)) {
+            }
+        });
+
+        if ($isRefreshPage) return $this->Handle();
+      */
         $pageCurent = $this->scene->sceneData['page'];
 
         $inPage = 6;

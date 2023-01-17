@@ -2,6 +2,7 @@
 
 namespace App\Scene;
 
+use App\Helpers\PaginationHelper;
 use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
 use App\Models\Bot\Scene;
@@ -24,10 +25,57 @@ class BaseRoom
         return $this->request->message == $name;
     }
 
+    public function PaginateCollection($listCollection, $inPage, $callback)
+    {
+        if (!isset($this->scene->sceneData['page'])) {
+            $this->scene->SetData('page', 1);
+            $this->scene->save();
+        }
+
+        $pageCurent = $this->scene->sceneData['page'];
+        $pageCountMax = ceil($listCollection->count() / $inPage);
+
+        $paginated = PaginationHelper::paginate($listCollection, $inPage, $pageCurent);
+
+        foreach ($paginated as $item) {
+            $callback($item);
+        }
+
+        if ($pageCountMax > 1) {
+            if ($pageCurent > 1) {
+                if ($this->AddButton("<")) {
+                    $this->scene->SetData('page', $pageCurent - 1);
+                    $this->scene->save();
+                    $this->response->Reset();
+                    return true;
+                }
+            }
+        }
+
+
+        if ($pageCountMax > 1) {
+            if ($pageCurent < $pageCountMax) {
+                if ($this->AddButton(">")) {
+                    $pageCurent += 1;
+                    $this->scene->SetData('page', $pageCurent);
+                    $this->scene->save();
+                    $this->response->Reset();
+                    return true;
+                }
+            }
+            $this->response->message .= "\n\n Страница " . ($pageCurent) . " / " . ($pageCountMax) . "";
+        }
+
+        return false;
+    }
 
     public function AddButton($name, $isNewLine = false)
     {
-        $this->response->btns[$name] = $isNewLine;
+        if (isset($this->response->btns[$name])) {
+            $name .= ' #2';
+        }
+        $this->response->AddButton($name, $isNewLine);
+
         return $this->IsBtn($name);
     }
 
