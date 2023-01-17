@@ -65,7 +65,7 @@ class HomeRoom extends BaseRoom
         $this->response->message = "Ваши машины (" . (count($cars)) . " шт): \n";
 
 
-        $isRefreshPage = $this->PaginateCollection(collect($cars), 2, function (CarCharacter $car) {
+        $isRefreshPage = $this->PaginateCollection(collect($cars), 4, function (CarCharacter $car) {
             $this->response->message .= "\n\n" . $car->Render(true, false, false);
 
             if ($this->AddButton($car->name)) {

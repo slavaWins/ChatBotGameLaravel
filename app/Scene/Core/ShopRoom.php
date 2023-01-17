@@ -117,28 +117,11 @@ class ShopRoom extends BaseRoom
         $this->response->message = "МАГАЗИН МАШИН \n";
         $this->response->message .= $this->user->player->GetStats()->money->RenderLine(false, false);
         $this->response->message .= "\n Выберите машину которые вы хотите посмотреть";
-/*
+
         $items = $this->GetItems();
-        $isRefreshPage = $this->PaginateCollection(collect($items), 2, function (CarCharacter $car) {
-            $this->response->message .= "\n\n" . $car->Render(true, false, false);
-
-            if ($this->AddButton($car->name)) {
-            }
-        });
-
-        if ($isRefreshPage) return $this->Handle();
-      */
-        $pageCurent = $this->scene->sceneData['page'];
-
-        $inPage = 6;
-        $items = $this->GetItems();
-        $pageCountMax = ceil($items->count() / $inPage);
+        $isRefreshPage = $this->PaginateCollection(collect($items), 4, function (ItemCharacterShop $V) {
 
 
-        /** @var ItemCharacterShop[] $paginated */
-        $paginated = PaginationHelper::paginate($this->GetItems(), $inPage, $pageCurent);
-
-        foreach ($paginated as $K => $V) {
             $this->response->message .= "\n\n";
             $this->response->message .= $V->icon . ' [' . $V->id . '] ' . $V->name;
             $this->response->message .= ' 💵 ' . number_format($V->price) . ' ₽' . "\n";
@@ -158,35 +141,15 @@ class ShopRoom extends BaseRoom
                 $this->scene->SetData('selectId', $V->id);
                 return $this->NextStep();
             }
-        }
 
+        });
 
-        if ($pageCountMax > 1) {
-            if ($pageCurent > 1) {
-                if ($this->AddButton("<")) {
-                    $this->scene->SetData('page', $pageCurent - 1);
-                    $this->scene->save();
-                    $this->request->message = "";
-                    return $this->Handle();
-                }
-            }
-        }
+        if ($isRefreshPage) return $this->Handle();
 
         if ($this->AddButton("⚙️")) {
             return $this->SetStep(0);
         }
 
-        if ($pageCountMax > 1) {
-            if ($pageCurent < $pageCountMax) {
-                if ($this->AddButton(">")) {
-                    $this->scene->SetData('page', $pageCurent + 1);
-                    $this->scene->save();
-                    $this->request->message = "";
-                    return $this->Handle();
-                }
-            }
-            $this->response->message .= "\n\n Страница " . ($pageCurent) . " / " . ($pageCountMax) . "";
-        }
 
         if ($this->AddButton("Выход", true)) {
             return $this->SetRoom(HomeRoom::class);
