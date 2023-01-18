@@ -90,9 +90,8 @@ class BotLogicController extends Controller
     {
         $textFromRequest = $botRequestStructure->message;
 
-        if ($botRequestStructure->message == "Назад") EasyAnaliticsHelper::Increment("btn_back", 1, "Пользователь нажал - назад");
-        if ($botRequestStructure->message == "Перегнать") EasyAnaliticsHelper::Increment("peregon", 1, "Пользователь перегнал тачку");
-        if ($botRequestStructure->message == "Закончить обучение") EasyAnaliticsHelper::Increment("tutorial_stop", 1, "Попытался заончить обучение");
+        if ($botRequestStructure->message == "...") EasyAnaliticsHelper::Increment("btn_empty", 1, "Пустая кнопка", "Пользователю была предложена пустая кнопка - многоточие.");
+
 
 
         $this->user = $user;
@@ -184,6 +183,9 @@ class BotLogicController extends Controller
         $history->message_response = $response->message;
         $history->attachment_sound = $botResponse->attach_sound ?? null;
         $history->isFromBot = false;
+        if($user->player) {
+            $history->money = $user->player->characterData->money;
+        }
         $history->save();
         $this->history = $history;
 

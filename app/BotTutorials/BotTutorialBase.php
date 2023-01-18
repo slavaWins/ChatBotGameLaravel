@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Scene\Core\BaseRoom;
 use App\Scene\GarageRoom;
 use App\Scene\RegistrationRoom;
+use SlavaWins\EasyAnalitics\Library\EasyAnaliticsHelper;
 
 class BotTutorialBase
 {
@@ -112,8 +113,8 @@ class BotTutorialBase
         }
 
 
-
         if ($tutorial->request->message == "Закончить обучение!") {
+            EasyAnaliticsHelper::Increment("tutorial_exit", 1, "Остановил тутуориал",  "Пользователь остановил обучающий туториал.");
             $user->tutorial_class = null;
             $user->tutorial_step = 0;
             $user->save();

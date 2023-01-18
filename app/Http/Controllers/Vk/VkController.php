@@ -14,6 +14,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use SlavaWins\EasyAnalitics\Library\EasyAnaliticsHelper;
 
 
 class VkController extends Controller
@@ -69,6 +70,9 @@ class VkController extends Controller
                 $user->tutorial_class = StartTutorial::class.'';
                 $user->tutorial_step = 0;
                 $user->save();
+
+                EasyAnaliticsHelper::Increment("user_new", 1, "Новый пользователь","Новый пользователь впервые написал боту");
+                EasyAnaliticsHelper::Increment("user_new_vk", 1, "Новый пользователь VK","Новый пользователь с ВК");
             }
 
             if ($user->last_message_time > $dateUnix) {

@@ -7,6 +7,7 @@ use App\Characters\PlayerCharacter;
 use App\Characters\Shop\GarageItemCharacterShop;
 use App\Scene\Core\BaseRoom;
 use App\Scene\Core\ShopRoom;
+use SlavaWins\EasyAnalitics\Library\EasyAnaliticsHelper;
 
 class StartHistoryRoom extends BaseRoom
 {
@@ -98,6 +99,8 @@ class StartHistoryRoom extends BaseRoom
 
 
         if ($this->AddButton("Смотреть гаражи")) {
+
+            EasyAnaliticsHelper::Increment("user_tracking_hist", 1, "Пользователь. Закончил историю",  "Пользователь закончил комнату истории");
             $this->SetRoom(GarageRoom::class);
 
             $room = ShopRoom::CreateShopRoomByCharacterType($this->user, GarageCharacter::class, GarageItemCharacterShop::class);

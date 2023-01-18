@@ -4,6 +4,7 @@ namespace App\Scene;
 
 use App\Scene\Core\BaseRoom;
 use Illuminate\Support\Facades\Validator;
+use SlavaWins\EasyAnalitics\Library\EasyAnaliticsHelper;
 
 class RegistrationRoom extends BaseRoom
 {
@@ -13,7 +14,11 @@ class RegistrationRoom extends BaseRoom
         $this->response->Reset();
         $this->response->message = "Добро пожаловать в игру! Здесь вы сможете покупать в игре автомобили из Дрома. Что бы участвовать на них в гонках, или заниматься грузоперевозками. Или быть перекупом. Возможностей много!";
 
+
+
         if ($this->AddButton("Далее")) {
+
+            EasyAnaliticsHelper::Increment("user_tracking_frist", 1, "Пользователь. Первый ответ",  "Пользователь впервые ответил на сообщение бота");
             $this->request->message = "";
             return $this->SetStep(2);
         }
