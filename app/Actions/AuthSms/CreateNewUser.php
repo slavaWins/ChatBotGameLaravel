@@ -2,7 +2,6 @@
 
 namespace App\Actions\AuthSms;
 
-use App\Http\Controllers\NotifyBallController;
 use App\Models\User;
 
 class CreateNewUser
@@ -18,7 +17,7 @@ class CreateNewUser
         $user->password = "";
         $user->save();
 
-        NotifyBallController::SendToUid($user->id, "Спасибо за регистрацию! Обязательно заполните свой профиль!", route('profile'));
+        //NotifyBallController::SendToUid($user->id, "Спасибо за регистрацию! Обязательно заполните свой профиль!", route('profile'));
         return $user;
     }
 }

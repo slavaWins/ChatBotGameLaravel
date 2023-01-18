@@ -3,13 +3,7 @@
     namespace App\Http\Controllers;
 
 
-    use MoveMoveIo\DaData\Enums\BranchType;
-    use MoveMoveIo\DaData\Enums\CompanyType;
-    use MoveMoveIo\DaData\Facades\DaDataCompany;
-    use MoveMoveIo\DaData\Facades\DaDataAddress;
 
-
-    use App\Models\Cat;
     use Illuminate\Http\Request;
     use App\Models\User;
     use Illuminate\Support\Facades\Auth;
@@ -35,7 +29,6 @@
             $user->name = $request->name;
             $user->save();
 
-            //   dd($dadata['suggestions'][0]);
 
 
             return redirect()->back();

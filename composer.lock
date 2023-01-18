@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72f6b0f9e496f4340406f5239575e323",
+    "content-hash": "44e481c7534be6ccae0a278ebeac0b00",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2293,83 +2293,6 @@
             "time": "2022-07-24T11:55:47+00:00"
         },
         {
-            "name": "movemoveapp/laravel-dadata",
-            "version": "1.0.10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/movemoveapp/laravel-dadata.git",
-                "reference": "090e5d9d6561d75fe605a183e3801df77b8b83eb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/movemoveapp/laravel-dadata/zipball/090e5d9d6561d75fe605a183e3801df77b8b83eb",
-                "reference": "090e5d9d6561d75fe605a183e3801df77b8b83eb",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^7.0|^7.2",
-                "php": "^7.3|^8.0|^8.1"
-            },
-            "require-dev": {
-                "orchestra/testbench": "^6.2.0",
-                "phpunit/phpunit": "^9.4.0"
-            },
-            "type": "laravel-package",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "MoveMoveIo\\DaData\\DaDataServiceProvider"
-                    ],
-                    "aliases": {
-                        "DaDataAddress": "MoveMoveIo\\DaData\\Facades\\DaDataAddress",
-                        "DaDataName": "MoveMoveIo\\DaData\\Facades\\DaDataName",
-                        "DaDataEmail": "MoveMoveIo\\DaData\\Facades\\DaDataEmail",
-                        "DaDataPhone": "MoveMoveIo\\DaData\\Facades\\DaDataPhone",
-                        "DaDataCompany": "MoveMoveIo\\DaData\\Facades\\DaDataCompany",
-                        "DaDataBank": "MoveMoveIo\\DaData\\Facades\\DaDataBank",
-                        "DaDataPassport": "MoveMoveIo\\DaData\\Facades\\DaDataPassport"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "MoveMoveIo\\DaData\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dmitry Kovalev aka Pipisco",
-                    "email": "d.kovalev@movemove.io",
-                    "homepage": "https://movemove.io",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Laravel SDK for working with the DaData.RU service API",
-            "keywords": [
-                "Bank",
-                "DaData",
-                "address",
-                "email",
-                "laravel",
-                "movemoveapp",
-                "name",
-                "passport",
-                "patronymic",
-                "pipisco",
-                "sdk",
-                "surname"
-            ],
-            "support": {
-                "issues": "https://github.com/movemoveapp/laravel-dadata/issues",
-                "source": "https://github.com/movemoveapp/laravel-dadata/tree/v1.0.10"
-            },
-            "time": "2022-04-26T13:20:20+00:00"
-        },
-        {
             "name": "nesbot/carbon",
             "version": "2.65.0",
             "source": {
@@ -3814,6 +3737,55 @@
                 "source": "https://github.com/slavaWins/authsms/tree/master"
             },
             "time": "2023-01-10T15:14:30+00:00"
+        },
+        {
+            "name": "slavawins/easyanalitics",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/slavaWins/easyanalitics.git",
+                "reference": "65742f2051d5524268cce4bde0b54cfd3b2c22f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/slavaWins/easyanalitics/zipball/65742f2051d5524268cce4bde0b54cfd3b2c22f6",
+                "reference": "65742f2051d5524268cce4bde0b54cfd3b2c22f6",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3|^8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "SlavaWins\\EasyAnalitics\\Providers\\EasyAnaliticsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "SlavaWins\\EasyAnalitics\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "slavaWins",
+                    "email": "email@example.com",
+                    "homepage": "https://github.com/slavaWins/easyanalitics"
+                }
+            ],
+            "description": "Expa",
+            "support": {
+                "issues": "https://github.com/slavaWins/easyanalitics/issues",
+                "source": "https://github.com/slavaWins/easyanalitics/tree/master"
+            },
+            "time": "2023-01-18T14:51:58+00:00"
         },
         {
             "name": "slavawins/formbuilder",
@@ -9146,6 +9118,7 @@
     "stability-flags": {
         "slavawins/adminwinda": 20,
         "slavawins/authsms": 20,
+        "slavawins/easyanalitics": 20,
         "slavawins/formbuilder": 20
     },
     "prefer-stable": true,

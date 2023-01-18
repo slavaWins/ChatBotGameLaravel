@@ -18,13 +18,14 @@ Messagebox.Sendmessage = function (cmdBtn = "") {
 
     EasyApi.Post('/api/messagebox/send', Messagebox.currentOption, function (response, error) {
         if (error) {
-            window.open('/api/messagebox/send?onlytext=1&text='+ Messagebox.currentOption.text, '_blank').focus();
+            window.open('/api/messagebox/send?onlytext=1&text=' + Messagebox.currentOption.text, '_blank').focus();
             return;
         }
-        console.log("sended");
+       // console.log("sended");
 
         $('.mess_row_btns').html("");
-        console.log(response.response);
+        //console.log(response.response.html);
+
         $('.mess_scroll').append(response.response.html)
         $('.mess_row_btns').html(response.response.buttons_html)
         $('.debugInfoBot').html(response.response.debugInfoBot)

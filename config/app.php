@@ -176,9 +176,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
-        MoveMoveIo\DaData\DaDataServiceProvider::class,
         L5Swagger\L5SwaggerServiceProvider::class,
-        \SlavaWins\Poli\Providers\PoliServiceProvider::class, //для подключение провайдеров из своих пакетов
     ],
 
     /*

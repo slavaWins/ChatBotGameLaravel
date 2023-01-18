@@ -48,27 +48,17 @@ class MessageBoxController extends Controller
         $botLogic = new BotLogicController();
         $botResponse = $botLogic->Message($user, $botRequest);
 
+
+        $html = "Нет ответа";
+        /** @var History $history */
+        $history = $botLogic->history;
+        if ($history) {
+            $html = view("messagebox.mess", compact('history', 'user'));
+        }
+
         if ($request->has('onlytext')) {
             return nl2br($botResponse->message);
         }
-
-        /** @var History $history */
-        $history = new History();
-        $history->user_id = Auth::user()->id;
-        $history->message = $data['text'];
-        $history->isFromBot = false;
-        $history->save();
-
-        $html = view("messagebox.mess", compact('history', 'user'));
-
-        $history = new History();
-        $history->user_id = Auth::user()->id;
-        $history->message = $botResponse->message;
-        $history->attachment_sound = $botResponse->attach_sound ?? null;
-        $history->isFromBot = true;
-        $history->save();
-        $html .= view("messagebox.mess", compact('history', 'user'));
-
 
         $buttons = $user->buttons;
         //  $buttons = ['xz'=>3];
@@ -82,7 +72,7 @@ class MessageBoxController extends Controller
             [
                 'debugInfoBot' => $debugInfoBot,
                 'buttons_html' => $buttons_html,
-                'html' => $html,
+                'html' => $html . '',
             ]
         );
     }
@@ -134,19 +124,14 @@ class MessageBoxController extends Controller
             $response = $botLogic->Message($user, $botRequest);
             $user->refresh();
 
+
             /** @var History $history */
             $history = new History();
             $history->user_id = Auth::user()->id;
             $history->message = $mess;
-            $history->isFromBot = false;
-            $history->save();
-
-
-            $history = new History();
-            $history->user_id = Auth::user()->id;
-            $history->message = $response->message;
+            $history->message_response = $response->message;
             $history->attachment_sound = $response->attach_sound ?? null;
-            $history->isFromBot = true;
+            $history->isFromBot = false;
             $history->save();
 
 

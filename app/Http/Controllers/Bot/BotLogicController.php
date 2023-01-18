@@ -6,15 +6,16 @@ namespace App\Http\Controllers\Bot;
 use App\BotTutorials\BotTutorialBase;
 use App\BotTutorials\StartTutorial;
 use App\Http\Controllers\Controller;
-use App\Library\EasyAnalitics\EasyAnaliticsHelper;
 use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
+use App\Models\Bot\History;
 use App\Models\Bot\Scene;
-use App\Models\EasyAnalitics\EasyAnalitics;
 use App\Models\User;
 use App\Scene\Core\BaseRoom;
 use App\Scene\HomeRoom;
 use App\Scene\RegistrationRoom;
+use Illuminate\Support\Facades\Auth;
+use SlavaWins\EasyAnalitics\Library\EasyAnaliticsHelper;
 
 
 /**
@@ -24,6 +25,7 @@ class BotLogicController extends Controller
 {
     public $repeatNullResponse = 0; //количество возвратов null в респонсе
     private User $user;
+    public History $history;
 
     public static function Logic(User $user, $message)
     {
@@ -86,6 +88,7 @@ class BotLogicController extends Controller
      */
     public function Message(User $user, BotRequestStructure $botRequestStructure)
     {
+        $textFromRequest = $botRequestStructure->message;
 
         if ($botRequestStructure->message == "Назад") EasyAnaliticsHelper::Increment("btn_back", 1, "Пользователь нажал - назад");
         if ($botRequestStructure->message == "Перегнать") EasyAnaliticsHelper::Increment("peregon", 1, "Пользователь перегнал тачку");
@@ -169,12 +172,20 @@ class BotLogicController extends Controller
         }
 
 
-
         if ($botRequestStructure->messageFrom == "local") {
             $user->buttons = $response->btns;
             $user->save();
         }
 
+        /** @var History $history */
+        $history = new History();
+        $history->user_id = $user->id;
+        $history->message = $textFromRequest;
+        $history->message_response = $response->message;
+        $history->attachment_sound = $botResponse->attach_sound ?? null;
+        $history->isFromBot = false;
+        $history->save();
+        $this->history = $history;
 
         return $response;
     }

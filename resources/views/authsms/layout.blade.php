@@ -2,6 +2,8 @@
 
 @section('app-col')
 
+    <script src="{{ asset('js/authsms/authsms.js')."?".microtime()  }}"></script>
+
     <div class="container">
         <div class="row">
 

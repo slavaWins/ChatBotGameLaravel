@@ -25,7 +25,8 @@ class BotgameUserData extends Migration
             $table->id();
             $table->boolean('isFromBot')->default(0)->comment("это сообщение от бота");
             $table->integer('user_id')->default(0)->comment("с кем диалог");
-            $table->text('message')->nullable()->comment("текст сообщения");
+            $table->text('message')->nullable()->comment("Сообщение которое написал пользователь");
+            $table->text('message_response')->nullable()->comment("Текст которым ответил бот");
             $table->json('buttons')->nullable()->comment("Дата с кнопками");
             $table->string('attachment')->nullable()->comment("Атач");
             $table->string('attachment_sound')->nullable()->comment("Атач звука");

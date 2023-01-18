@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
+
     <script src="{{ asset('js/easyapi/easyapi.js')."?".microtime()  }}"></script>
     <script src="{{ asset('js/editor/block-controller.js')."?".microtime() }}"></script>
     <script src="{{ asset('js/editor/baserow-controller.js')."?".microtime() }}"></script>

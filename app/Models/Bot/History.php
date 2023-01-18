@@ -13,6 +13,7 @@ use Rennokki\QueryCache\Traits\QueryCacheable;
  * @property User user
  * @property string attachment
  * @property string message
+ * @property string message_response
  * @property array buttons
  * @property boolean isFromBot
  * @property string|null $attachment_sound
