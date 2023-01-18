@@ -112,7 +112,7 @@ class StartHistoryRoom extends BaseRoom
     }
 
 
-    public function Handle()
+    public function Route()
     {
         if ($this->GetStep() == 0) return $this->Step0();
         if ($this->GetStep() == 1) return $this->Step1_Info();

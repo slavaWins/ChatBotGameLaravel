@@ -12,7 +12,7 @@ class HomeRoom extends BaseRoom
     public function Step0()
     {
         $this->response->Reset();
-        $this->response->message = "Вы находитесь в гараже";
+        $this->response->message = "Сейчас вы дома. \n";
 
         $isFullInfo = $this->IsBtn("?");
 
@@ -29,10 +29,14 @@ class HomeRoom extends BaseRoom
         if ($this->AddButton("Прокачка персонажа")) {
             $room = SkillRoom::CreateSkillRoomByCharacter($this->user, $this->user->player);
             return $this->SetRoom($room, [], true);
-        } 
+        }
 
         if ($this->AddButton("Мои гаражи")) {
             return $this->SetRoom(GarageRoom::class);
+        }
+
+        if ($this->AddButton("Работа")) {
+            return $this->SetRoom(WorkRoom::class);
         }
 
 
@@ -56,7 +60,7 @@ class HomeRoom extends BaseRoom
     }
 
 
-    public function Handle()
+    public function Route()
     {
         if ($this->GetStep() == 0) return $this->Step0();
         if ($this->GetStep() == 1) return $this->Step1_Xz();

@@ -9,12 +9,18 @@ use Illuminate\Database\Eloquent\Model;
  * @property mixed $user_id
  * @property int|mixed $className
  * @property int|mixed $step
+ * @property int timer_from
+ * @property int $timer_to
  * @property array|mixed $sceneData
  * @property mixed $id
  */
 class Scene extends Model
 {
     use HasFactory;
+
+    /**
+     * @var int|mixed
+     */
 
     protected $casts = [
         'sceneData' => 'array'

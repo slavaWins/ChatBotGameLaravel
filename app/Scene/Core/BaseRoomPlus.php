@@ -5,10 +5,12 @@ namespace App\Scene\Core;
 use App\Characters\CarCharacter;
 use App\Helpers\PaginationHelper;
 use App\Library\Structure\BotResponseStructure;
+use App\Models\Bot\Character;
 use App\Scene\HomeRoom;
 
 class BaseRoomPlus extends BaseRoom
 {
+    private ?Character $_selectorData;
 
     /**
      * Вывести пагинированый список моих чарактеров по их классу. С кнопкой. И переходм на другой шаг. С кнопкой выхода в хоум.
@@ -51,6 +53,35 @@ class BaseRoomPlus extends BaseRoom
     }
 
 
+    /**
+     * Быстрый селектор данных. Возвращает выбранного из списка чарактера. Сам норм пагинирует всё, и вообще збс
+     * @param $charactersListCollection
+     * @return Character|null
+     */
+    public function PaginateSelector($charactersListCollection)
+    {
+
+
+        $this->PaginateCollection($charactersListCollection, 6, function (Character $V) {
+            $this->response->message .= "\n\n";
+            $this->response->message .= $V->Render(true);
+
+            if ($this->AddButton($V->name)) {
+                $this->_selectorData = $V;
+            }
+        });
+
+        $response = $this->_selectorData ?? null;
+
+        if (is_object($response)) {
+            if (substr_count(get_class($response), "Character")) {
+                return $response;
+            }
+        }
+
+        return null;
+    }
+
     public function PaginateCollection($listCollection, $inPage, $callback)
     {
         if (!isset($this->scene->sceneData['page'])) {
@@ -61,14 +92,22 @@ class BaseRoomPlus extends BaseRoom
         $pageCurent = $this->scene->sceneData['page'];
         $pageCountMax = ceil($listCollection->count() / $inPage);
 
+        if ($pageCurent > $pageCountMax) {
+            $pageCurent = $pageCountMax;
+            $this->scene->SetData('page', $pageCurent);
+        }
+
         $paginated = PaginationHelper::paginate($listCollection, $inPage, $pageCurent);
 
         foreach ($paginated as $item) {
             $response = $callback($item);
+
             if (is_object($response)) {
                 if (substr_count(get_class($response), "BotResponseStructure")) {
                     // $this->response->Reset();
                     $this->request->message = "";
+                    return $response;
+                } else {
                     return $response;
                 }
             }
@@ -103,5 +142,7 @@ class BaseRoomPlus extends BaseRoom
 
         return null;
     }
+
+
 
 }

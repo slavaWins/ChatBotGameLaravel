@@ -17,7 +17,7 @@ class CreateEasyAnaliticsTable extends Migration
             $table->id();
             $table->string("ind")->nullable()->comment("Индификатор статистики");
             $table->string("date_day")->nullable()->comment("Денормализация для быстрого поиска по дате");
-            $table->integer("amount")->default(0);
+            $table->bigInteger("amount")->default(0);
             $table->timestamps();
         });
 

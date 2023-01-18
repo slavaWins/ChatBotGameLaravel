@@ -56,7 +56,7 @@ class RegistrationRoom extends BaseRoom
     }
 
 
-    public function Handle()
+    public function Route()
     {
         if ($this->GetStep() == 1 || $this->GetStep() == 0) return $this->Step1_Start();
         if ($this->GetStep() == 2) return $this->Step2_Info();

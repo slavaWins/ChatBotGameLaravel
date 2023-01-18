@@ -8,6 +8,7 @@ use App\BotTutorials\StartTutorial;
 use App\Http\Controllers\Controller;
 use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
+use App\Library\Vk\VkAction;
 use App\Models\Bot\History;
 use App\Models\Bot\Scene;
 use App\Models\User;
@@ -25,7 +26,7 @@ class BotLogicController extends Controller
 {
     public $repeatNullResponse = 0; //количество возвратов null в респонсе
     private User $user;
-    public History $history;
+    public ?History $history;
 
     public static function Logic(User $user, $message)
     {
@@ -77,6 +78,11 @@ class BotLogicController extends Controller
         $text .= "\n Этап: " . ($this->user->tutorial_step ?? "НЕТ");
         $text .= "\n Класс: " . ($this->user->tutorial_class ?? "НЕТ");
 
+        if ($this->user->player) {
+            $text .= "\n\n Player: ";
+            $text .= "\n  " . json_encode($this->user->player->characterData);
+        }
+
         return $text;
 
     }
@@ -91,7 +97,6 @@ class BotLogicController extends Controller
         $textFromRequest = $botRequestStructure->message;
 
         if ($botRequestStructure->message == "...") EasyAnaliticsHelper::Increment("btn_empty", 1, "Пустая кнопка", "Пользователю была предложена пустая кнопка - многоточие.");
-
 
 
         $this->user = $user;
@@ -151,12 +156,15 @@ class BotLogicController extends Controller
 
         if ($response == null) {
             $this->repeatNullResponse += 1;
+
             if ($this->repeatNullResponse > 2) {
                 Scene::where("user_id", $user->id)->delete();
+                $response = new BotResponseStructure();
                 return $response->Reset()
                     ->AddWarning("Ошибка бота. Бот ушел в бесконечный цикл. Сейчас бот попробует исправить проблему самостоятельно. ")
                     ->AddButton("Исправить проблему");
             }
+
             return $this->Message($user, $botRequestStructure);
         }
 
@@ -181,9 +189,9 @@ class BotLogicController extends Controller
         $history->user_id = $user->id;
         $history->message = $textFromRequest;
         $history->message_response = $response->message;
-        $history->attachment_sound = $botResponse->attach_sound ?? null;
+        $history->attachment_sound = $response->attach_sound ?? null;
         $history->isFromBot = false;
-        if($user->player) {
+        if ($user->player) {
             $history->money = $user->player->characterData->money;
         }
         $history->save();
@@ -192,5 +200,49 @@ class BotLogicController extends Controller
         return $response;
     }
 
+
+    public function SceneTimerCronAction()
+    {
+        /** @var Scene[] $scenes */
+        $scenes = Scene::where("timer_to", ">", 0)->where("timer_to", "<", time())->limit(3)->get();
+        if (!count($scenes)) return null;
+
+        foreach ($scenes as $scene) {
+            $cnm = $scene->className;
+            if (!class_exists($cnm)) continue;
+
+            $botRequestStructure = new BotRequestStructure();
+            $botRequestStructure->user = User::find($scene->user_id);
+            $botRequestStructure->user_id = $botRequestStructure->user->id;
+
+            /** @var BaseRoom $sceneRoom */
+            $sceneRoom = new $cnm($botRequestStructure, $scene);
+            //        $sceneRoom->scene->timer_to = 0;
+            //          $sceneRoom->scene->timer_from = 0;
+            //         $sceneRoom->scene->save();
+            $response = $sceneRoom->Handle();
+
+
+            /** @var History $history */
+            $history = new History();
+            $history->user_id = $botRequestStructure->user->id;
+            $history->message = "CRON";
+            $history->message_response = $response->message;
+            $history->attachment_sound = $response->attach_sound ?? null;
+            $history->isFromBot = false;
+            if ($botRequestStructure->user->player) {
+                $history->money = $botRequestStructure->user->player->characterData->money;
+            }
+            $history->save();
+
+            if($botRequestStructure->user->vk_id){
+                VkAction::SendMessage($botRequestStructure->user->vk_id,$response->message, $response->btns, $response->attach_sound ?? null);
+            }
+
+            echo $response->message;
+        }
+
+
+    }
 
 }

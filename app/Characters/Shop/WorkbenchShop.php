@@ -27,5 +27,6 @@ class WorkbenchShop extends ItemCharacterShop
 
     protected $casts = [
         'characterData' => WorkbenchStruct::class,
+      //  'characterDataRand' => WorkbenchStruct::class,
     ];
 }

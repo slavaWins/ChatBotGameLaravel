@@ -58,6 +58,12 @@
                         </a>
                     </li>
 
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('bot.cron') }}"> bot.cron
+                        </a>
+                    </li>
+
                 @endauth
 
             </ul>

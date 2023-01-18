@@ -16,6 +16,7 @@ class GarageItemCharacterShop extends ItemCharacterShop
     public $icon = "💒‍";
     public $baseName = "Гараж";
 
+    public $titleShop = "Аренда гаража";
 
     public $showInShopPreview = [
         "size",
@@ -23,5 +24,6 @@ class GarageItemCharacterShop extends ItemCharacterShop
 
     protected $casts = [
         'characterData' => GarageCharacterDataStructure::class,
+     //   'characterDataRand' => GarageCharacterDataStructure::class,
     ];
 }

@@ -14,6 +14,7 @@ use App\Models\Bot\ItemCharacterShop;
 use App\Scene\Core\BaseRoomPlus;
 use App\Scene\Core\ShopRoom;
 use App\Scene\Core\SkillRoom;
+use App\Services\InventoryCharacterService;
 
 class GarageRoom extends BaseRoomPlus
 {
@@ -76,7 +77,7 @@ class GarageRoom extends BaseRoomPlus
     {
         $this->response->Reset();
 
-        if (!$this->garage->GetChildldren()->count()) {
+        if ($this->garage->GetFreeSlotsCount()) {
             if ($this->AddButton("Купить верстак")) {
                 $room = ShopRoom::CreateShopRoomByCharacterType($this->user, WorkbenchCharacter::class, Shop\WorkbenchShop::class, $this->scene->sceneData['id']);
                 return $this->SetRoom($room, null, true);
@@ -119,7 +120,8 @@ class GarageRoom extends BaseRoomPlus
     {
         $this->response->Reset();
 
-        if (!$this->garage->GetChildldren()->count()) {
+
+        if ($this->garage->GetFreeSlotsCount()) {
             if ($this->AddButton("Купить машину")) {
                 $room = ShopRoom::CreateShopRoomByCharacterType($this->user, CarCharacter::class, CarItemCharacterShop::class, $this->scene->sceneData['id']);
                 return $this->SetRoom($room, null, true);
@@ -133,6 +135,7 @@ class GarageRoom extends BaseRoomPlus
         });
 
         $this->response->message = $this->garage->GetName();
+
         $this->response->message .= "\n Машины в этом гараже" . " (" . (count($items)) . " шт): \n";
 
         $isRedirect = $this->PaginateCollection($items, 4, function ($item) {
@@ -170,36 +173,9 @@ class GarageRoom extends BaseRoomPlus
 
             if ($this->AddButton("Переместить")) {
 
+                $try = InventoryCharacterService::MoveItemsForOtherCharacters($this->user, $inner, GarageCharacter::class, $this->garage->id);
 
-                $noId = $this->garage->id;
-                $garages = collect($this->user->GetAllCharacters(GarageCharacter::class))
-                    ->filter(function (GarageCharacter $item) use ($noId) {
-                        if ($item->id == $noId) return false;
-                        $item->characterData->inner = $item->GetChildldren()->count();
-                        return $item->GetChildldren()->count() < $item->characterData->size;
-                    });
-
-                if (!$garages->count()) {
-                    return $this->response->AddWarning("Нет свободных гаражей!");
-                }
-
-                /** @var Character $item */
-                /** @var GarageCharacter $garage */
-                foreach ($inner as $item) {
-                    foreach ($garages as $garage) {
-                        if ($garage->characterData->inner >= $garage->characterData->size) {
-                            continue;
-                        }
-                        $item->parent_id = $garage->id;
-                        $item->save();
-                        $garage->characterData->inner++;
-                    }
-                }
-
-                $inner = $this->garage->GetChildldren();
-
-
-                if (!$inner->count()) {
+                if ($try) {
                     return $this->response->AddWarning("Все вещи с гаража были перенесены в другие гаражи", true);
                 } else {
                     return $this->response->AddWarning("Не удалось перенести все вещи.");
@@ -224,7 +200,7 @@ class GarageRoom extends BaseRoomPlus
         return $this->response;
     }
 
-    public function Handle()
+    public function Route()
     {
         if ($this->GetStep() > 0) {
             $this->garage = GarageCharacter::LoadCharacterById($this->scene->sceneData['id'] ?? 0);

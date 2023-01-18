@@ -90,7 +90,7 @@ class CarRoom extends BaseRoomPlus
     }
 
 
-    public function Handle()
+    public function Route()
     {
         $this->car = CarCharacter::LoadCharacterById($this->scene->sceneData['id']);
         if ($this->GetStep() == 0) return $this->Step0_Show();

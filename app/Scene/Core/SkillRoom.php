@@ -74,7 +74,7 @@ class SkillRoom extends BaseRoom
     }
 
 
-    public function Handle()
+    public function Route()
     {
         $this->character = Character::LoadCharacterById($this->scene->sceneData['character_id']);
 

@@ -29,6 +29,17 @@ class CarCharacter extends Character
     }
 
 
+    /**
+     * Получить текущие ХП объекта в процентах 0-1. При условии что есть hp и hpMax
+     * @return float|int
+     */
+    public function GetHpPercent()
+    {
+        if (!isset($this->characterData->hp)) return null;
+        if (!isset($this->characterData->hpMax)) return null;
+        return $this->GetStatsCalculate()->hp->value / $this->characterData->hpMax;
+    }
+
     public function GetStatsCalculate()
     {
         $res = $this->GetStats();
@@ -38,7 +49,7 @@ class CarCharacter extends Character
         $res->power->value += ($basePower * $res->skill_kpp->value) / 14;
 
         $res->razgon->value = $res->mass->value / $res->power->value;
-        $res->razgon->value  = round( $res->razgon->value , 2);
+        $res->razgon->value = round($res->razgon->value, 2);
 
         $res->hp->max = $res->hpMax->value;
         $res->hp->value = min($res->hp->value, $res->hpMax->value);

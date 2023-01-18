@@ -76,6 +76,10 @@ class Character extends Model
         return $items;
     }
 
+    function GetFreeSlotsCount(){
+        return $this->characterData->size - $this->GetStatsCalculate()->childCount->value;
+    }
+
     /**
      * Это публичный метод, он выводит уже реальные скилы с валую правильньыми
      * @return CharDataType

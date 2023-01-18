@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * @property CarCharacterDataStructure characterDataRand
  * @property CarCharacterDataStructure characterData
  * @property int $id
  * @property int price
@@ -38,14 +39,21 @@ class ItemCharacterShop extends Model
 
     protected $casts = [
         'characterData' => PlayerCharacterDataStructure::class,
+      //  'characterDataRand' => PlayerCharacterDataStructure::class,
     ];
 
     protected $table = 'item_character_shops';
+
+    public static function RandomizeDatabase(){
+        $className = get_called_class(); //для статик класа так получается
+       // $character = Character::where('user_Id', $user_id)->where('className', $className)->first();
+    }
 
     public function InitCastsStructure()
     {
         if (!$this->characterData) {
             $this->characterData=  new $this->casts['characterData']();
+         //   $this->characterDataRand=  new $this->casts['characterData']();
         }
 
     }

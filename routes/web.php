@@ -9,6 +9,7 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 
 AuthSmsRoute::routes();
 
+Route::any('/cron/scene-timer', [\App\Http\Controllers\Bot\BotLogicController::class, 'SceneTimerCronAction'])->name("bot.cron");
 
 Route::group(['middleware' => ['auth']], function () {
 
@@ -18,6 +19,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/messagebox/action/autotest', [\App\Http\Controllers\Bot\Dev\MessageBoxController::class, 'AutoTest'])->name('messagebox.action.autotest');
     Route::get('/messagebox/action/resetuser', [\App\Http\Controllers\Bot\Dev\MessageBoxController::class, 'Resetuser'])->name('messagebox.action.resetuser');
     Route::any('/api/messagebox/send', [\App\Http\Controllers\Bot\Dev\MessageBoxController::class, 'SendMessage']);
+
+
+
 
 
 

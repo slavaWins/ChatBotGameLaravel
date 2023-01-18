@@ -105,6 +105,7 @@ class MessageBoxController extends Controller
             $botRequest = new BotRequestStructure();
 
 
+
             $mess = "Начать";
             if (!empty($response->btns) && count($response->btns) > 0) {
                 $option = [];
@@ -125,6 +126,7 @@ class MessageBoxController extends Controller
             $user->refresh();
 
 
+
             /** @var History $history */
             $history = new History();
             $history->user_id = Auth::user()->id;
@@ -133,6 +135,14 @@ class MessageBoxController extends Controller
             $history->attachment_sound = $response->attach_sound ?? null;
             $history->isFromBot = false;
             $history->save();
+
+            if ($botLogic->sceneRoom) {
+                if ($botLogic->sceneRoom->IsTimer()) {
+                    $botRequest->message = "[QA Bot] Там таймер, я не буду ждать!";
+                    $response = $botLogic->Message($user, $botRequest);
+                    return redirect()->back();
+                }
+            }
 
 
             unset($botRequest);

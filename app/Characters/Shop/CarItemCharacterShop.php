@@ -14,6 +14,7 @@ class CarItemCharacterShop extends ItemCharacterShop
 {
     public $icon = "🚘";
     public $baseName = "Автомобиль";
+    public $titleShop = "Автосалон";
 
 
     public $showInShopPreview = [
@@ -23,5 +24,6 @@ class CarItemCharacterShop extends ItemCharacterShop
 
     protected $casts = [
         'characterData' => CarCharacterDataStructure::class,
+      //  'characterDataRand' => CarCharacterDataStructure::class,
     ];
 }

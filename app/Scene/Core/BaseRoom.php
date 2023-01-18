@@ -2,6 +2,7 @@
 
 namespace App\Scene\Core;
 
+use App\Library\ProgressBarEmoji;
 use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
 use App\Models\Bot\Scene;
@@ -26,7 +27,8 @@ class BaseRoom
 
     public function AddButton($name, $isNewLine = false)
     {
-        $name= mb_substr($name, 0, 25);
+        if (!$name) return false;
+        $name = mb_substr($name, 0, 25);
         if (isset($this->response->btns[$name])) {
             $name .= ' #2';
         }
@@ -67,6 +69,11 @@ class BaseRoom
         return $this->SetStep($this->scene->step + 1);
     }
 
+    public function PrevStep()
+    {
+        return $this->SetStep($this->scene->step - 1);
+    }
+
     /**
      * Перенестись в другую команту. Либо создать и перенестись в неё по классу
      * @param mixed|string|class-string $roomName класс команты либо его название
@@ -77,7 +84,7 @@ class BaseRoom
     public function SetRoom($roomName, $data = [], $isOverModal = false): BotResponseStructure
     {
         if (is_object($roomName)) {
-            if(!$isOverModal)$this->DeleteRoom();
+            if (!$isOverModal) $this->DeleteRoom();
 
             if (!empty($data)) {
                 foreach ($data as $K => $V) $roomName->scene->SetData($K, $V);
@@ -94,7 +101,7 @@ class BaseRoom
             return $this->response;
         }
 
-        if(!$isOverModal)$this->DeleteRoom();
+        if (!$isOverModal) $this->DeleteRoom();
 
         /** @var BaseRoom $sceneRoom */
         $sceneRoom = new $roomName($this->request);
@@ -129,7 +136,7 @@ class BaseRoom
     /**
      * @return BotResponseStructure
      */
-    public function Handle()
+    public function Route()
     {
         $this->response->message = "Кажется у нас ошибка!";
         $this->response->btns = [
@@ -137,6 +144,75 @@ class BaseRoom
         ];
 
         return $this->response;
+    }
+
+
+    /**
+     * Запустить таймер на столько то секунд
+     * @param $seconds
+     * @return void
+     */
+    public function StartTimer($seconds)
+    {
+        $this->scene->timer_from = time();
+        $this->scene->timer_to = time() + $seconds;
+        $this->scene->save();
+    }
+
+    /**
+     * Обратный отсчет сколько осталось до конца таймера
+     * @return string
+     */
+    public function GetTimerFormat()
+    {
+        $text = " " . ($this->scene->timer_to - time()) . ' сек.';
+        $percent = max(0, ($this->scene->timer_to - time())) / ($this->scene->timer_to - $this->scene->timer_from);
+        $text .= ProgressBarEmoji::Render(1 - $percent);
+        return $text;
+    }
+
+    /**
+     * Стандартный ответ. Если включен таймер выводится этот ответ. Оверайд его что бы кастомизировать.
+     * @return \App\Library\Structure\BotResponseStructure
+     */
+    public function TimerResponse()
+    {
+        $this->response->Reset();
+        $this->response->message = "Осталось " . $this->GetTimerFormat();
+        $this->response->AddButton("Обновить");
+
+        return $this->response;
+    }
+
+    public function IsTimer()
+    {
+        return ($this->scene->timer_to ?? 0) > time();
+    }
+
+    /**
+     * Эта функция вызывается перед вызовом Handle. В ней можно подгрузить нужные чарактеры например или обработать что-то
+     * @return void
+     */
+    public function Boot()
+    {
+
+    }
+
+    /**
+     * @return BotResponseStructure
+     */
+    public function Handle()
+    {
+        $this->Boot();
+        if ($this->IsTimer()) return $this->TimerResponse();
+
+        if ($this->scene->timer_to > 0) {
+            $this->scene->timer_to = 0;
+            $this->scene->timer_from = 0;
+            $this->scene->save();
+        }
+
+        return $this->Route();
     }
 
 

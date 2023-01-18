@@ -89,7 +89,11 @@ class StatStructure
         $this->value = $val;
         return $this;
     }
-
+    public function SetValue($val)
+    {
+        $this->value = $val;
+        return $this;
+    }
     public function Hidden()
     {
         $this->is_hidden_property = true;

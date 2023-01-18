@@ -126,7 +126,7 @@ class ShopRoom extends BaseRoomPlus
 
         $items = $this->GetItems();
 
-        $isRefreshPage = $this->PaginateCollection(collect($items), 4, function (ItemCharacterShop $V) {
+        $isRefreshPage = $this->PaginateCollection(collect($items), 6, function (ItemCharacterShop $V) {
             $this->response->message .= "\n\n";
             $this->response->message .= $V->icon . ' [' . $V->id . '] ' . $V->name;
             $this->response->message .= ' 💵 ' . number_format($V->price) . ' ₽' . "\n";
@@ -258,7 +258,7 @@ class ShopRoom extends BaseRoomPlus
         return $items;
     }
 
-    public function Handle()
+    public function Route()
     {
         $this->itemShopClass = $this->scene->sceneData['itemShopClass'];
         $this->characterClass = $this->scene->sceneData['characterClass'];
