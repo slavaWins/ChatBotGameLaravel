@@ -11,6 +11,7 @@ use App\Scene\Core\ShopRoom;
 use App\Scene\GarageRoom;
 use App\Scene\RegistrationRoom;
 use App\Scene\StartHistoryRoom;
+use SlavaWins\EasyAnalitics\Library\EasyAnaliticsHelper;
 
 class StartTutorial extends BotTutorialBase
 {
@@ -35,6 +36,7 @@ class StartTutorial extends BotTutorialBase
 
             }
             if ($this->IsScene(GarageRoom::class)) {
+                EasyAnaliticsHelper::Increment("reg_buy_garage", 1, "Первый гараж", "Пользователю купил первый гараж.");
                 $this->NextStep();
             }
         }
@@ -84,6 +86,7 @@ class StartTutorial extends BotTutorialBase
             }
 
             if ($this->IsScene(GarageRoom::class)) {
+                EasyAnaliticsHelper::Increment("reg_buy_car", 1, "Первая машина", "Пользователю купил первую машину.");
                 $this->NextStep();
             }
         }
