@@ -4,6 +4,7 @@ namespace App\Models\Bot;
 
 use App\Characters\Struct\CarCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
+use App\Characters\WorkbenchCharacter;
 use App\Library\Structure\StatStructure;
 use App\Models\user;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -59,6 +60,21 @@ class Character extends Model
         ];
     }
 
+    /**
+     * @return Character[]
+     */
+    function GetChildldren($byClass = null)
+    {
+        if ($this->id == 0) return [];
+        $items = Character::where("parent_id", $this->id)->get();
+
+        if ($byClass) {
+            $items = $items->filter(function ($item) use ($byClass) {
+                return $item->className == $byClass;
+            })->count();
+        }
+        return $items;
+    }
 
     /**
      * Это публичный метод, он выводит уже реальные скилы с валую правильньыми
@@ -70,10 +86,9 @@ class Character extends Model
         $AR = new $this->casts['characterData']($this->characterData);;
 
 
-
         foreach ($AR as $K => $V) {
             if (!is_object($V)) {
-                Log::error("В структуре чара ".$this->casts['characterData'].' Параметр '.$K.' Не правильно прописан! Там его в констуктор класса надо занести!');
+                Log::error("В структуре чара " . $this->casts['characterData'] . ' Параметр ' . $K . ' Не правильно прописан! Там его в констуктор класса надо занести!');
                 continue;
             }
             $V->value = $this->characterData->$K ?? $V->value;
@@ -170,8 +185,13 @@ class Character extends Model
      */
     public static function LoadCharacterById($id)
     {
+        if (!$id) return null;
+
         /** @var Character $character */
         $character = Character::find($id);
+
+        if (!$character) return null;
+
         return $character->className::find($id);
     }
 

@@ -119,7 +119,7 @@ class BotTutorialBase
             $user->save();
             return $response;
         }
-        
+
         $response = $tutorial->Handle();
 
         $tutorial->response->AddButton("Закончить обучение");

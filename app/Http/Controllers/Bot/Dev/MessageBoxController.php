@@ -97,7 +97,7 @@ class MessageBoxController extends Controller
         Scene::where('user_id', $user->id)->delete();
         $user->is_registration_end = false;
         $user->tutorial_step = 0;
-        $user->tutorial_class = StartTutorial::class.'';
+        $user->tutorial_class = StartTutorial::class . '';
         $user->save();
         return redirect()->back();
     }
@@ -124,7 +124,7 @@ class MessageBoxController extends Controller
                 if (count($option) > 1) {
                     $mess = $option[rand(0, count($option) - 1)];
                 } else {
-                    $mess = $option[0];
+                    $mess = $option[0] ?? "Нет вариантов";
                 }
             }
 

@@ -25,5 +25,6 @@ class Scene extends Model
         $data = $this->sceneData;
         $data[$key] = $val;
         $this->sceneData = $data;
+        return $this;
     }
 }

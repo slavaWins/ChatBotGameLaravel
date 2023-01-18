@@ -24,7 +24,7 @@ class GarageCharacter extends Character
     function GetStatsCalculate()
     {
 
-        if(!$this->id) return $this->GetStats();
+        if (!$this->id) return $this->GetStats();
 
         $stats = $this->GetStats();
         $stats->inner->max = $stats->size->value;
@@ -35,10 +35,15 @@ class GarageCharacter extends Character
         return $stats;
     }
 
+
+
     function RenderAppend($isShort = false, $isShowDescr = false, $showSkill = false)
     {
-        $items = WorkbenchCharacter::where("parent_id", $this->id)->get();
-        $c = $items->filter(function ($item){return $item->className=="App\Characters\WorkbenchCharacter";})->count();
+        $items = $this->GetChildldren();
+
+        $c = $items->filter(function ($item) {
+            return $item->className == "App\Characters\WorkbenchCharacter";
+        })->count();
 
         $text = "";
         if ($c) {
@@ -47,7 +52,9 @@ class GarageCharacter extends Character
             $text .= "\n Нет верстаков";
         }
 
-        $c = $items->filter(function ($item){return $item->className=="App\Characters\CarCharacter";})->count();
+        $c = $items->filter(function ($item) {
+            return $item->className == "App\Characters\CarCharacter";
+        })->count();
         if ($c) {
             $text .= "\n 🚘 Машин: " . $c;
         } else {

@@ -30,6 +30,9 @@ class BotResponseStructure
 
 
     public function AddWarning($text, $icon = "⚠️"){
+        if($icon===true){
+            $icon = "✅";
+        }
         $text =$icon . $text;
         $this->message = $text . "\n\n" . $this->message;
         return $this;

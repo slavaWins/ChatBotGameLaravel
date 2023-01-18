@@ -28,6 +28,7 @@
     <table class="table  bg-white table-bordered">
         <tr class="small">
             <td>ИД</td>
+            <td>Покупок</td>
             <td>Название</td>
             <td>Цена</td>
 
@@ -50,6 +51,7 @@
                       action="{{route('admin.itemshop.edit', ['catClassName'=>$catClassNameOriginal, 'id'=> $item->id])}}">
                     @csrf
                     <td>{{$item->id}}</td>
+                    <td>{{$item->buy_count}}</td>
                     <td>
                         @php
                             FElement::NewInputText()

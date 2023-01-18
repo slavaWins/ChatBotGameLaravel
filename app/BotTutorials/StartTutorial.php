@@ -31,7 +31,7 @@ class StartTutorial extends BotTutorialBase
             if ($this->IsScene(ShopRoom::class)) {
                 $this->RemoveBtn("Выход")->RemoveBtn("Доступные товары");
                 if ($this->sceneCurrent->step == 1) $this->AddMessage("Теперь вы должны купить свой первый гараж! У каждого товара есть номер. Вы можете нажать кнопку, или просто ввести номер товара.");
-                if ($this->sceneCurrent->step == 2) $this->AddMessage("Вы можете посмотреть характеристики гаража прежде чем его купить. Для начала стоит купить гараж по дешевле!");
+                if ($this->sceneCurrent->step == 2) $this->AddMessage("Вы можете посмотреть характеристики гаража прежде чем его купить. Для начала стоит арендовать гараж по дешевле!");
 
             }
             if ($this->IsScene(GarageRoom::class)) {
@@ -44,7 +44,7 @@ class StartTutorial extends BotTutorialBase
             if ($this->IsScene(GarageRoom::class)) {
                 $this
                     ->RemoveExitBtns()
-                    ->RemoveBtn("Купить гараж")
+                    ->RemoveBtn("Арендовать гараж")
                     ->RemoveBtn("Верстаки");
 
                 if ($this->sceneCurrent->step == 0) $this->AddMessage("Теперь перейдите в ваш гараж!");
