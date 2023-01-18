@@ -16,7 +16,9 @@ use App\Scene\Core\BaseRoom;
 use App\Scene\HomeRoom;
 use App\Scene\RegistrationRoom;
 use Illuminate\Support\Facades\Auth;
+use mysql_xdevapi\Exception;
 use SlavaWins\EasyAnalitics\Library\EasyAnaliticsHelper;
+use Throwable;
 
 
 /**
@@ -203,6 +205,15 @@ class BotLogicController extends Controller
 
     public function SceneTimerCronAction()
     {
+        try {
+            BotLogicController::MakeSceneTimerCronAction();
+        } catch (Throwable  $e) {
+            return false;
+        }
+    }
+
+    public static function MakeSceneTimerCronAction()
+    {
         /** @var Scene[] $scenes */
         $scenes = Scene::where("timer_to", ">", 0)->where("timer_to", "<", time())->limit(3)->get();
         if (!count($scenes)) return null;
@@ -235,11 +246,11 @@ class BotLogicController extends Controller
             }
             $history->save();
 
-            if($botRequestStructure->user->vk_id){
-                VkAction::SendMessage($botRequestStructure->user->vk_id,$response->message, $response->btns, $response->attach_sound ?? null);
+            if ($botRequestStructure->user->vk_id) {
+                VkAction::SendMessage($botRequestStructure->user->vk_id, $response->message, $response->btns, $response->attach_sound ?? null);
             }
 
-            echo $response->message;
+            echo "x";
         }
 
 

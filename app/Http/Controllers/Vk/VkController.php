@@ -14,7 +14,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use mysql_xdevapi\Exception;
 use SlavaWins\EasyAnalitics\Library\EasyAnaliticsHelper;
+use Throwable;
 
 
 class VkController extends Controller
@@ -67,12 +69,12 @@ class VkController extends Controller
                 $user = new User();
                 $user->vk_id = $from_id;
                 $user->name = "Игрок";
-                $user->tutorial_class = StartTutorial::class.'';
+                $user->tutorial_class = StartTutorial::class . '';
                 $user->tutorial_step = 0;
                 $user->save();
 
-                EasyAnaliticsHelper::Increment("user_new", 1, "Новый пользователь","Новый пользователь впервые написал боту");
-                EasyAnaliticsHelper::Increment("user_new_vk", 1, "Новый пользователь VK","Новый пользователь с ВК");
+                EasyAnaliticsHelper::Increment("user_new", 1, "Новый пользователь", "Новый пользователь впервые написал боту");
+                EasyAnaliticsHelper::Increment("user_new_vk", 1, "Новый пользователь VK", "Новый пользователь с ВК");
             }
 
             if ($user->last_message_time > $dateUnix) {
@@ -95,8 +97,13 @@ class VkController extends Controller
 
             VkAction::SendMessage($from_id, $botResponse->message, $botResponse->btns, $botResponse->attach_sound ?? null);
 
-            //  Log::info($data);
-            //  Log::info($data['from_id']);
+            try {
+                BotLogicController::MakeSceneTimerCronAction();
+            } catch (Throwable  $e) {
+                return false;
+            }
+
+
             die("ok");
         }
 

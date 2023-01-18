@@ -157,6 +157,8 @@ class WorkRoom extends BaseRoomPlus
         $this->scene->step = 2;
         $this->scene->save();
 
+        $this->response > $this->AddButton("Ок!");
+
         return $this->response;
     }
 
