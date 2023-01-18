@@ -6,9 +6,11 @@ namespace App\Http\Controllers\Bot;
 use App\BotTutorials\BotTutorialBase;
 use App\BotTutorials\StartTutorial;
 use App\Http\Controllers\Controller;
+use App\Library\EasyAnalitics\EasyAnaliticsHelper;
 use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
 use App\Models\Bot\Scene;
+use App\Models\EasyAnalitics\EasyAnalitics;
 use App\Models\User;
 use App\Scene\Core\BaseRoom;
 use App\Scene\HomeRoom;
@@ -84,6 +86,12 @@ class BotLogicController extends Controller
      */
     public function Message(User $user, BotRequestStructure $botRequestStructure)
     {
+
+        if ($botRequestStructure->message == "Назад") EasyAnaliticsHelper::Increment("btn_back", 1, "Пользователь нажал - назад");
+        if ($botRequestStructure->message == "Перегнать") EasyAnaliticsHelper::Increment("peregon", 1, "Пользователь перегнал тачку");
+        if ($botRequestStructure->message == "Закончить обучение") EasyAnaliticsHelper::Increment("tutorial_stop", 1, "Попытался заончить обучение");
+
+
         $this->user = $user;
 
         $response = new BotResponseStructure();
@@ -105,7 +113,7 @@ class BotLogicController extends Controller
             $user->refresh();
 
 
-            if($user->is_registration_end) {
+            if ($user->is_registration_end) {
                 $response->Reset()
                     ->AddWarning("Ошибка бота. Потеряна игровая сцена. Сейчас ошибка будет автоматически исправлена.")
                     ->AddButton("Исправить");
@@ -115,7 +123,7 @@ class BotLogicController extends Controller
                 $user->buttons = $response->btns;
                 $user->save();
             }
-          //  return $response;
+            //  return $response;
         }
 
         /** @var BaseRoom $sceneRoom */
@@ -150,8 +158,8 @@ class BotLogicController extends Controller
             return $this->Message($user, $botRequestStructure);
         }
 
-        if($user->tutorial_class) {
-            if(class_exists($user->tutorial_class)) {
+        if ($user->tutorial_class) {
+            if (class_exists($user->tutorial_class)) {
                 $response = $user->tutorial_class::Run($user, $sceneRoom, $botRequestStructure, $response);
             }
         }
@@ -159,6 +167,7 @@ class BotLogicController extends Controller
         if (count($response->btns) == 0) {
             $response->AddButton("...");
         }
+
 
 
         if ($botRequestStructure->messageFrom == "local") {
