@@ -40,6 +40,8 @@ class CarCharacter extends Character
         return $this->GetStatsCalculate()->hp->value / $this->characterData->hpMax;
     }
 
+
+
     public function GetStatsCalculate()
     {
         $res = $this->GetStats();

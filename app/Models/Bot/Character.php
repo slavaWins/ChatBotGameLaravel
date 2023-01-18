@@ -76,7 +76,8 @@ class Character extends Model
         return $items;
     }
 
-    function GetFreeSlotsCount(){
+    function GetFreeSlotsCount()
+    {
         return $this->characterData->size - $this->GetStatsCalculate()->childCount->value;
     }
 
@@ -239,6 +240,16 @@ class Character extends Model
             return null;
         }
         return $character->className::find($character->id);
+    }
+
+
+    public function Damage($amount)
+    {
+        $this->characterData->hp -= $amount;
+        if ($this->characterData->hp <= 0) $this->characterData->hp = 0;
+        $tex = "  " . $this->GetStats()->hp->icon . " Получен урон: -" . number_format($amount) . " " . $this->GetStats()->hp->postfix;
+        $tex .= "\n " . $this->GetStatsCalculate()->hp->RenderLine(true);
+        return $tex;
     }
 
 }

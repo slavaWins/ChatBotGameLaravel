@@ -19,7 +19,7 @@ use App\Scene\Core\SkillRoom;
 class WorkRoom extends BaseRoomPlus
 {
 
-    public \App\Models\Bot\Character $car;
+    public ?CarCharacter $car;
 
     const  tarifs = [
         'eco' => [
@@ -146,11 +146,16 @@ class WorkRoom extends BaseRoomPlus
     public function Step3_Taxi()
     {
         $this->response->Reset();
-        $this->response->message = "Работа выполнена!";
+        $this->response->message = "Работа выполнена! \n";
 
         $tarif = self::tarifs[$this->scene->sceneData['tarif']];
         $this->response->message .= $this->user->player->AddMoney($tarif['money']);
         $this->response->message .= $this->user->player->AddExpa($tarif['expa']);
+        $this->response->message .= "\n\n" . $this->user->player->GetStats()->money->RenderLine(false);
+
+        $this->response->message .= "\n\n" . $this->car->GetName() . "  " . $this->car->Damage(3);
+
+        $this->car->save();
         $this->user->player->save();
 
 

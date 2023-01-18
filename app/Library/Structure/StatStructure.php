@@ -14,7 +14,7 @@ class StatStructure
     public $value = 0;
     public string $typeData = "int";
     public bool $isShowShort = true;
-    private $postfix;
+    public $postfix;
     private string $format = "";
     private bool $isShowProgressBar = false;
     private $progressBarIcon_On = '▰';

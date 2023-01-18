@@ -29,6 +29,8 @@ class PlayerCharacter extends Character
         ];
     }
 
+
+
     public function AddMoney($amount)
     {
         $tex = "\n " . $this->GetStats()->money->icon . " Вы получили деньги: +" . number_format($amount) . " ₽ ";
