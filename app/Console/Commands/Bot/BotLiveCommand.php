@@ -8,7 +8,7 @@ use App\Models\Bot\Character;
 use App\Services\MoneyAnalizService;
 use Illuminate\Console\Command;
 
-class AutoTest extends Command
+class BotLiveCommand extends Command
 {
     /**
      * The name and signature of the console command.

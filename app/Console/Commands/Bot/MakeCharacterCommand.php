@@ -8,7 +8,7 @@ use App\Models\Bot\Character;
 use App\Services\MoneyAnalizService;
 use Illuminate\Console\Command;
 
-class MakeCharacter extends Command
+class MakeCharacterCommand extends Command
 {
 
     protected $signature = 'make:character {ind} {isPasteFileNoDouble?}';

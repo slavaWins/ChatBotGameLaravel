@@ -2,68 +2,91 @@
 
 namespace App\Scene;
 
+use App\Characters\CarCharacter;
 use App\Characters\GarageCharacter;
-use App\Scene\Core\BaseRoom;
+use App\Scene\Core\BaseRoomPlus;
 use App\Scene\Core\SkillRoom;
 
-class TemplateRoom extends BaseRoom
+class TemplateRoom extends BaseRoomPlus
 {
 
-    public function Step0()
+    public ?CarCharacter $car;
+
+
+    public function Step0_List()
     {
         $this->response->Reset();
-        $this->response->message = "Сейчас вы дома. \n";
-
-        $isFullInfo = $this->IsBtn("?");
-
-        $this->response->message .= $this->user->player->RenderStats(false, $isFullInfo, $isFullInfo);
+        $this->response->message = "Выберите машину:";
 
 
-        /** @var GarageCharacter $garageCharacter */
-        $garageCharacter = GarageCharacter::LoadFristCharacterByUser($this->user->id, true);
-        $this->response->message .= "\n\n " . $garageCharacter->icon . " Гараж";
+        $cars = $this->user->GetAllCharacters(CarCharacter::class);
+        $selectCharacter = $this->PaginateSelector($cars);
 
-        $this->response->message .= $garageCharacter->RenderStats(false, $isFullInfo, true);
-
-
-        if ($this->AddButton("Прокачка персонажа")) {
-            $room = SkillRoom::CreateSkillRoomByCharacter($this->user, $this->user->player);
-            return $this->SetRoom($room, [], true);
+        if (count($cars) == 1) {
+            $selectCharacter = $cars->first();
+        } elseif (count($cars) == 0) {
+            $this->response->AddWarning("У вас нет подходящей машины");
         }
 
-        if ($this->AddButton("Мои гаражи")) {
-            return $this->SetRoom(GarageRoom::class);
+        if ($selectCharacter) {
+            $this->scene->SetData('id', $selectCharacter->id);
+            return $this->NextStep();
         }
 
-        if ($this->AddButton("Работа")) {
-            return $this->SetRoom(WorkRoom::class);
-        }
-
-
-        if ($isFullInfo) {
-            $this->AddButton("Убрать описание");
-        } else {
-            $this->AddButton("?");
+        if ($this->AddButton("Назад")) {
+            $this->DeleteRoom();
+            return null;
         }
 
         return $this->response;
     }
 
 
-    public function Step1_Xz()
+    public function Step1_Show()
     {
+        $this->response->Reset();
 
+        $this->response->message = "Хотите начать гонку?";
+        $this->response->message .= "\n" . $this->car->Render(true);
+
+
+        if ($this->AddButton("Выход")) {
+            $this->DeleteRoom();
+            return null;
+        }
+
+        return $this->response;
     }
+
 
     public function Step2_Info()
     {
+        $this->response->Reset();
+
+        if ($this->AddButton("Выход")) {
+            $this->DeleteRoom();
+            return null;
+        }
+
+        if ($this->AddButton("Назад")) {
+            return $this->PrevStep();
+        }
+
+        return $this->response;
     }
 
 
+    function Boot()
+    {
+        if ($this->scene->sceneData['id'] ?? false) {
+            $this->car = CarCharacter::LoadCharacterById($this->scene->sceneData['id']);
+        }
+    }
+
     public function Route()
     {
-        if ($this->GetStep() == 0) return $this->Step0();
-        if ($this->GetStep() == 1) return $this->Step1_Xz();
+        if ($this->GetStep() == 0) return $this->Step0_List();
+        if ($this->GetStep() == 1) return $this->Step1_Show();
         if ($this->GetStep() == 2) return $this->Step2_Info();
 
         return $this->response;
