@@ -37,6 +37,14 @@ class CarRoom extends BaseRoomPlus
             return $this->SetStep(2);
         }
 
+        if ($this->AddButton("Таксовать")) {
+            return $this->SetRoom(WorkRoom::class,['step'=>1]);
+        }
+
+        if ($this->AddButton("На СТО")) {
+            return $this->SetRoom(StoRoom::class, ['id'=>$this->car->id]);
+        }
+
         return $this->response;
     }
 
@@ -51,7 +59,7 @@ class CarRoom extends BaseRoomPlus
         /** @var CarCharacter[] $items */
         $items = collect($this->user->GetAllCharacters(GarageCharacter::class))->filter(function (GarageCharacter $item) {
             if ($this->car->parent_id == $item->id) return false;
-            return $item->GetChildldren()->count() < $item->characterData->size;
+            return $item->GetChildldren()->count() < $item->characterData->storage_size;
         });
 
         $this->response->message = "В какой гараж вы хотите перегнать " . $this->car->GetName() . " ? \n";

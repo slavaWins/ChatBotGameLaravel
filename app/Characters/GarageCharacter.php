@@ -27,10 +27,10 @@ class GarageCharacter extends Character
         if (!$this->id) return $this->GetStats();
 
         $stats = $this->GetStats();
-        $stats->childCount->max = $stats->size->value;
+        $stats->storage_childs->max = $stats->storage_size->value;
 
         $c = Character::where("parent_id", $this->id)->count();
-        $stats->childCount->value = $c;
+        $stats->storage_childs->value = $c;
 
         return $stats;
     }

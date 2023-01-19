@@ -22,8 +22,8 @@ class InventoryCharacterService
         $garages = collect($user->GetAllCharacters($className))
             ->filter(function (GarageCharacter $item) use ($ignoreId) {
                 if ($item->id == $ignoreId) return false;
-                $item->characterData->childCount = $item->GetChildldren()->count();
-                return $item->GetChildldren()->count() < $item->characterData->size;
+                $item->characterData->storage_childs = $item->GetChildldren()->count();
+                return $item->GetChildldren()->count() < $item->characterData->storage_size;
             });
 
         return $garages;
@@ -46,13 +46,13 @@ class InventoryCharacterService
         /** @var GarageCharacter $garage */
         foreach ($items as $K => $item) {
             foreach ($garages as $garage) {
-                if ($garage->characterData->childCount >= $garage->characterData->size) {
+                if ($garage->characterData->storage_childs >= $garage->characterData->storage_size) {
                     continue;
                 }
                 $item->parent_id = $garage->id;
                 $item->save();
                 unset($items[$K]);
-                $garage->characterData->childCount++;
+                $garage->characterData->storage_childs++;
             }
         }
 

@@ -61,10 +61,18 @@ class Character extends Model
     }
 
     /**
+     * Является ли этот чарактер инвартерем или хранилищем?
+     * @return bool
+     */
+    public function IsStorage(){
+        return isset($this->characterData->storage_size) && isset($this->characterData->storage_childs);
+    }
+    /**
      * @return Character[]
      */
     function GetChildldren($byClass = null)
     {
+        if(!$this->IsStorage())return [];
         if ($this->id == 0) return [];
         $items = Character::where("parent_id", $this->id)->get();
 
@@ -78,7 +86,8 @@ class Character extends Model
 
     function GetFreeSlotsCount()
     {
-        return $this->characterData->size - $this->GetStatsCalculate()->childCount->value;
+        if(!$this->IsStorage())return 0;
+        return $this->characterData->storage_size - $this->GetStatsCalculate()->storage_childs->value;
     }
 
     /**

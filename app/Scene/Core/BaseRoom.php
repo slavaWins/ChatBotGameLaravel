@@ -107,9 +107,12 @@ class BaseRoom
         $sceneRoom = new $roomName($this->request);
 
         if (!empty($data)) {
+            if(isset($data['step'])) $sceneRoom->scene->step = $data['step'];
             foreach ($data as $K => $V) $sceneRoom->scene->SetData($K, $V);
             $sceneRoom->scene->save();
         }
+
+        $this->request->message = "";
 
         return $sceneRoom->Handle();
     }

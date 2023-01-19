@@ -6,11 +6,13 @@ namespace App\BotTutorials;
 use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
 use App\Models\User;
+use App\Scene\CarRoom;
 use App\Scene\Core\BaseRoom;
 use App\Scene\Core\ShopRoom;
 use App\Scene\GarageRoom;
 use App\Scene\RegistrationRoom;
 use App\Scene\StartHistoryRoom;
+use App\Scene\WorkRoom;
 use SlavaWins\EasyAnalitics\Library\EasyAnaliticsHelper;
 
 class StartTutorial extends BotTutorialBase
@@ -95,16 +97,75 @@ class StartTutorial extends BotTutorialBase
         if ($this->step == 5) {
             if ($this->IsScene(GarageRoom::class)) {
                 $this->RemoveExitBtns()->RemoveBtn("Купить машину");
-
-                if ($this->sceneCurrent->step == 3) $this
-                    ->AddMessage("Отличично теперь в вашем гараже есть первая машина!")
-                    ->AddMessage("Перейдите в вашу машину");
-
-
+                if ($this->sceneCurrent->step == 3) {
+                    $this->AddMessage("Отличично теперь в вашем гараже есть первая машина!")
+                        ->AddMessage("Перейдите в вашу машину");
+                }
             }
+            if ($this->IsScene(CarRoom::class)) {
+                //  $this->RemoveExitBtns()->RemoveBtn("Купить машину");
+                if ($this->sceneCurrent->step == 0) {
+                    $this->OnlyBtn("Таксовать");
+                    $this->AddMessage("Попробуем заработать первые деньги, с помощью машины. Теперь нажмите Таксовать");
+                }
+            }
+            if ($this->IsScene(WorkRoom::class)) {
+                $this->NextStep();
+            }
+        }
 
-            if ($this->IsScene(ShopRoom::class)) {
-                // $this->NextStep();
+        if ($this->step == 6) {
+            if ($this->IsScene(WorkRoom::class)) {
+                $this->RemoveExitBtns();
+                if ($this->sceneCurrent->step == 1) {
+                    $this->AddMessage("Выберите тариф для такси! Чем лучше машина, тем более крутой тариф можно получить.");
+                }
+                if ($this->sceneCurrent->step == 2) {
+                    $this->AddMessage("Выберите машину");
+                }
+                if ($this->sceneCurrent->step == 3) {
+                    $this->AddMessage("Когда ваш персонаж выполняет работу, игра переходит в режим ожидания. Что бы посмотреть сколько осталось времени, вы можете нажимать Обновить. Либо бот сам отправит вам сообщение, когда время закончится. Но это может затянутся.");
+                    $this->NextStep();
+                }
+            }
+        }
+
+        if ($this->step == 7) {
+
+            if ($this->IsScene(WorkRoom::class)) {
+                //   $this->RemoveExitBtns();
+                if ($this->sceneCurrent->step == 1) {
+                    $this->AddMessage("Отлично, вы заработали первые деньги! Такси это самый простой способ заработка в игре. Но таксование быстро портит машину.");
+                    $this->NextStep();
+                    return $this->response;
+                }
+            }
+        }
+
+        if ($this->step == 8) {
+            if ($this->IsScene(WorkRoom::class)) {
+                //   $this->RemoveExitBtns();
+                if ($this->sceneCurrent->step == 1) {
+                    $this->OnlyBtn("Назад");
+                    $this->AddMessage("Вы научились зарабатывать. Теперь нужно научится ремонтировать машину. Нажмите Назад.");
+                }
+                if ($this->sceneCurrent->step == 0) {
+                    $this->OnlyBtn("Назад");
+                    $this->AddMessage("Нажмите Назад.");
+                }
+            }
+            if ($this->IsScene(GarageRoom::class)) {
+                $this->RemoveExitBtns()->RemoveBtn("Купить машину");
+                if ($this->sceneCurrent->step == 3) {
+                    $this->AddMessage("Выберите машину для ремонта");
+                }
+            }
+            if ($this->IsScene(CarRoom::class)) {
+                $this->RemoveExitBtns()->RemoveBtn("Купить машину");
+                if ($this->sceneCurrent->step == 0) {
+                    $this->OnlyBtn("На СТО");
+                    $this->AddMessage("Нажмите На СТО");
+                }
             }
         }
 

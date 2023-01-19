@@ -15,58 +15,31 @@ use App\Models\Bot\Scene;
 use App\Scene\Core\BaseRoomPlus;
 use App\Scene\Core\ShopRoom;
 use App\Scene\Core\SkillRoom;
+use Illuminate\Support\Facades\Log;
 
-class WorkRoom extends BaseRoomPlus
+class StoRoom extends BaseRoomPlus
 {
 
     public ?CarCharacter $car;
 
     const  tarifs = [
-        'eco' => [
-            'name' => "Эконом",
-            'money' => 1400,
-            'expa' => 1,
-            'carPrice' => 12000,
-            'carHp' => 5,
-            'cars' => [],
+        'ameran' => [
+            'name' => "Стошка у Азамата",
+            'price' => 1,
+            'repairToValue' => 30,
         ],
-        'comfort' => [
-            'name' => "Комфорт",
-            'money' => 2600,
-            'expa' => 2,
-            'carPrice' => 38000,
-            'carHp' => 50,
-            'cars' => [],
+        'mid' => [
+            'name' => "СТО Последний день",
+            'price' => 1.2,
+            'repairToValue' => 38,
         ],
         'comfortPlus' => [
-            'name' => "Комфорт+",
-            'money' => 3100,
-            'expa' => 4,
-            'carPrice' => 48000,
-            'carHp' => 65,
-            'cars' => [],
+            'name' => "СТО ПРЕМИУМ",
+            'price' => 3,
+            'repairToValue' => 130,
         ],
     ];
 
-    public function Step0_Show()
-    {
-        $this->response->Reset();
-
-
-        $this->response->message = "И так надо подзаработать.";
-
-        if ($this->AddButton("Такси")) {
-            $this->SetStep(1);
-            return null;
-        }
-
-        if ($this->AddButton("Назад")) {
-            $this->DeleteRoom();
-            return null;
-        }
-
-        return $this->response;
-    }
 
     public static function FilterCarByTarifData($cars, $tarif)
     {
@@ -78,37 +51,41 @@ class WorkRoom extends BaseRoomPlus
         return $cars;
     }
 
-    public function Step1_Show()
+    public function Step0_Show()
     {
         $this->response->Reset();
-        $this->response->message = "Для такси требуются машины";
+        $this->response->message = "Вот какие СТО доступны для машины " . $this->car->GetName();
+        $this->response->message .= $this->car->RenderStats();
 
 
-        $cars = $this->user->GetAllCharacters(CarCharacter::class);
-
+        //$cars = $this->user->GetAllCharacters(CarCharacter::class);
+        $stats = $this->car->GetStatsCalculate();
         foreach (self::tarifs as $K => $tarif) {
-            $tarifs[$K]['cars'] = self::FilterCarByTarifData($cars, $tarif);
+            // $tarifs[$K]['cars'] = self::FilterCarByTarifData($cars, $tarif);
 
-            $this->response->message .= "\n\n Для тарифа " . $tarif['name'] . ': ';
-            $this->response->message .= "\n 💵 Нужна машина от " . number_format($tarif['carPrice']) . '₽ ';
-            $this->response->message .= "\n ⚙ В состояние не меньше: " . number_format($tarif['carHp']) . '% ';
+            if ($stats->hp->value > $tarif['repairToValue']) continue;
 
-            if (!$tarifs[$K]['cars']->count()) {
-                $this->response->message .= "\n У вас нет подходящей машины.";
-            } else {
-                $this->response->message .= "\n 🚘 Подходит машин: " . $tarifs[$K]['cars']->count() . ' шт.';
 
+            $canRepairCount = $stats->hpMax->value - $stats->hp->value;
+            $priceRepair = $canRepairCount * $tarif['price'] * $this->car->GetPriceOneHpRepair();
+
+            $this->response->message .= "\n\n  " . $tarif['name'] . ': ';
+            //$this->response->message .= "\n 💵 Ценн " . number_format($tarif['carPrice']) . '₽ ';
+            $this->response->message .= "\n ⚙ Ремонт до: " . number_format($tarif['repairToValue']) . ' HP. ';
+            $this->response->message .= "\n 💵 Сделает ремонт за : " . number_format($priceRepair) . ' ₽ ';
+
+            if ($this->user->player->characterData->money > $priceRepair) {
                 if ($this->AddButton($tarif['name'])) {
-                    $this->scene->SetData("tarif", $K);
-                    return $this->NextStep();
+
                 }
 
             }
         }
 
 
-        if ($this->AddButton("Назад")) {
-            return $this->PrevStep();
+        if ($this->AddButton("Выход")) {
+            $this->DeleteRoom();
+            return null;
         }
 
         return $this->response;
@@ -126,8 +103,8 @@ class WorkRoom extends BaseRoomPlus
 
         $selectCharacter = $this->PaginateSelector($cars);
 
-        if(count($cars)==1){
-            $selectCharacter=$cars->first();
+        if (count($cars) == 1) {
+            $selectCharacter = $cars->first();
         }
 
         if ($selectCharacter) {
@@ -181,7 +158,7 @@ class WorkRoom extends BaseRoomPlus
     public function Route()
     {
         if ($this->GetStep() == 0) return $this->Step0_Show();
-        if ($this->GetStep() == 1) return $this->Step1_Show();
+        if ($this->GetStep() == 1) return $this->Step0_Show();
         if ($this->GetStep() == 2) return $this->Step2_SelectCar();
         if ($this->GetStep() == 3) return $this->Step3_Taxi();
 

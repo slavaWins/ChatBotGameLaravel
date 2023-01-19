@@ -28,6 +28,12 @@ class CarCharacter extends Character
         ];
     }
 
+    public function GetPriceOneHpRepair()
+    {
+        $stats = $this->GetStatsCalculate();
+
+        return  round(($stats->price->value / $stats->hpMax->value)*0.3);
+    }
 
     /**
      * Получить текущие ХП объекта в процентах 0-1. При условии что есть hp и hpMax
@@ -39,7 +45,6 @@ class CarCharacter extends Character
         if (!isset($this->characterData->hpMax)) return null;
         return $this->GetStatsCalculate()->hp->value / $this->characterData->hpMax;
     }
-
 
 
     public function GetStatsCalculate()
