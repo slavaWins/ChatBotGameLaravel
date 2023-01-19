@@ -45,7 +45,7 @@ class GarageCharacter extends Character
             return $item->className == "App\Characters\WorkbenchCharacter";
         })->count();
 
-        $text = "";
+        $text = "\n";
         if ($c) {
             $text .= "\n 🛠️ Верстаков: " . $c;
         } else {

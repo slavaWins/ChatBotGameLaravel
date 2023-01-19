@@ -89,8 +89,8 @@ class WorkRoom extends BaseRoomPlus
         foreach (self::tarifs as $K => $tarif) {
             $tarifs[$K]['cars'] = self::FilterCarByTarifData($cars, $tarif);
 
-            $this->response->message .= "\n\n Для тарифа " . $tarif['name'] . ': ';
-            $this->response->message .= "\n 💵 Нужна машина от " . number_format($tarif['carPrice']) . '₽ ';
+            $this->response->message .= "\n\n 🔸 Для тарифа " . $tarif['name'] . ': ';
+            $this->response->message .= "\n   Нужна машина от " . number_format($tarif['carPrice']) . ' ₽ ';
             $this->response->message .= "\n ⚙ В состояние не меньше: " . number_format($tarif['carHp']) . '% ';
 
             if (!$tarifs[$K]['cars']->count()) {
@@ -154,7 +154,7 @@ class WorkRoom extends BaseRoomPlus
         $tarif = self::tarifs[$this->scene->sceneData['tarif']];
         $this->response->message .= $this->user->player->AddMoney($tarif['money']);
         $this->response->message .= $this->user->player->AddExpa($tarif['expa']);
-        $this->response->message .= "\n\n" . $this->user->player->GetStats()->money->RenderLine(false);
+        //$this->response->message .= "\n\n" . $this->user->player->GetStats()->money->RenderLine(false);
 
         $this->response->message .= "\n\n" . $this->car->GetName() . "  " . $this->car->Damage(3);
 

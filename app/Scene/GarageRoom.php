@@ -136,7 +136,7 @@ class GarageRoom extends BaseRoomPlus
 
         $this->response->message = $this->garage->GetName();
 
-        $this->response->message .= "\n Машины в этом гараже" . " (" . (count($items)) . " шт): \n";
+        $this->response->message .= "\n Машины в этом гараже" . " (" . (count($items)) . " шт):  ";
 
         $isRedirect = $this->PaginateCollection($items, 4, function ($item) {
             $this->response->message .= "\n\n" . $item->Render(true, false, false);

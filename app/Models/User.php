@@ -74,6 +74,8 @@ class User extends Authenticatable
         return Scene::where("user_id", $this->id)->orderBy('id', 'desc')->first();
     }
 
+
+
     public function player()
     {
         return $this->belongsTo(PlayerCharacter::class, "player_id");

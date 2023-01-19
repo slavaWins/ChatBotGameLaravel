@@ -37,6 +37,7 @@ class StoRoom extends BaseRoomPlus
     public function Step0_StoList()
     {
         $this->response->Reset();
+
         $this->response->message = "Вот какие СТО доступны для машины " . $this->car->GetName();
         $this->response->message .= $this->car->RenderStats();
 

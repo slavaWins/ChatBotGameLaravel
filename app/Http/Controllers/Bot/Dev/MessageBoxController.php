@@ -117,7 +117,7 @@ class MessageBoxController extends Controller
 
             $botRequest->message = $mess;
             $botRequest->messageFrom = 'local';
-            $response = $botLogic->Message($user, $botRequest, $writeHistrory,$writeHistrory);
+            $response = $botLogic->Message($user, $botRequest, $writeHistrory, $writeHistrory);
 
             if ($botLogic->sceneRoom) {
                 if ($botLogic->sceneRoom->IsTimer()) {
@@ -134,7 +134,7 @@ class MessageBoxController extends Controller
             unset($botRequest);
         }
 
-        return "Теперь у игрока: " . number_format( $user->player->characterData->money ). " RUB ";
+        return "Теперь у игрока: " . number_format($user->player->characterData->money) . " RUB ";
     }
 
     public function AutoTest()
@@ -145,7 +145,7 @@ class MessageBoxController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        self::MakeAutoTest($user);
+        self::MakeAutoTest($user, 10, true);
 
         return redirect()->back();
     }

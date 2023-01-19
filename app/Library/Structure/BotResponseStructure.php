@@ -4,6 +4,8 @@ namespace App\Library\Structure;
 
 class BotResponseStructure
 {
+    public $issetHeader = false;
+
     public $message = "";
     public $btns = [];
 

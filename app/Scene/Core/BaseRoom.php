@@ -11,6 +11,8 @@ use App\Models\User;
 class BaseRoom
 {
 
+    public $usePlayerHeader = true;
+
     public $roomType = "scene";
     public $name = "Базовая сцена";
     public BotResponseStructure $response;
@@ -169,7 +171,7 @@ class BaseRoom
     {
         $text = " " . ($this->scene->timer_to - time()) . ' сек.';
         $percent = max(0, ($this->scene->timer_to - time())) / ($this->scene->timer_to - $this->scene->timer_from);
-        $text .= ProgressBarEmoji::Render(1 - $percent);
+        $text .= "\n".ProgressBarEmoji::Console(1 - $percent, 9);
         return $text;
     }
 
@@ -214,7 +216,20 @@ class BaseRoom
             $this->scene->save();
         }
 
-        return $this->Route();
+        $response = $this->Route();
+
+        if($response) {
+
+            if ($this->user->player && !$response->issetHeader) {
+                $response->issetHeader = true;
+
+                if ($this->usePlayerHeader) {
+                    $response->message = $this->user->player->GetHeader() . $response->message;
+                }
+            }
+        }
+
+        return $response;
     }
 
 

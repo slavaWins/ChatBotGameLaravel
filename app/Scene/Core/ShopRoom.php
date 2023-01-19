@@ -27,7 +27,6 @@ class ShopRoom extends BaseRoomPlus
         $clasExample = new $this->itemShopClass();
 
         $this->response->message = $clasExample->titleShop . " \n";
-        $this->response->message .= $this->user->player->GetStats()->money->RenderLine(false, false);
         $this->response->message .= "\n Выберите по каким параметрам отображать товары.";
 
 
@@ -121,7 +120,6 @@ class ShopRoom extends BaseRoomPlus
         $this->response->Reset();
 
         $this->response->message = $clasExample->titleShop . " \n";
-        $this->response->message .= $this->user->player->GetStats()->money->RenderLine(false, false);
         $this->response->message .= "\n Выберите машину которые вы хотите посмотреть";
 
         $items = $this->GetItems();
@@ -171,11 +169,10 @@ class ShopRoom extends BaseRoomPlus
         /** @var ItemCharacterShop $item */
         $item = $this->GetItems()[$this->scene->sceneData['selectId']] ?? null;
 
-        $this->response->message = $this->user->player->GetStats()->money->RenderLine(false, false);
 
 
         //$this->response->message .= "\n ВЫ СМОТРИТЕ ТОВАР:";
-        $this->response->message .= "\n\n" . $item->icon . ' ' . $item->name;
+        $this->response->message = "  " . $item->icon . ' ' . $item->name;
 
         /** @var Character $character */
         $character = new $this->characterClass();

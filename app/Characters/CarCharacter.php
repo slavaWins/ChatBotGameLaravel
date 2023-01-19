@@ -35,17 +35,6 @@ class CarCharacter extends Character
         return  round(($stats->price->value / $stats->hpMax->value)*0.3);
     }
 
-    /**
-     * Получить текущие ХП объекта в процентах 0-1. При условии что есть hp и hpMax
-     * @return float|int
-     */
-    public function GetHpPercent()
-    {
-        if (!isset($this->characterData->hp)) return null;
-        if (!isset($this->characterData->hpMax)) return null;
-        return $this->GetStatsCalculate()->hp->value / $this->characterData->hpMax;
-    }
-
 
     public function GetStatsCalculate()
     {

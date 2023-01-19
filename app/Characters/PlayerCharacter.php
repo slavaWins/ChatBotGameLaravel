@@ -30,6 +30,20 @@ class PlayerCharacter extends Character
     }
 
 
+    public function GetHeader()
+    {
+        $text = "";
+
+        $calc = $this->GetStatsCalculate();
+        $text .= $calc->money->RenderLine();
+        $text .= "  " . $calc->level->RenderLine();
+        if ($calc->score_level->value) {
+            $text .= "  " . $calc->score_level->RenderLine();
+        }
+        $text .= "\n\n";
+
+        return $text;
+    }
 
     public function AddMoney($amount)
     {
@@ -51,8 +65,8 @@ class PlayerCharacter extends Character
             EasyAnaliticsHelper::Increment("level_plus", 1, "Игрок левелапнулись", "Сколько всего левелапов было сделано");
             $tex = "\n 🌟🌟 У ВАС НОВЫЙ УРОВЕНЬ: " . $this->characterData->level . " 🌟🌟 ";
         } else {
-            $tex .= "\n До след уровня: \n";
-            $tex .= $this->GetStats()->expa->RenderLine(false, false, $this->characterData->expa);
+          //  $tex .= "\n До след уровня: \n";
+            $tex .="\n". $this->GetStats()->expa->RenderLine(false, false, $this->characterData->expa);
         }
         return $tex;
     }

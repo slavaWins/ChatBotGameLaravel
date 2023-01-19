@@ -9,10 +9,11 @@ class CarCharacterDataStructure extends BaseCharacterDataCast
 {
 
     public $hp = 1;
+    public $hpMax = 23;
     public $razgon = 13;
     public $power = 255;
+    public $maxSpeed = 150;
     public $mass = 930;
-    public $hpMax = 23;
     public $skill_engine = 0;
     public $skill_kpp = 0;
     public $price = 1;
@@ -30,6 +31,8 @@ class CarCharacterDataStructure extends BaseCharacterDataCast
         $this->power = StatStructure::Make("Мощность")->SetDefault(78)->SetIcon("🔩")->SetPostfix(' л.с.');
         $this->razgon = StatStructure::Make("Разгон 0-100км")->SetDefault(17.5)->SetIcon("🚥")->SetPostfix(' сек.');
 
+        $this->maxSpeed = StatStructure::Make("Макс.Скорость")->SetDefault(150)->SetIcon("🚥")->SetPostfix(' км/ч');
+
         $this->price = StatStructure::Make("Цена")->SetDefault(0)->SetIcon("💵")->SetPostfix(' ₽')->FormatMoney()->SetShowInShort(false);
 
         $this->skill_engine = StatStructure::Make("Тюнинг двигателя")->SetDefault(1)
@@ -45,7 +48,6 @@ class CarCharacterDataStructure extends BaseCharacterDataCast
 
         $this->marka = StatStructure::Make("Марка")->SetDefault("Dolorian")->Hidden()->ShopCategory()->SetTypeString()
             ->SetShowInShort(false);
-
 
 
         $this->UpdateValuesFromData($characterData);

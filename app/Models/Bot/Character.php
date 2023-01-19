@@ -265,4 +265,10 @@ class Character extends Model
         return $tex;
     }
 
+    public function GetHpPercent()
+    {
+        if (!isset($this->characterData->hp)) return null;
+        if (!isset($this->characterData->hpMax)) return null;
+        return $this->GetStatsCalculate()->hp->value / $this->characterData->hpMax;
+    }
 }
