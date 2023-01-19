@@ -284,7 +284,6 @@ class ShopRoom extends BaseRoomPlus
 
         $request = new BotRequestStructure();
         $request->user = $user;
-        $request->user_id = $user->id;
         $skillRoom = new ShopRoom($request);
 
         $skillRoom->scene->sceneData = [

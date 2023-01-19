@@ -76,7 +76,7 @@ class StartHistoryRoom extends BaseRoom
 
             $this->user->player_id = $player->id;
             $this->user->save();
-            $this->user->fresh();
+            $this->user->refresh();
             return $this->NextStep();
         }
 
@@ -100,7 +100,7 @@ class StartHistoryRoom extends BaseRoom
 
         if ($this->AddButton("Смотреть гаражи")) {
 
-            EasyAnaliticsHelper::Increment("user_tracking_hist", 1, "Пользователь. Закончил историю",  "Пользователь закончил комнату истории");
+            EasyAnaliticsHelper::Increment("user_tracking_hist", 1, "Пользователь. Закончил историю", "Пользователь закончил комнату истории");
             $this->SetRoom(GarageRoom::class);
 
             $room = ShopRoom::CreateShopRoomByCharacterType($this->user, GarageCharacter::class, GarageItemCharacterShop::class);

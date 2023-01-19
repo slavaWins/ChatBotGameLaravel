@@ -37,6 +37,8 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
 
+    protected $with = ['player'];
+
     /**
      * Если пользователь новичек и только что зарегался
      * @return bool
@@ -85,19 +87,21 @@ class User extends Authenticatable
 
     {
         $list = [];
-        $charList = Character::where("user_id", $this->id)->get();
 
+        $charList = Character::select(['id', 'className'])->where("user_id", $this->id);
         if ($byClass) {
-            $charList = $charList->filter(function ($item) use ($byClass) {
-                return $item->className == $byClass;
-            });
+            $charList = $charList->where("className", $byClass);
         }
+        $charList =$charList->get();
+
 
         foreach ($charList as $char) {
-            $character = $char->className::LoadCharacterById($char->id);
-
+            /** @var Character $character */
+            $character = $char->className::find($char->id);
             $list[] = $character;
         }
+
+
 
         $list = collect($list);
         return $list;

@@ -13,7 +13,8 @@ class BotRequestStructure
     public string $marker ="";
 
     public string $message ="";
-    public int $user_id;
+
+
     public User $user;
     public string $messageFrom = "local";
 

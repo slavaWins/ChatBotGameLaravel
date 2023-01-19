@@ -87,7 +87,6 @@ class VkController extends Controller
 
             $botRequest = new BotRequestStructure();
             $botRequest->message = $text;
-            $botRequest->user_id = $user->id;
             $botRequest->user = $user;
             $botRequest->messageFrom = 'vk';
 

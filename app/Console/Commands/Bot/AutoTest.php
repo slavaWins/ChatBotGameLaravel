@@ -3,14 +3,9 @@
 namespace App\Console\Commands\Bot;
 
 use App\Http\Controllers\Bot\Dev\MessageBoxController;
+use App\Library\ProgressBarEmoji;
 use App\Models\Bot\Character;
-use app\Models\Trash\Product;
-use app\Models\Trash\Shop;
 use App\Services\MoneyAnalizService;
-use App\Services\SnoUSNService;
-use App\Sno;
-use App\TaxTransaction;
-use http\Client\Curl\User;
 use Illuminate\Console\Command;
 
 class AutoTest extends Command
@@ -42,12 +37,17 @@ class AutoTest extends Command
 
     public function GetUserHaves(\App\Models\User $user)
     {
+        if (!$user->player) {
+            return 0;
+        }
+
         $text = "\n\n" . $user->name;
         $text .= "\n " . $user->player->Render(true, false, true);
         $text .= "\n Имеет: ";
 
         /** @var Character $character */
         foreach ($user->GetAllCharacters() as $character) {
+            if ($character->id == $user->player->id) continue;
             $text .= "\n " . $character->GetName();
         }
         $text .= "\n";
@@ -68,15 +68,30 @@ class AutoTest extends Command
         $time = microtime(true);
 
 
-        for ($i = 1; $i < 5; $i++) {
-            $text = MessageBoxController::MakeAutoTest($user, 10);
-            $this->info($text);
+        $this->info("Фин.Сост игрока: " . number_format($money) . ' RUB');
+        $this->info("\n\n");
+
+        $needTests = 300;
+
+        $prevText = '';
+        $j = 1000;
+        for ($i = 1; $i < $needTests; $i++) {
+            $j++;
+            if ($j > max($needTests / 22, 7) || $j > 20) {
+                $j = 0;
+                $this->info(ProgressBarEmoji::Console($i / $needTests) . ' Complete');
+            }
+            $text = MessageBoxController::MakeAutoTest($user, 10, false);
+            if ($prevText <> $text) {
+                $this->info($text);
+                $prevText = $text;
+            }
         }
 
         $time = microtime(true) - $time;
 
 
-        $this->info("\n Время выполнения: ".number_format($time,2).' sec.');
+        $this->info("\n Время выполнения: " . number_format($time, 2) . ' sec.');
 
         $this->info($this->GetUserHaves($user));
 

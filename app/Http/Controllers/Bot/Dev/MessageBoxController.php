@@ -41,7 +41,6 @@ class MessageBoxController extends Controller
 
         $botRequest = new BotRequestStructure();
         $botRequest->message = $data['text'];
-        $botRequest->user_id = $user->id;
         $botRequest->messageFrom = 'local';
 
 
@@ -92,7 +91,7 @@ class MessageBoxController extends Controller
         return redirect()->back();
     }
 
-    public static function MakeAutoTest(User $user, $countRepeats = 8)
+    public static function MakeAutoTest(User $user, $countRepeats = 8, $writeHistrory = false)
     {
 
         $response = new BotResponseStructure();
@@ -117,9 +116,8 @@ class MessageBoxController extends Controller
             }
 
             $botRequest->message = $mess;
-            $botRequest->user_id = $user->id;
             $botRequest->messageFrom = 'local';
-            $response = $botLogic->Message($user, $botRequest);
+            $response = $botLogic->Message($user, $botRequest, $writeHistrory,$writeHistrory);
 
             if ($botLogic->sceneRoom) {
                 if ($botLogic->sceneRoom->IsTimer()) {
@@ -131,16 +129,6 @@ class MessageBoxController extends Controller
                     //return redirect()->back();
                 }
             }
-
-            /** @var History $history */
-            $history = new History();
-            $history->user_id =$user->id;
-            $history->message = $mess;
-            $history->message_response = $response->message;
-            $history->attachment_sound = $response->attach_sound ?? null;
-            $history->isFromBot = false;
-            $history->save();
-
 
 
             unset($botRequest);

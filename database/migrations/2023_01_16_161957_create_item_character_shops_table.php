@@ -18,7 +18,7 @@ class CreateItemCharacterShopsTable extends Migration
             $table->json('characterData');
             $table->integer('price')->comment("Стоимость товара. Иногда может сама считать и игнорить редактор")->default(0);
             $table->integer('buy_count')->comment("Колв покупок товара")->default(0);
-            $table->string('className')->comment("Название класса для каста")->nullable();
+            $table->string('className')->comment("Название класса для каста")->nullable()->index();
             $table->string('name')->comment("Название итема, уйдет в чараектера потом")->default("Toyto Prius 2004");
             $table->timestamps();
         });

@@ -15,10 +15,10 @@ class CreateScenesTable extends Migration
     {
         Schema::create('scenes', function (Blueprint $table) {
             $table->id();
-            $table->string('className')->index()->nullable();
+            $table->string('className')->index()->nullable()->index();
             $table->json('sceneData');
-            $table->integer('user_id')->default(0)->nullable();
-            $table->bigInteger('timer_to')->default(0)->nullable();
+            $table->integer('user_id')->default(0)->nullable()->index();
+            $table->bigInteger('timer_to')->default(0)->nullable()->index();
             $table->bigInteger('timer_from')->default(0)->nullable();
             $table->integer('step')->default(0)->nullable();
             $table->timestamps();

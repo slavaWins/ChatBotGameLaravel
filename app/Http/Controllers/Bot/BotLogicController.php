@@ -82,8 +82,8 @@ class BotLogicController extends Controller
 
         if ($this->user->player) {
             $text .= "\n\n Player: ";
-            $text .= "\n UserId: ".$this->user->id;
-            $text .= "\n bot:test ".$this->user->id;
+            $text .= "\n UserId: " . $this->user->id;
+            $text .= "\n bot:test " . $this->user->id;
             $text .= "\n  " . json_encode($this->user->player->characterData);
         }
 
@@ -96,9 +96,10 @@ class BotLogicController extends Controller
      * @param BotRequestStructure $botRequestStructure
      * @return BotResponseStructure
      */
-    public function Message(User $user, BotRequestStructure $botRequestStructure)
+    public function Message(User $user, BotRequestStructure $botRequestStructure, $isSaveBtns = true, $isSaveHistory = true)
     {
         $textFromRequest = $botRequestStructure->message;
+        $botRequestStructure->user = $user;
 
         if ($botRequestStructure->message == "...") EasyAnaliticsHelper::Increment("btn_empty", 1, "Пустая кнопка", "Пользователю была предложена пустая кнопка - многоточие.");
 
@@ -108,8 +109,9 @@ class BotLogicController extends Controller
         $response = new BotResponseStructure();
         $response->message = "ERROR BOT";
 
+        $userScene = $user->scene() ?? null;
 
-        if (!$user->scene()) {
+        if (!$userScene) {
             $response->message = "У вас нет сцены";
 
 
@@ -121,7 +123,7 @@ class BotLogicController extends Controller
             } else {
                 $scene = new RegistrationRoom($botRequestStructure);
             }
-            $user->refresh();
+            $userScene = $user->scene();
 
 
             if ($user->is_registration_end) {
@@ -138,20 +140,20 @@ class BotLogicController extends Controller
         }
 
         /** @var BaseRoom $sceneRoom */
-        $cnm = $user->scene()->className;
+        $cnm = $userScene->className;
         $sceneRoom = null;
 
         if (!class_exists($cnm)) {
 
             $response->Reset()
-                ->AddWarning("Ошибка. Бот не может найти игровую сцену " . $user->scene()->className)
+                ->AddWarning("Ошибка. Бот не может найти игровую сцену " . $userScene->className)
                 ->AddButton("Исправить");
 
-            $user->scene()->delete();
+            $userScene->delete();
 
         } else {
 
-            $sceneRoom = new $cnm($botRequestStructure, $user->scene());
+            $sceneRoom = new $cnm($botRequestStructure, $userScene);
             $this->sceneRoom = $sceneRoom;
 
             $response = $sceneRoom->Handle();
@@ -182,24 +184,27 @@ class BotLogicController extends Controller
             $response->AddButton("...");
         }
 
-
-        if ($botRequestStructure->messageFrom == "local") {
-            $user->buttons = $response->btns;
-            $user->save();
+        if($isSaveBtns) {
+            if ($botRequestStructure->messageFrom == "local") {
+                $user->buttons = $response->btns;
+                $user->save();
+            }
         }
 
-        /** @var History $history */
-        $history = new History();
-        $history->user_id = $user->id;
-        $history->message = $textFromRequest;
-        $history->message_response = $response->message;
-        $history->attachment_sound = $response->attach_sound ?? null;
-        $history->isFromBot = false;
-        if ($user->player) {
-            $history->money = $user->player->characterData->money;
+        if($isSaveHistory) {
+            /** @var History $history */
+            $history = new History();
+            $history->user_id = $user->id;
+            $history->message = $textFromRequest;
+            $history->message_response = $response->message;
+            $history->attachment_sound = $response->attach_sound ?? null;
+            $history->isFromBot = false;
+            if ($user->player) {
+                $history->money = $user->player->characterData->money;
+            }
+            $history->save();
+            $this->history = $history;
         }
-        $history->save();
-        $this->history = $history;
 
         return $response;
     }

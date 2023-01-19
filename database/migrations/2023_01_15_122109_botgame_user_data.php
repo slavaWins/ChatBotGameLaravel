@@ -24,7 +24,7 @@ class BotgameUserData extends Migration
         Schema::create('histories', function(Blueprint $table) {
             $table->id();
             $table->boolean('isFromBot')->default(0)->comment("это сообщение от бота");
-            $table->integer('user_id')->default(0)->comment("с кем диалог");
+            $table->integer('user_id')->default(0)->comment("с кем диалог")->index();
             $table->integer('money')->default(0)->comment("Баланс игрока на момент сообщения");
             $table->text('message')->nullable()->comment("Сообщение которое написал пользователь");
             $table->text('message_response')->nullable()->comment("Текст которым ответил бот");

@@ -74,13 +74,14 @@ class Character extends Model
     {
         if(!$this->IsStorage())return [];
         if ($this->id == 0) return [];
-        $items = Character::where("parent_id", $this->id)->get();
+        //$items = Character::where("parent_id", $this->id)->get();
 
+        $items = Character::where("parent_id", $this->id);
         if ($byClass) {
-            $items = $items->filter(function ($item) use ($byClass) {
-                return $item->className == $byClass;
-            })->count();
+            $items = $items->where("className", $byClass);
         }
+        $items =$items->get();
+
         return $items;
     }
 
@@ -202,7 +203,7 @@ class Character extends Model
         if (!$id) return null;
 
         /** @var Character $character */
-        $character = Character::find($id);
+        $character = Character::select(['id','className'])->find($id);
 
         if (!$character) return null;
 
@@ -233,8 +234,10 @@ class Character extends Model
     {
 
         $className = get_called_class(); //для статик класа так получается
+
         /** @var Character $character */
-        $character = Character::where('user_Id', $user_id)->where('className', $className)->first();
+        $character = $className::where('user_Id', $user_id)->where('className', $className)->first();
+
         if (!$character) {
             if ($createIfNot) {
                 /** @var Character $character */
@@ -248,7 +251,8 @@ class Character extends Model
             }
             return null;
         }
-        return $character->className::find($character->id);
+
+        return  $character;
     }
 
 

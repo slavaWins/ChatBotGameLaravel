@@ -88,7 +88,6 @@ class SkillRoom extends BaseRoom
 
         $request = new BotRequestStructure();
         $request->user = $user;
-        $request->user_id = $user->id;
         $skillRoom = new SkillRoom($request);
         $skillRoom->scene->sceneData = ['character_id' => $character->id];
 

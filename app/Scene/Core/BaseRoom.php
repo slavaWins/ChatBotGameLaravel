@@ -44,7 +44,7 @@ class BaseRoom
         if (isset($request->user)) {
             $this->user = $request->user;
         } else {
-            $this->user = User::find($request->user_id);
+            dd("НЕТ ПОЛЬЗОВАТЕЛЯ!");
         }
 
         if (!$scene) {
@@ -52,7 +52,6 @@ class BaseRoom
             $scene->user_id = $this->user->id;
             $scene->className = (new \ReflectionClass($this))->getName();
             $scene->step = 0;
-
             $scene->sceneData = $this->data;
             $scene->save();
         }
@@ -107,7 +106,7 @@ class BaseRoom
         $sceneRoom = new $roomName($this->request);
 
         if (!empty($data)) {
-            if(isset($data['step'])) $sceneRoom->scene->step = $data['step'];
+            if (isset($data['step'])) $sceneRoom->scene->step = $data['step'];
             foreach ($data as $K => $V) $sceneRoom->scene->SetData($K, $V);
             $sceneRoom->scene->save();
         }
