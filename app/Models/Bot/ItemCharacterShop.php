@@ -49,6 +49,9 @@ class ItemCharacterShop extends Model
        // $character = Character::where('user_Id', $user_id)->where('className', $className)->first();
     }
 
+    public function GetStatsStruct(){
+        return new $this->casts['characterData']($this->characterData);
+    }
     public function InitCastsStructure()
     {
         if (!$this->characterData) {
@@ -56,5 +59,28 @@ class ItemCharacterShop extends Model
          //   $this->characterDataRand=  new $this->casts['characterData']();
         }
 
+    }
+
+    /**
+     * @return ItemCharacterShop
+     */
+    public static function FindById($id){
+        $className = get_called_class(); //для статик класа так получается
+
+        return $className::find($id) ?? null;
+    }
+
+    /**
+     * @return ItemCharacterShop[]
+     */
+    public static function GetItmes(){
+        $className = get_called_class(); //для статик класа так получается
+
+        $items = [];
+        foreach (ItemCharacterShop::where("className", $className)->get() as $V) {
+            $items[] = $className::find($V->id);
+        }
+
+        return collect($items);
     }
 }

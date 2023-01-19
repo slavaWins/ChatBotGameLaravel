@@ -21,24 +21,7 @@ class StoRoom extends BaseRoomPlus
 {
 
     public ?CarCharacter $car;
-
-    const  tarifs = [
-        'ameran' => [
-            'name' => "Стошка у Азамата",
-            'price' => 1,
-            'repairToValue' => 30,
-        ],
-        'mid' => [
-            'name' => "СТО Последний день",
-            'price' => 1.2,
-            'repairToValue' => 38,
-        ],
-        'comfortPlus' => [
-            'name' => "СТО ПРЕМИУМ",
-            'price' => 3,
-            'repairToValue' => 130,
-        ],
-    ];
+    private ?Shop\StoShop $stoShop;
 
 
     public static function FilterCarByTarifData($cars, $tarif)
@@ -51,36 +34,44 @@ class StoRoom extends BaseRoomPlus
         return $cars;
     }
 
-    public function Step0_Show()
+    public function Step0_StoList()
     {
         $this->response->Reset();
         $this->response->message = "Вот какие СТО доступны для машины " . $this->car->GetName();
         $this->response->message .= $this->car->RenderStats();
 
 
-        //$cars = $this->user->GetAllCharacters(CarCharacter::class);
         $stats = $this->car->GetStatsCalculate();
-        foreach (self::tarifs as $K => $tarif) {
-            // $tarifs[$K]['cars'] = self::FilterCarByTarifData($cars, $tarif);
 
-            if ($stats->hp->value > $tarif['repairToValue']) continue;
+        $stoList = Shop\StoShop::GetItmes();
 
 
-            $canRepairCount = $stats->hpMax->value - $stats->hp->value;
-            $priceRepair = $canRepairCount * $tarif['price'] * $this->car->GetPriceOneHpRepair();
+        $isRedirect = $this->PaginateCollection($stoList, 6, function (Shop\StoShop $stoItem) use ($stats) {
 
-            $this->response->message .= "\n\n  " . $tarif['name'] . ': ';
-            //$this->response->message .= "\n 💵 Ценн " . number_format($tarif['carPrice']) . '₽ ';
-            $this->response->message .= "\n ⚙ Ремонт до: " . number_format($tarif['repairToValue']) . ' HP. ';
-            $this->response->message .= "\n 💵 Сделает ремонт за : " . number_format($priceRepair) . ' ₽ ';
+            if ($stats->hp->value < $stoItem->characterData->repairToValue) {
 
-            if ($this->user->player->characterData->money > $priceRepair) {
-                if ($this->AddButton($tarif['name'])) {
+
+                $canRepairCount = $stoItem->characterData->repairToValue - $stats->hp->value;
+
+                $priceRepair = $canRepairCount * ($stoItem->characterData->price / 100) * $this->car->GetPriceOneHpRepair();
+
+                $this->response->message .= "\n\n  " . $stoItem->name . ': ';
+                //$this->response->message .= "\n 💵 Ценн " . number_format($tarif['carPrice']) . '₽ ';
+                $this->response->message .= "\n ⚙ Ремонт до: " . number_format($stoItem->characterData->repairToValue) . ' HP. ';
+                $this->response->message .= "\n 💵 Сделает ремонт за : " . number_format($priceRepair) . ' ₽ ';
+
+                if ($this->user->player->characterData->money > $priceRepair) {
+                    if ($this->AddButton($stoItem->name)) {
+                        $this->scene->SetData("stoId", $stoItem->id);
+                        return $this->SetStep(1);
+                    }
 
                 }
 
             }
-        }
+        });
+
+        if ($isRedirect) return $isRedirect;
 
 
         if ($this->AddButton("Выход")) {
@@ -91,29 +82,40 @@ class StoRoom extends BaseRoomPlus
         return $this->response;
     }
 
-    public function Step2_SelectCar()
+    public function Step1_Approve()
     {
-        $tarif = self::tarifs[$this->scene->sceneData['tarif']];
 
-        $this->response->Reset()->message = "Выберите машину для такси:";
+        $this->response->Reset()->message = $this->stoShop->icon . ' ' . $this->stoShop->name;
+        $this->response->message .= "\n " . $this->user->player->GetStats()->money->RenderLine(false);
+        $this->response->message .= "\n\n " . $this->car->Render(true);
 
-        $cars = $this->user->GetAllCharacters(CarCharacter::class);
-        $cars = self::FilterCarByTarifData($cars, $tarif);
-
-
-        $selectCharacter = $this->PaginateSelector($cars);
-
-        if (count($cars) == 1) {
-            $selectCharacter = $cars->first();
+        foreach ((array)$this->stoShop->characterData as $K => $statka) {
+            if ($K == 'price') continue;
+            /** @var StatStructure $statka */
+            $this->response->message .= "\n" . $this->stoShop->GetStatsStruct()->$K->RenderLine(false, true);
         }
 
-        if ($selectCharacter) {
-            $this->StartTimer(6);
+        $stoItem = $this->stoShop;
+        $stats = $this->car->GetStatsCalculate();
+        if ($stats->hp->value < $stoItem->characterData->repairToValue && $stats->hp->value<$stats->hp->max) {
 
-            $this->scene->SetData('id', $selectCharacter->id);
-            return $this->NextStep();
+            $canRepairCount = $stoItem->characterData->repairToValue - $stats->hp->value;
+            $priceRepair = $canRepairCount * ($stoItem->characterData->price / 100) * $this->car->GetPriceOneHpRepair();
+            $this->response->message .= "\n\n 🔷 Услуга Ремонт:";
+            $this->response->message .= "  💵 " . number_format($priceRepair) . ' ₽ ';
+
+            if ($this->user->player->characterData->money > $priceRepair) {
+                if ($this->AddButton("Ремонт")) {
+                    $this->user->player->characterData->money -= $priceRepair;
+                    $this->user->player->save();
+                    $this->request->message = "";
+                    $this->request->marker = "Ремонт";
+                    $this->car->characterData->hp = $stoItem->characterData->repairToValue;
+                    $this->car->save();
+                    return $this->Handle()->AddWarning("Ремонт выполнен", true);
+                }
+            }
         }
-
 
         if ($this->AddButton("Назад")) {
             return $this->PrevStep();
@@ -150,6 +152,11 @@ class StoRoom extends BaseRoomPlus
 
     public function Boot()
     {
+
+        if (isset($this->scene->sceneData['stoId'])) {
+            $this->stoShop = $stoList = Shop\StoShop::FindById($this->scene->sceneData['stoId']);
+        }
+
         if ($this->scene->sceneData['id'] ?? false) {
             $this->car = CarCharacter::LoadCharacterById($this->scene->sceneData['id']);
         }
@@ -157,9 +164,9 @@ class StoRoom extends BaseRoomPlus
 
     public function Route()
     {
-        if ($this->GetStep() == 0) return $this->Step0_Show();
-        if ($this->GetStep() == 1) return $this->Step0_Show();
-        if ($this->GetStep() == 2) return $this->Step2_SelectCar();
+        if ($this->GetStep() == 0) return $this->Step0_StoList();
+        if ($this->GetStep() == 1) return $this->Step1_Approve();
+        if ($this->GetStep() == 2) return $this->Step1_Approve();
         if ($this->GetStep() == 3) return $this->Step3_Taxi();
 
         return $this->response;

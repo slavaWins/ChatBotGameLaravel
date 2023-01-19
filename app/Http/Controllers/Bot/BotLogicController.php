@@ -82,6 +82,8 @@ class BotLogicController extends Controller
 
         if ($this->user->player) {
             $text .= "\n\n Player: ";
+            $text .= "\n UserId: ".$this->user->id;
+            $text .= "\n bot:test ".$this->user->id;
             $text .= "\n  " . json_encode($this->user->player->characterData);
         }
 

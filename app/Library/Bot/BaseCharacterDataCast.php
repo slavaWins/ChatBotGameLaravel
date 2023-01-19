@@ -17,6 +17,8 @@ class BaseCharacterDataCast
         return [$key => json_encode($value)];
     }
 
+
+
     public function UpdateValuesFromData($characterData)
     {
         $characterData = (array)$characterData;

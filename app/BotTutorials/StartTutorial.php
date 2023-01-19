@@ -12,6 +12,7 @@ use App\Scene\Core\ShopRoom;
 use App\Scene\GarageRoom;
 use App\Scene\RegistrationRoom;
 use App\Scene\StartHistoryRoom;
+use App\Scene\StoRoom;
 use App\Scene\WorkRoom;
 use SlavaWins\EasyAnalitics\Library\EasyAnaliticsHelper;
 
@@ -24,7 +25,6 @@ class StartTutorial extends BotTutorialBase
 
 
         if ($this->step == 0) {
-
             if ($this->IsScene(StartHistoryRoom::class)) {
                 if ($this->room->scene->step == 2) $this->NextStep();
             }
@@ -49,6 +49,7 @@ class StartTutorial extends BotTutorialBase
                 $this
                     ->RemoveExitBtns()
                     ->RemoveBtn("Арендовать гараж")
+                    ->RemoveBtn("Аренда")
                     ->RemoveBtn("Верстаки");
 
                 if ($this->sceneCurrent->step == 0) $this->AddMessage("Теперь перейдите в ваш гараж!");
@@ -61,28 +62,30 @@ class StartTutorial extends BotTutorialBase
         }
 
         if ($this->step == 3) {
-            if ($this->IsScene(GarageRoom::class)) {
+            if ($this->IsScene(ShopRoom::class)) {
+                $this->NextStep();
+
+            }elseif ($this->IsScene(GarageRoom::class)) {
                 $this->RemoveExitBtns();
 
                 $this->AddMessage("Сейчас у вас нет машин. Но когда-то у вас будет целый автопарк. Теперь купите машину.");
 
             }
-
-            if ($this->IsScene(ShopRoom::class)) {
-                $this->NextStep();
-            }
         }
 
         if ($this->step == 4) {
             if ($this->IsScene(ShopRoom::class)) {
-                $this->RemoveBtn("Выход")->RemoveBtn("Доступные товары");
+                $this->RemoveBtn("Выход");
+                $this->RemoveBtn("Доступные товары");
 
 
                 if ($this->sceneCurrent->step == 0) $this->AddMessage("Для удобной покупки машин, можно пользоваться фильтром.");
                 if ($this->sceneCurrent->step <> 2) $this->RemoveExitBtns();
 
+                if ($this->sceneCurrent->step == 1) $this
+                    ->AddMessage("Перед покупкой, можно посмотреть характеристики автомобиля и увидеть некоторые дефекты.");
+
                 if ($this->sceneCurrent->step == 2) $this
-                    ->AddMessage("Перед покупкой, можно посмотреть характеристики автомобиля и увидеть некоторые дефекты.")
                     ->AddMessage("Для начала вам подойдет любая машина, покупайте.");
 
             }
@@ -166,6 +169,41 @@ class StartTutorial extends BotTutorialBase
                     $this->OnlyBtn("На СТО");
                     $this->AddMessage("Нажмите На СТО");
                 }
+            }
+            if ($this->IsScene(StoRoom::class)) {
+                $this->NextStep();
+            }
+        }
+
+        if ($this->step == 9) {
+            if ($this->IsScene(StoRoom::class)) {
+
+                if ($this->sceneCurrent->step == 0) {
+                    $this->RemoveExitBtns();
+                    $this->AddMessage("Теперь нужно выбрать СТО. Каждая СТО отличается ценой и своими возможностями. Дешманская СТОшка не сможет починить дорогую иномарку.");
+                }
+
+                if ($this->sceneCurrent->step == 1) {
+                    if ($this->request->marker == "Ремонт") {
+                        $this->NextStep();
+                    } else {
+                        $this->RemoveExitBtns();
+                        $this->AddMessage("Выберите услугу Ремонт");
+                    }
+                }
+
+            }
+        }
+
+
+        if ($this->step == 10) {
+            if ($this->IsScene(StoRoom::class)) {
+                $this->AddMessage("Теперь вы должны заработать денег, накупить машин и открыть свой гараж для ремонта.");
+                $this->NextStep();
+                $this->Stop();
+
+                EasyAnaliticsHelper::Increment("start_tutorial_end", 1, "Закончил туториал 1", "Игрок закончил первый туториал!");
+                return $this->response;
             }
         }
 

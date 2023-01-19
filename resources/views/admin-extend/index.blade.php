@@ -11,8 +11,9 @@
         Панель управления - это простой и понятный инструмент для выполнения повседневных задач контент-менеджера. От
         простого редактирования информации до управления разделами проекта.</p>
 
-@include("easyanalitics::example.example")
-@include("easyanalitics::voronka", ['inds'=>['user_new','user_tracking_frist','user_tracking_hist','reg_buy_garage','reg_buy_car'],'name'=>"Воронка регистраций"])
+    @include("easyanalitics::example.example")
+
+    @include("easyanalitics::voronka", ['inds'=>['user_new','user_tracking_frist','user_tracking_hist','reg_buy_garage','reg_buy_car','start_tutorial_end'],'name'=>"Воронка регистраций"])
 
 @endsection
 

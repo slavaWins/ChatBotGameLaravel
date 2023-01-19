@@ -92,19 +92,16 @@ class MessageBoxController extends Controller
         return redirect()->back();
     }
 
-    public function AutoTest()
+    public static function MakeAutoTest(User $user, $countRepeats = 8)
     {
 
         $response = new BotResponseStructure();
         $response->AddButton("Начать");
-        /** @var User $user */
-        $user = Auth::user();
-        for ($i = 1; $i < 20; $i++) {
+
+        for ($i = 1; $i < $countRepeats; $i++) {
 
             $botLogic = new BotLogicController();
             $botRequest = new BotRequestStructure();
-
-
 
             $mess = "Начать";
             if (!empty($response->btns) && count($response->btns) > 0) {
@@ -123,30 +120,44 @@ class MessageBoxController extends Controller
             $botRequest->user_id = $user->id;
             $botRequest->messageFrom = 'local';
             $response = $botLogic->Message($user, $botRequest);
-            $user->refresh();
 
-
+            if ($botLogic->sceneRoom) {
+                if ($botLogic->sceneRoom->IsTimer()) {
+                    $botLogic->sceneRoom->scene->timer_from = 0;
+                    $botLogic->sceneRoom->scene->timer_to = 0;
+                    $botLogic->sceneRoom->scene->save();
+                    $mess = "[QA Bot] Я офнул таймер!";
+                    //$response = $botLogic->Message($user, $botRequest);
+                    //return redirect()->back();
+                }
+            }
 
             /** @var History $history */
             $history = new History();
-            $history->user_id = Auth::user()->id;
+            $history->user_id =$user->id;
             $history->message = $mess;
             $history->message_response = $response->message;
             $history->attachment_sound = $response->attach_sound ?? null;
             $history->isFromBot = false;
             $history->save();
 
-            if ($botLogic->sceneRoom) {
-                if ($botLogic->sceneRoom->IsTimer()) {
-                    $botRequest->message = "[QA Bot] Там таймер, я не буду ждать!";
-                    $response = $botLogic->Message($user, $botRequest);
-                    return redirect()->back();
-                }
-            }
 
 
             unset($botRequest);
         }
+
+        return "Теперь у игрока: " . number_format( $user->player->characterData->money ). " RUB ";
+    }
+
+    public function AutoTest()
+    {
+
+        $response = new BotResponseStructure();
+        $response->AddButton("Начать");
+        /** @var User $user */
+        $user = Auth::user();
+
+        self::MakeAutoTest($user);
 
         return redirect()->back();
     }

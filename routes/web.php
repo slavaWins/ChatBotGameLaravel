@@ -41,6 +41,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/admin/itemshop/edit/cat/{catClassName}/to/{id}', [\App\Http\Controllers\Bot\Admin\Bot\ItemCharacterShopAdminController::class, 'editSave'])->name('admin.itemshop.edit');
 
     /*
+     *
+     *
     Route::get('/admin/orders/list', [App\Http\Controllers\AdminWinda\AdminPageController::class, 'OrderList'])->name('admin.order.list');
     Route::get('/admin/orders/edit/{order}', [App\Http\Controllers\AdminWinda\AdminPageController::class, 'OrderDeteils'])->name('admin.order.edit');
     Route::post('/admin/orders/edit/{order}', [App\Http\Controllers\AdminWinda\AdminPageController::class, 'OrderEditSave'])->name('admin.order.edit.save');

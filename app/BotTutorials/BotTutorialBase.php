@@ -25,11 +25,12 @@ class BotTutorialBase
 
     public function IsScene($scene)
     {
+
         if ($this->sceneCurrent) {
             if ($this->sceneCurrent->className == $scene) return true;
         }
 
-        if (get_class($this->room) == $scene) return true;
+        //if (get_class($this->room) == $scene) return true;
         return false;
     }
 
@@ -66,6 +67,7 @@ class BotTutorialBase
 
     public function NextStep()
     {
+        $this->step++;
         $this->user->tutorial_step++;
         $this->user->save();
     }
@@ -123,7 +125,9 @@ class BotTutorialBase
 
         $response = $tutorial->Handle();
 
-        $tutorial->response->AddButton("Закончить обучение");
+        if(!$tutorial->room->IsTimer()) {
+            $tutorial->response->AddButton("Закончить обучение");
+        }
 
         if ($tutorial->request->message == ("Закончить обучение")) {
             $response->btns = [];

@@ -162,10 +162,12 @@ class StatStructure
             $text .= " " . $val;
         }
 
-        $text .= $this->postfix ?? '';
+        if (!$this->max) {
+            $text .= $this->postfix ?? '';
+        }
 
         if ($this->max) {
-            $text .= "/" . $this->max;
+            $text .= "/" . $this->max . ($this->postfix ?? '');
         }
 
         if (!$isShort && $this->max && $this->isShowProgressBar) {
