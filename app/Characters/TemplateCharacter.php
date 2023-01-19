@@ -5,12 +5,13 @@ namespace App\Characters;
 use App\Characters\Struct\CarCharacterDataStructure;
 use App\Characters\Struct\GarageCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
+use App\Characters\Struct\TemplateStructure;
 use App\Library\Structure\StatStructure;
 use App\Models\Bot\Character;
 
 
 /**
- * @implements Character<CarCharacterDataStructure>
+ * @implements Character<TemplateStructure>
  */
 class TemplateCharacter extends Character
 {
@@ -18,7 +19,7 @@ class TemplateCharacter extends Character
     public $baseName = "Автомобиль";
 
     protected $casts = [
-        'characterData' => CarCharacterDataStructure::class
+        'characterData' => TemplateStructure::class
     ];
 
     public function GetSkillPrice($skillInd, $skillCurrentValue)
