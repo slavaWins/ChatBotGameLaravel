@@ -7,6 +7,7 @@ use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
 use App\Models\Bot\Scene;
 use App\Models\User;
+use App\Services\Bot\ParserBotService;
 
 class BaseRoom
 {
@@ -142,13 +143,7 @@ class BaseRoom
      */
     public function Route()
     {
-        $routes = [];
-        foreach (get_class_methods($this) as $V) {
-            if (strpos($V, "Step") !== 0) continue;
-            $id = str_replace("Step", "", $V);
-            $id = intval(substr($id, 0, 1));
-            $routes[$id] = $V;
-        }
+        $routes = ParserBotService::GetRoutesScene($this);
 
         if (!isset($routes[0])) {
             throw new \Exception('Нет функции Step0_NAME без неё комната не запустится! В ' . __CLASS__);

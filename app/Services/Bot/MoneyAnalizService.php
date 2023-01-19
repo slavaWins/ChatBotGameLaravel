@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Bot;
 
-use App\Characters\GarageCharacter;
 use App\Models\Bot\Character;
 use App\Models\User;
 

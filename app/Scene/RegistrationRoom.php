@@ -9,24 +9,23 @@ use SlavaWins\EasyAnalitics\Library\EasyAnaliticsHelper;
 class RegistrationRoom extends BaseRoom
 {
 
-    public function Step1_Start()
+    public function Step0_Start()
     {
         $this->response->Reset();
         $this->response->message = "Добро пожаловать в игру! Здесь вы сможете покупать в игре автомобили из Дрома. Что бы участвовать на них в гонках, или заниматься грузоперевозками. Или быть перекупом. Возможностей много!";
 
 
-
         if ($this->AddButton("Далее")) {
 
-            EasyAnaliticsHelper::Increment("user_tracking_frist", 1, "Пользователь. Первый ответ",  "Пользователь впервые ответил на сообщение бота");
+            EasyAnaliticsHelper::Increment("user_tracking_frist", 1, "Пользователь. Первый ответ", "Пользователь впервые ответил на сообщение бота");
             $this->request->message = "";
-            return $this->SetStep(2);
+            return $this->NextStep();
         }
 
         return $this->response;
     }
 
-    public function Step2_Info()
+    public function Step1_Info()
     {
         $this->response->Reset();
         $this->response->message = "Введите ваше имя:";
@@ -46,21 +45,6 @@ class RegistrationRoom extends BaseRoom
 
             return $this->SetRoom(StartHistoryRoom::class);
         }
-
-        return $this->response;
-    }
-
-    public function Step3_Info()
-    {
-
-    }
-
-
-    public function Route()
-    {
-        if ($this->GetStep() == 1 || $this->GetStep() == 0) return $this->Step1_Start();
-        if ($this->GetStep() == 2) return $this->Step2_Info();
-        if ($this->GetStep() == 3) return $this->Step3_Info();
 
         return $this->response;
     }

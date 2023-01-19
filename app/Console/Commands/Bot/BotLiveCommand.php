@@ -5,7 +5,7 @@ namespace App\Console\Commands\Bot;
 use App\Http\Controllers\Bot\Dev\MessageBoxController;
 use App\Library\ProgressBarEmoji;
 use App\Models\Bot\Character;
-use App\Services\MoneyAnalizService;
+use App\Services\Bot\MoneyAnalizService;
 use Illuminate\Console\Command;
 
 class BotLiveCommand extends Command
