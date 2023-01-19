@@ -142,12 +142,24 @@ class BaseRoom
      */
     public function Route()
     {
-        $this->response->message = "Кажется у нас ошибка!";
-        $this->response->btns = [
-            'Повтор' => 1
-        ];
+        $routes = [];
+        foreach (get_class_methods($this) as $V) {
+            if (strpos($V, "Step") !== 0) continue;
+            $id = str_replace("Step", "", $V);
+            $id = intval(substr($id, 0, 1));
+            $routes[$id] = $V;
+        }
 
-        return $this->response;
+        if (!isset($routes[0])) {
+            throw new \Exception('Нет функции Step0_NAME без неё комната не запустится! В ' . __CLASS__);
+        }
+
+        if (!isset($routes[$this->GetStep()])) {
+            return null;
+        }
+
+        $fun = $routes[$this->GetStep()];
+        return $this->$fun();
     }
 
 
@@ -171,7 +183,7 @@ class BaseRoom
     {
         $text = " " . ($this->scene->timer_to - time()) . ' сек.';
         $percent = max(0, ($this->scene->timer_to - time())) / ($this->scene->timer_to - $this->scene->timer_from);
-        $text .= "\n".ProgressBarEmoji::Console(1 - $percent, 9);
+        $text .= "\n" . ProgressBarEmoji::Console(1 - $percent, 9);
         return $text;
     }
 
@@ -218,7 +230,7 @@ class BaseRoom
 
         $response = $this->Route();
 
-        if($response) {
+        if ($response) {
 
             if ($this->user->player && !$response->issetHeader) {
                 $response->issetHeader = true;

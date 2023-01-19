@@ -60,14 +60,4 @@ class HomeRoom extends BaseRoom
     }
 
 
-    public function Route()
-    {
-        if ($this->GetStep() == 0) return $this->Step0();
-        if ($this->GetStep() == 1) return $this->Step1_Xz();
-        if ($this->GetStep() == 2) return $this->Step2_Info();
-
-        return $this->response;
-    }
-
-
 }

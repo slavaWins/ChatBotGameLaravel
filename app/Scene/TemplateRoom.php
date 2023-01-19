@@ -83,14 +83,5 @@ class TemplateRoom extends BaseRoomPlus
         }
     }
 
-    public function Route()
-    {
-        if ($this->GetStep() == 0) return $this->Step0_List();
-        if ($this->GetStep() == 1) return $this->Step1_Show();
-        if ($this->GetStep() == 2) return $this->Step2_Info();
-
-        return $this->response;
-    }
-
 
 }
