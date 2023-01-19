@@ -13,6 +13,7 @@ use App\Models\Bot\History;
 use App\Models\ResponseApi;
 use App\Models\Bot\Scene;
 use App\Models\User;
+use App\Services\Bot\ResetService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -81,13 +82,7 @@ class MessageBoxController extends Controller
 
         /** @var User $user */
         $user = Auth::user();
-        History::where('user_id', $user->id)->delete();
-        Character::where('user_id', $user->id)->delete();
-        Scene::where('user_id', $user->id)->delete();
-        $user->is_registration_end = false;
-        $user->tutorial_step = 0;
-        $user->tutorial_class = StartTutorial::class . '';
-        $user->save();
+        ResetService::UserRestContent($user);
         return redirect()->back();
     }
 

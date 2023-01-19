@@ -24,13 +24,14 @@ class SceneTest extends TestCase
             $mypath = $path . $name;
             $className = str_replace('.php', '', $name);
             $className = "App\Scene\\" . $className;
-            if (!class_exists($className)) {
-                return $this->assertTrue(false, "Не найден класс сцены " . $className);
-            }
+
+            $this->assertTrue(class_exists($className), "Не найден класс сцены " . $className);
+
 
             $routes = ParserBotService::GetRoutesScene($className);
-            if (!count($routes)) return $this->assertTrue(false, "Нет не одного шага, нет роутов в " . $className);
-            if (!isset($routes[0])) return $this->assertTrue(false, "Нет стартового шага Step0_XX в " . $className);
+            $this->assertTrue(count($routes) > 0, "Нет не одного шага, нет роутов в " . $className);
+
+            $this->assertTrue(isset($routes[0]), "Нет стартового шага Step0_XX в " . $className);
 
             $this->assertTrue(true);
         }
