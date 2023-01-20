@@ -29,6 +29,8 @@ Route::group(['middleware' => ['auth']], function () {
 
 
 
+    Route::get('/admin/excel', [\App\Http\Controllers\LikeExcel\LikeExcelController::class, 'index'])->name('admin.excel');
+
     Route::get('/admin', [\App\Http\Controllers\AdminPageController::class, 'index'])->name('admin');
 
 

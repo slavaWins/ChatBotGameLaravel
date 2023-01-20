@@ -10,21 +10,6 @@ use App\Models\User;
 
 class UsersAdminController extends Controller
 {
-    public function index()
-    {
-
-
-        $users = User::all();
-        return view('admin-extend.users.list', compact('users'));
-
-    }
-
-    public function show(User $userShow)
-    {
-
-        return view('admin-extend.users.show', compact('userShow'));
-
-    }
 
     public function history(User $userShow)
     {
