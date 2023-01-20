@@ -46,7 +46,7 @@ class GarageRoom extends BaseRoomPlus
         $this->response->message = "Вы в гараже: \n " . $this->garage->GetName();
 
         $this->response->message .= "\n " . $this->garage->RenderStats(false, true, true);
-        $this->response->message .= $this->garage->RenderAppend(false);
+        $this->response->message .= "\n". $this->garage->RenderAppend(false);
 
 
         if ($this->AddButton("Верстаки")) {

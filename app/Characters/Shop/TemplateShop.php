@@ -19,10 +19,7 @@ class TemplateShop extends ItemCharacterShop
 
     public $titleShop = "Магазин Template";
 
-    public $showInShopPreview = [
-        "hp",
-        "size",
-    ];
+    public $showInShopPreview = null;
 
     protected $casts = [
         'characterData' => TemplateStructure::class,

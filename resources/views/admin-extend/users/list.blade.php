@@ -15,7 +15,8 @@
     <h1>
         Поиск пользователей
     </h1>
-<p>Чтобы использовать элемент управления для выполнения поиска, а не как инструмент для ввода данных, выберите вариант Поиск записи в форме на основе значения</p>
+    <p>Чтобы использовать элемент управления для выполнения поиска, а не как инструмент для ввода данных, выберите
+        вариант Поиск записи в форме на основе значения</p>
 
     <table class="table  bg-white">
         <tr>
@@ -25,6 +26,8 @@
             <td>VK</td>
             <td>tg id</td>
             <td>Создан</td>
+            <td>Денег</td>
+            <td>Фин.Сост</td>
         </tr>
 
         @foreach($users as $user)
@@ -61,6 +64,14 @@
                 </td>
                 <td>
                     {{$user->created_at }}
+                </td>
+                <td>
+                    @if($user->player)
+                        {{$user->player->characterData->money }}
+                    @endif
+                </td>
+                <td>
+                    {{ number_format( \App\Services\MoneyAnalizService::GetUserMoneyState($user) )}} RUB
                 </td>
 
             </tr>

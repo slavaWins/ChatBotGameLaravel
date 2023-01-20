@@ -22,12 +22,14 @@
             <table class="table  bg-white">
                 <tr>
                     <td>ИД</td>
+                    <td>ParentId</td>
                     <td>Имя</td>
                     <td>Статки</td>
                 </tr>
                 @foreach($userShow->GetAllCharacters() as $character)
                     <tr>
                         <td>{{$character->id}}</td>
+                        <td>{{$character->parent_id}}</td>
 
                         <td>
                             <a href="{{route("admin.character.show", $character)}}">

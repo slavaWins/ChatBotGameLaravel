@@ -75,7 +75,6 @@ class User extends Authenticatable
     }
 
 
-
     public function player()
     {
         return $this->belongsTo(PlayerCharacter::class, "player_id");
@@ -94,7 +93,7 @@ class User extends Authenticatable
         if ($byClass) {
             $charList = $charList->where("className", $byClass);
         }
-        $charList =$charList->get();
+        $charList = $charList->get();
 
 
         foreach ($charList as $char) {
@@ -102,7 +101,6 @@ class User extends Authenticatable
             $character = $char->className::find($char->id);
             $list[] = $character;
         }
-
 
 
         $list = collect($list);

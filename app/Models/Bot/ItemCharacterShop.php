@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property CarCharacterDataStructure characterData
  * @property int $id
  * @property int price
+ * @property int merchant_id
  * @property int buy_count
  * @property string className
  * @property string name

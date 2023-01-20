@@ -40,6 +40,11 @@ class HomeRoom extends BaseRoom
         }
 
 
+        if ($this->AddButton("Запчасти")) {
+            return $this->SetRoom(EnginePartRoom::class);
+        }
+
+
         if ($isFullInfo) {
             $this->AddButton("Убрать описание");
         } else {

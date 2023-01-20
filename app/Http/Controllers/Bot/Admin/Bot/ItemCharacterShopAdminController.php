@@ -4,30 +4,21 @@ namespace App\Http\Controllers\Bot\Admin\Bot;
 
 use App\Characters\Shop\CarItemCharacterShop;
 use App\Characters\Shop\GarageItemCharacterShop;
+use App\Characters\Shop\MerchantShop;
 use App\Http\Controllers\Controller;
 use App\Models\Bot\Character;
 use App\Models\Bot\ItemCharacterShop;
+use App\Services\Bot\ParserBotService;
 use Illuminate\Http\Request;
 
 class ItemCharacterShopAdminController extends Controller
 {
 
-    public static function GetCategories()
-    {
-        $list = [];
-        foreach (scandir(app_path("Characters/Shop")) as $K => $V) if ($K > 1) {
-            $V = str_replace(".php", "", $V);
-            $V = 'App\Characters\Shop\\' . $V;
-            $list[] = new $V();
-        }
-        return  $list;
-    }
 
     public function categorys()
     {
 
-
-        $categorys = self::GetCategories();
+        $categorys = ParserBotService::GetShopItmesClasses();
 
         return view('admin-extend.itemshop.cat', compact('categorys'));
 
@@ -87,6 +78,7 @@ class ItemCharacterShopAdminController extends Controller
 
         $item->name = $data['name'] ?? $item->name;
         $item->price = $data['price'] ?? $item->price;
+        $item->merchant_id = $data['merchant_id'] ?? 0;
         $item->save();
 
         return redirect()->back();
@@ -129,7 +121,11 @@ class ItemCharacterShopAdminController extends Controller
         $example = new $catClassName();
         $example->InitCastsStructure();
 
-        return view('admin-extend.itemshop.list', compact('items', 'catClassNameOriginal', 'example'));
+        $merchantList = MerchantShop::GetMerchantsPluckList();
+
+        $issetPriceVarible = isset($example->characterData->price);
+
+        return view('admin-extend.itemshop.list', compact('items', 'catClassNameOriginal', 'example', 'merchantList','issetPriceVarible'));
 
     }
 

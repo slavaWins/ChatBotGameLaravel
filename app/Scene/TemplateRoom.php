@@ -3,14 +3,16 @@
 namespace App\Scene;
 
 use App\Characters\CarCharacter;
-use App\Characters\GarageCharacter;
+use App\Characters\EnginePartCharacter;
 use App\Scene\Core\BaseRoomPlus;
-use App\Scene\Core\SkillRoom;
 
 class TemplateRoom extends BaseRoomPlus
 {
 
     public ?CarCharacter $car;
+
+    /**  @var EnginePartCharacter $items */
+    public $items = [];
 
 
     public function Step0_List()
@@ -19,12 +21,12 @@ class TemplateRoom extends BaseRoomPlus
         $this->response->message = "Выберите машину:";
 
 
-        $cars = $this->user->GetAllCharacters(CarCharacter::class);
-        $selectCharacter = $this->PaginateSelector($cars);
+        $this->items = $this->user->GetAllCharacters(CarCharacter::class);
+        $selectCharacter = $this->PaginateSelector($this->items);
 
-        if (count($cars) == 1) {
-            $selectCharacter = $cars->first();
-        } elseif (count($cars) == 0) {
+        if (count($this->items) == 1) {
+            $selectCharacter = $this->items->first();
+        } elseif (count($this->items) == 0) {
             $this->response->AddWarning("У вас нет подходящей машины");
         }
 

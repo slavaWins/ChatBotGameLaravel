@@ -2,6 +2,7 @@
 
 namespace App\Characters;
 
+use App\Characters\Shop\EnginePartShop;
 use App\Characters\Struct\CarCharacterDataStructure;
 use App\Characters\Struct\GarageCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
@@ -32,25 +33,87 @@ class CarCharacter extends Character
     {
         $stats = $this->GetStatsCalculate();
 
-        return  round(($stats->price->value / $stats->hpMax->value)*0.3);
+        return round(($stats->price->value / $stats->hpMax->value) * 0.3);
     }
 
+
+    /**
+     * @param $partType
+     * @return EnginePartCharacter|null
+     */
+    public function IssetEnginePart($partType)
+    {
+        $list = $this->GetEngineParts();
+        if (!$list) return null;
+        return $list->filter(function (EnginePartCharacter $item) use ($partType) {
+            return $item->characterData->partType == $partType;
+        })->first() ?? null;
+    }
+
+
+    /** @var */
+    private $enginePartsList = -1;
+
+    /**
+     * @return EnginePartCharacter[]
+     */
+    public function GetEngineParts()
+    {
+        if ($this->enginePartsList === -1) {
+            $this->enginePartsList = $this->GetChildldren(EnginePartCharacter::class) ?? null;
+        }
+        return $this->enginePartsList;
+    }
 
     public function GetStatsCalculate()
     {
         $res = $this->GetStats();
 
         $basePower = $res->power->value;
+        $baseSpeed = $res->maxSpeed->value;
+
         $res->power->value += ($basePower * $res->skill_engine->value) / 10;
         $res->power->value += ($basePower * $res->skill_kpp->value) / 14;
 
         $res->razgon->value = $res->mass->value / $res->power->value;
-        $res->razgon->value = round($res->razgon->value, 2);
+
 
         $res->hp->max = $res->hpMax->value;
         $res->hp->value = min($res->hp->value, $res->hpMax->value);
 
+
+        $parts = $this->GetEngineParts();
+
+        if ($parts) foreach ($parts as $part) {
+            $res->power->value += $basePower * ($part->characterData->boostPower / 100);
+            $res->razgon->value -= $res->razgon->value * ($part->characterData->boostRazgon / 100);
+            $res->maxSpeed->value += $baseSpeed * ($part->characterData->boostSpeed / 100);
+            //$res->price->value += $part->characterData->price;
+
+        }
+        $res->razgon->value = round($res->razgon->value, 2);
+        $res->maxSpeed->value = round($res->maxSpeed->value);
+
         return $res;
+    }
+
+    function RenderAppend($isShort = false, $isShowDescr = false, $showSkill = false)
+    {
+
+        if ($isShort) return "";
+
+        $text = "";
+        $parts = $this->GetEngineParts();
+
+        if (!$parts) {
+            return "Нет модификаций";
+        }
+
+        foreach ($parts as $part) {
+            $text .= "\n\n" . $part->Render(true);
+        }
+
+        return $text;
     }
 
 }

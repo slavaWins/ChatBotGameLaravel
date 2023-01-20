@@ -15,6 +15,18 @@
 
 @section('content')
 
+    <style>
+        .sidebarFloatind {
+            display: none;
+        }
+
+        .mainContent {
+            width: 100%;
+        }
+    </style>
+
+   <a href="./"> <h2>< Назад</h2></a>
+
     <h4 class="mb-0"> База товаров </h4>
     <h1> {{$example->baseName}}</h1>
 
@@ -30,7 +42,10 @@
             <td>ИД</td>
             <td>Покупок</td>
             <td>Название</td>
-            <td>Цена</td>
+            @if(!$issetPriceVarible)
+                <td>Цена</td>
+            @endif
+            <td>Торговец</td>
 
 
             @foreach((array)$example->characterData as $K=>$parameter)
@@ -61,13 +76,24 @@
                              ->RenderHtml(true);
                         @endphp
                     </td>
-                    <td>
+                    @if(!$issetPriceVarible)
+                        <td>
+                            @php
+                                FElement::NewInputText()
+                                 ->SetName("price")
+                                 ->SetValue(old("price", $item->price)  )
+                                 ->RenderHtml(true);
+                            @endphp
+                        </td>
+                    @endif
 
+                    <td>
                         @php
-                            FElement::NewInputText()
-                             ->SetName("price")
-                             ->SetValue(old("price", $item->price)  )
-                             ->RenderHtml(true);
+                            FElement::New()->SetView()->InputSelect()
+                             ->SetName("merchant_id")
+                              ->AddOptionFromArray($merchantList)
+                             ->SetValue(old("merchant_id", $item->merchant_id ?? 0)  )
+                              ->RenderHtml(true);
                         @endphp
                     </td>
 
@@ -76,14 +102,14 @@
                         <td>
                             @if($parameter->options ?? false)
                                 @php
-                                $options = [];
-                                foreach ($parameter->options as $variant)$options[$variant]=$variant;
+                                    $options = [];
+                                    foreach ($parameter->options as $variant)$options[$variant]=$variant;
 
-                                    FElement::New()->SetView()->InputSelect()
-                                     ->SetName($K)
-                                      ->AddOptionFromArray($options)
-                                     ->SetValue(old($K, $item->characterData->$K ?? 0)  )
-                                      ->RenderHtml(true);
+                                        FElement::New()->SetView()->InputSelect()
+                                         ->SetName($K)
+                                          ->AddOptionFromArray($options)
+                                         ->SetValue(old($K, $item->characterData->$K ?? 0)  )
+                                          ->RenderHtml(true);
                                 @endphp
                             @else
                                 @php
@@ -138,7 +164,8 @@
             border: none;
             border-radius: 0px;
         }
-        .formMini  label {
+
+        .formMini label {
             display: none;
         }
 

@@ -14,15 +14,14 @@ use App\Models\Bot\ItemCharacterShop;
  */
 class EnginePartShop extends ItemCharacterShop
 {
-    public $icon = "💒‍";
+    public $icon = "💠";
     public $baseName = "EnginePart";
 
-    public $titleShop = "Магазин EnginePart";
+    public $titleShop = "Магазин запчастей";
 
-    public $showInShopPreview = [
-        "hp",
-        "size",
-    ];
+    public $filter_by = "partType";
+
+    public $showInShopPreview = null;
 
     protected $casts = [
         'characterData' => EnginePartStructure::class,

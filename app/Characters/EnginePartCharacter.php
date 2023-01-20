@@ -15,12 +15,17 @@ use App\Models\Bot\Character;
  */
 class EnginePartCharacter extends Character
 {
-    public $icon = "🚘";
-    public $baseName = "Автомобиль";
+    public $icon = "💠";
+    public $baseName = "Деталь";
 
     protected $casts = [
         'characterData' => EnginePartStructure::class
     ];
+
+    function GetName()
+    {
+        return $this->icon . ' ' . $this->GetStats()->partType->value . ' ' . ($this->name ?? $this->baseName);
+    }
 
     public function GetSkillPrice($skillInd, $skillCurrentValue)
     {

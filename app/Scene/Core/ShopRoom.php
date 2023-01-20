@@ -120,13 +120,16 @@ class ShopRoom extends BaseRoomPlus
         $this->response->Reset();
 
         $this->response->message = $clasExample->titleShop . " \n";
-        $this->response->message .= "\n Выберите машину которые вы хотите посмотреть";
+        // $this->response->message .= "\n Выберите машину которые вы хотите посмотреть";
 
         $items = $this->GetItems();
 
-        $isRefreshPage = $this->PaginateCollection(collect($items), 6, function (ItemCharacterShop $V) {
+        /** @var bool $isFullInfo подробный вывод инфы */
+        $isFullInfo = !$this - $this->IsBtn("?");
+
+        $isRefreshPage = $this->PaginateCollection(collect($items), 6, function (ItemCharacterShop $V) use ($isFullInfo) {
             $this->response->message .= "\n\n";
-            $this->response->message .= $V->icon . ' [' . $V->id . '] ' . $V->name;
+            $this->response->message .= $V->id . ' ] ' . $V->icon . '   ' . $V->name;
             $this->response->message .= ' 💵 ' . number_format($V->price) . ' ₽' . "\n";
 
             /** @var Character $character */
@@ -135,15 +138,28 @@ class ShopRoom extends BaseRoomPlus
 
             /** @var StatStructure[] $stat */
             $stat = $character->GetStatsCalculate();
-            foreach ($V->showInShopPreview as $ind) {
-                if (!isset($stat->$ind)) continue;
-                $this->response->message .= "  " . $stat->$ind->RenderLine(true, false);
+            if ($V->showInShopPreview == null) {
+                foreach ((array)$stat as $kk => $vv) {
+                    if ($kk == "price") continue;
+                    if ($kk == "hpMax") continue;
+                    if ($stat->$kk->is_hidden_property ) continue;
+                    if ($isFullInfo) $this->response->message .= "\n";
+                    $this->response->message .= "  " . $stat->$kk->RenderLine(!$isFullInfo, $isFullInfo);
+                }
+            } else {
+                foreach ($V->showInShopPreview as $ind) {
+                    if (!isset($stat->$ind)) continue;
+                    if ($isFullInfo) $this->response->message .= "\n";
+                    $this->response->message .= "  " . $stat->$ind->RenderLine(!$isFullInfo, $isFullInfo);
+                }
             }
+
 
             if ($this->AddButton($V->id . '')) {
                 $this->scene->SetData('selectId', $V->id);
                 return $this->NextStep();
             }
+
 
         });
 
@@ -151,6 +167,10 @@ class ShopRoom extends BaseRoomPlus
 
         if ($this->AddButton("⚙️")) {
             return $this->SetStep(0);
+        }
+
+        if ($this->AddButton("?")) {
+
         }
 
 
@@ -168,7 +188,6 @@ class ShopRoom extends BaseRoomPlus
 
         /** @var ItemCharacterShop $item */
         $item = $this->GetItems()[$this->scene->sceneData['selectId']] ?? null;
-
 
 
         //$this->response->message .= "\n ВЫ СМОТРИТЕ ТОВАР:";

@@ -9,6 +9,7 @@ use App\Library\Structure\StatStructure;
 use App\Models\user;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -16,7 +17,6 @@ use Illuminate\Support\Facades\Log;
  * @property int $id
  * @property int $user_id
  * @property int $parent_id родитель объекта. Например машина в гараже
- * @property user $user
  * @property string className
  * @property string name
  * @template CharDataType
@@ -64,30 +64,39 @@ class Character extends Model
      * Является ли этот чарактер инвартерем или хранилищем?
      * @return bool
      */
-    public function IsStorage(){
+    public function IsStorage()
+    {
         return isset($this->characterData->storage_size) && isset($this->characterData->storage_childs);
     }
+
     /**
-     * @return Character[]
+     * Получить список всех машин
+     * @return Collection<Character>
      */
     function GetChildldren($byClass = null)
     {
-        if(!$this->IsStorage())return [];
+        //if(!$this->IsStorage())return [];
         if ($this->id == 0) return [];
         //$items = Character::where("parent_id", $this->id)->get();
 
-        $items = Character::where("parent_id", $this->id);
+        $items = [];
+        if ($byClass) {
+            $items = $byClass::where("parent_id", $this->id);
+        } else {
+            $items = Character::where("parent_id", $this->id);
+        }
+
         if ($byClass) {
             $items = $items->where("className", $byClass);
         }
-        $items =$items->get();
+        $items = $items->get();
 
         return $items;
     }
 
     function GetFreeSlotsCount()
     {
-        if(!$this->IsStorage())return 0;
+        if (!$this->IsStorage()) return 0;
         return $this->characterData->storage_size - $this->GetStatsCalculate()->storage_childs->value;
     }
 
@@ -203,7 +212,7 @@ class Character extends Model
         if (!$id) return null;
 
         /** @var Character $character */
-        $character = Character::select(['id','className'])->find($id);
+        $character = Character::select(['id', 'className'])->find($id);
 
         if (!$character) return null;
 
@@ -252,7 +261,7 @@ class Character extends Model
             return null;
         }
 
-        return  $character;
+        return $character;
     }
 
 

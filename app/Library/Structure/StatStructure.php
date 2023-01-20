@@ -8,7 +8,7 @@ class StatStructure
 {
     public string $name;
     public string $descr = "";
-    public string $icon = "⚡";
+    public string $icon = "";
     public $default = 0;
     public $max = null;
     public $value = 0;
@@ -57,6 +57,12 @@ class StatStructure
         return $this;
     }
 
+    public function SetTypeFloat()
+    {
+        $this->typeData = 'float';
+        return $this;
+    }
+
     public function SetTypeInt()
     {
         $this->typeData = 'int';
@@ -70,9 +76,9 @@ class StatStructure
     }
 
 
-    public function SetOptions(array $val)
+    public function SetOptions(array $array)
     {
-        $this->options = $val;
+        $this->options = $array;
         return $this;
     }
 
@@ -89,11 +95,13 @@ class StatStructure
         $this->value = $val;
         return $this;
     }
+
     public function SetValue($val)
     {
         $this->value = $val;
         return $this;
     }
+
     public function Hidden()
     {
         $this->is_hidden_property = true;
@@ -158,6 +166,8 @@ class StatStructure
 
         if ($this->format == "money") {
             $text .= " " . number_format($val);
+        } elseif ($this->typeData == "float") {
+            $text .= " " . number_format($val, 2);
         } else {
             $text .= " " . $val;
         }

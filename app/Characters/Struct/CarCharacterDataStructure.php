@@ -29,11 +29,11 @@ class CarCharacterDataStructure extends BaseCharacterDataCast
         $this->hpMax = StatStructure::Make("Макс.состояние")->SetDefault(24)->SetIcon("")->SetShowInShort(false)->Hidden();
         $this->mass = StatStructure::Make("Вес")->SetDefault(1200)->SetIcon("🛎️")->SetPostfix(' кг.');
         $this->power = StatStructure::Make("Мощность")->SetDefault(78)->SetIcon("🔩")->SetPostfix(' л.с.');
-        $this->razgon = StatStructure::Make("Разгон 0-100км")->SetDefault(17.5)->SetIcon("🚥")->SetPostfix(' сек.');
+        $this->razgon = StatStructure::Make("Разгон 0-100км")->SetDefault(17.5)->SetIcon("🚥")->SetPostfix(' сек.')->SetTypeFloat();
 
         $this->maxSpeed = StatStructure::Make("Макс.Скорость")->SetDefault(150)->SetIcon("🚥")->SetPostfix(' км/ч');
 
-        $this->price = StatStructure::Make("Цена")->SetDefault(0)->SetIcon("💵")->SetPostfix(' ₽')->FormatMoney()->SetShowInShort(false);
+        $this->price = StatStructure::Make("Цена")->SetDefault(0)->SetIcon("💵")->SetPostfix(' ₽')->FormatMoney()->SetShowInShort(false)->Hidden();
 
         $this->skill_engine = StatStructure::Make("Тюнинг двигателя")->SetDefault(1)
             ->SetIcon("🧰")->SetMax(10)->SetShowInShort(false)->SetDescr("Тюнинг")->SetPostfix(' lev.');

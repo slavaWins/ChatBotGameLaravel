@@ -17,7 +17,7 @@ use App\Scene\Core\SkillRoom;
 class CarRoom extends BaseRoomPlus
 {
 
-    public \App\Models\Bot\Character $car;
+    public CarCharacter $car;
 
     public function Step0_Show()
     {
@@ -26,7 +26,7 @@ class CarRoom extends BaseRoomPlus
 
         $this->response->message = "Вы смотрите машину: " . $this->car->GetName();
 
-        $this->response->message .= "\n " . $this->car->RenderStats(false, false, true);
+        $this->response->message .= "\n \n " . $this->car->Render(false, false, true);
 
         if ($this->AddButton("Назад")) {
             $this->DeleteRoom();
@@ -37,23 +37,23 @@ class CarRoom extends BaseRoomPlus
             return $this->SetStep(2);
         }
 
+        if ($this->AddButton("Запчасти")) {
+            return $this->SetStep(2);
+        }
+
         if ($this->AddButton("Таксовать")) {
-            return $this->SetRoom(WorkRoom::class,['step'=>1]);
+            return $this->SetRoom(WorkRoom::class, ['step' => 1]);
         }
 
         if ($this->AddButton("На СТО")) {
-            return $this->SetRoom(StoRoom::class, ['id'=>$this->car->id]);
+            return $this->SetRoom(StoRoom::class, ['id' => $this->car->id]);
         }
 
         return $this->response;
     }
 
-    public function Step1_Show()
-    {
 
-    }
-
-    public function Step2_MoveToGarage()
+    public function Step1_MoveToGarage()
     {
 
         /** @var CarCharacter[] $items */
@@ -98,14 +98,41 @@ class CarRoom extends BaseRoomPlus
     }
 
 
-    public function Route()
+    public function Step2_Parts()
     {
-        $this->car = CarCharacter::LoadCharacterById($this->scene->sceneData['id']);
-        if ($this->GetStep() == 0) return $this->Step0_Show();
-        if ($this->GetStep() == 1) return $this->Step1_Show();
-        if ($this->GetStep() == 2) return $this->Step2_MoveToGarage();
+
+        $this->response->Reset();
+
+        if ($this->car->GetEngineParts()->count() > 0) {
+            $this->response->message = "Какую запчасть вы хотите снять?";
+        } else {
+            $this->response->message = "В машине не установлено модификаций.";
+        }
+
+        $select = $this->PaginateSelector($this->car->GetEngineParts());
+
+        if ($select) {
+            $select->parent_id = 0;
+            $select->save();
+            $this->response->AddWarning("Запчасть снята.", true);
+            return $this->Handle();
+        }
+
+        if ($this->AddButton("Назад")) {
+            return $this->SetStep(0);
+        }
+
+        if ($this->AddButton("Установить")) {
+            return $this->SetRoom(EnginePartRoom::class, ['id' => $this->car->id], true);
+        }
 
         return $this->response;
+
+    }
+
+    public function Boot()
+    {
+        $this->car = CarCharacter::LoadCharacterById($this->scene->sceneData['id']);
     }
 
 
