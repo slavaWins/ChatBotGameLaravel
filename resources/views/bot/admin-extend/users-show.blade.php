@@ -1,21 +1,12 @@
 @php
     use SlavaWins\Formbuilder\Library\FElement;
 
-   /*** @var $userShow \app\Models\User */
+   /*** @var $user \app\Models\User */
    /*** @var $character \App\Models\Bot\Character */
 @endphp
 
 
-@extends('adminwinda::screen')
-
-
-
-
-@section('content')
-
-    <h1>User {{$userShow->name ?? $userShow->player->name ?? "NA"}} #{{$userShow->id}}</h1>
-
-
+<div class="col-8">
     <div class="card">
         <div class="card-body">
             <h4>Чары игрока</h4>
@@ -26,7 +17,7 @@
                     <td>Имя</td>
                     <td>Статки</td>
                 </tr>
-                @foreach($userShow->GetAllCharacters() as $character)
+                @foreach($user->GetAllCharacters() as $character)
                     <tr>
                         <td>{{$character->id}}</td>
                         <td>{{$character->parent_id}}</td>
@@ -53,5 +44,4 @@
         </div>
     </div>
 
-@endsection
-
+</div>

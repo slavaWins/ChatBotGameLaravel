@@ -1,6 +1,6 @@
 <span class="spanTitle">Пользователи  </span>
 
-<a href="{{route("admin.user.list")}}">Все
+<a href="{{route("admin.users.list")}}">Все
     <span class="badge bg-primary "> {{count(\App\Models\User::all())}}</span>
 </a>
 

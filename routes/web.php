@@ -2,12 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use SlavaWins\AuthSms\Library\AuthSmsRoute;
+use SlavaWins\AdminWinda\Library\AdminWindaRoute;
 
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 
 AuthSmsRoute::routes();
+AdminWindaRoute::routes();
 
 Route::any('/cron/scene-timer', [\App\Http\Controllers\Bot\BotLogicController::class, 'SceneTimerCronAction'])->name("bot.cron");
 
@@ -29,8 +31,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/admin', [\App\Http\Controllers\AdminPageController::class, 'index'])->name('admin');
 
-    Route::get('/admin/users/list', [\App\Http\Controllers\Bot\Admin\Users\UsersAdminController::class, 'index'])->name('admin.user.list');
-    Route::get('/admin/users/show/{userShow}', [\App\Http\Controllers\Bot\Admin\Users\UsersAdminController::class, 'show'])->name('admin.user.show');
+
     Route::get('/admin/users/history/{userShow}', [\App\Http\Controllers\Bot\Admin\Users\UsersAdminController::class, 'history'])->name('admin.user.history');
     Route::get('/admin/character/show/{character}', [\App\Http\Controllers\Bot\Admin\Character\CharacterAdminController::class, 'show'])->name('admin.character.show');
     Route::post('/admin/character/edit/{character}', [\App\Http\Controllers\Bot\Admin\Character\CharacterAdminController::class, 'update'])->name('admin.character.edit');
