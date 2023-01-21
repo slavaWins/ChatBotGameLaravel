@@ -15,7 +15,7 @@ class MoneyAnalizService
      */
     public static function GetUserMoneyState(User $user)
     {
-
+        if (!$user->player) return 0;
         $money = $user->player->characterData->money;
 
         /** @var Character $character */
