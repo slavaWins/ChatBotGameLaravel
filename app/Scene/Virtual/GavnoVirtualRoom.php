@@ -11,16 +11,13 @@ class GavnoVirtualRoom extends BaseRoomPlus
     
     public ?\App\Characters\CarCharacter $car;
     
-    
     public function Step0_SelectGarageCharacter()
     {
         $this->response->Reset();
         
         $this->response->message = "Выберите гараж";
         
-        
         //render_character: not
-        
         
         $example =  new \App\Characters\GarageCharacter();
         
@@ -41,19 +38,12 @@ class GavnoVirtualRoom extends BaseRoomPlus
                 $this->scene->SetData('id', $selectCharacter->id);
                 $this->scene->save();
                 
-                
                 return $this->NextStep();
-            }
-            
-            
-            if ($this->AddButton("Домой")) {
-                return $this->SetRoom(\App\Scene\HomeRoom::class, ['id'=>$this->car->id]);
             }
             
             //step->btn_shop_parent = not
             if ($this->AddButton("Купить гараж")) {
                 $room = ShopRoom::CreateShopRoomByCharacterType($this->user,  \App\Characters\Shop\GarageItemCharacterShop::class);
-                
                 
                 return $this->SetRoom($room, null, true);
                 
@@ -64,7 +54,6 @@ class GavnoVirtualRoom extends BaseRoomPlus
                 return null;
             }
             
-            
             return $this->response;
         }
         public function Step1_SelectCarCharacter()
@@ -73,10 +62,8 @@ class GavnoVirtualRoom extends BaseRoomPlus
             
             $this->response->message = "Вы смотрите гараж";
             
-            
             //render_character: var1
             $this->response->message .="\n" .     $this->garage->Render();
-            
             
             $example =  new \App\Characters\CarCharacter();
             
@@ -97,13 +84,11 @@ class GavnoVirtualRoom extends BaseRoomPlus
                     
                     if ($selectCharacter) {
                         
-                        
                         $this->scene->SetData('id2', $selectCharacter->id);
                         $this->scene->save();
                         
                         return $this->NextStep();
                     }
-                    
                     
                     //step->btn_shop_parent = var1
                     if ($this->AddButton("Купить машину")) {
@@ -123,7 +108,6 @@ class GavnoVirtualRoom extends BaseRoomPlus
                         return $this->PrevStep();
                     }
                     
-                    
                     return $this->response;
                 }
                 public function Step2_Showvar2()
@@ -132,24 +116,17 @@ class GavnoVirtualRoom extends BaseRoomPlus
                     
                     $this->response->message = "Что сделать с машиной?";
                     
-                    
                     //render_character: var2
                     $this->response->message .="\n" .   $this->car->Render();
                     
-                    
+                    //btn_scene_name1: На СТО
                     if ($this->AddButton("На СТО")) {
-                        return $this->SetRoom(\App\Scene\StoRoom::class, ['id'=>$this->car->id]);
+                        return $this->SetRoom(\App\Scene\StoRoom::class, ['id'=>$this->car->id], true);
                     }
-                    
-                    //step->btn_shop_parent = var2
-                    if ($this->AddButton("Купить запчасти")) {
-                        
-                        
-                        $room = ShopRoom::CreateShopRoomByCharacterType($this->user,  \App\Characters\Shop\EnginePartShop::class, $this->car->id);
-                        return $this->SetRoom($room, null, true);
-                        
+                    //btn_scene_name2: Модификации
+                    if ($this->AddButton("Модификации")) {
+                        return $this->SetRoom(\App\Scene\EnginePartRoom::class, ['id'=>$this->car->id], true);
                     }
-                    
                     
                     if ($this->AddButton("Другая машина")) {
                         return $this->NextStep();

@@ -34,8 +34,11 @@ class CreateTableBotEditor extends Migration
             $table->string("btn_next")->nullable();
             $table->string("btn_back")->nullable();
             $table->string("btn_exit")->nullable();
-            $table->string("btn_scene_name")->nullable();
-            $table->string("btn_scene_class")->nullable();
+            for($i=1;$i<=2;$i++) {
+                $table->string("btn_scene_name".$i)->nullable();
+                $table->string("btn_scene_class".$i)->nullable();
+                $table->string("btn_scene_input".$i)->nullable();
+            }
             $table->string("btn_shop_name")->nullable();
             $table->string("btn_shop_class")->nullable();
 

@@ -115,7 +115,9 @@ class EnginePartRoom extends BaseRoomPlus
             $this->response->message .= "\n\n В машине установлена другая деталь. Она будет заменена:";
             $this->response->message .= "\n " . $otherPart->characterData->partType;
             $this->response->message .= "\n\n " . $otherPart->name . ' | ' . $this->partEngine->name;
+
             foreach ($this->partEngine->characterData as $K => $V) {
+                if(!isset($otherPart->GetStats()->$K))continue;
                 if ($otherPart->GetStats()->$K->is_hidden_property) continue;
                 $this->response->message .= "\n " . $otherPart->GetStats()->$K->RenderLine(true) . ' | ' . $this->partEngine->GetStats()->$K->RenderLine(true);
             }

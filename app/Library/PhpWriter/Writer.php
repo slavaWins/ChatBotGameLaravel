@@ -74,7 +74,7 @@ class Writer
             } else {
                 $emptyLines = 0;
             }
-            if ($emptyLines > 2) continue;
+            if ($emptyLines > 1) continue;
 
             if (substr($V, -1) == "}") $opens -= 1;
 

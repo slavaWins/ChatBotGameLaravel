@@ -25,10 +25,10 @@
                 var input = $(e.attr("isInputEmpty"));
 
                 function redner() {
-                    if(e.is(':checked')) {
+                    if (e.is(':checked')) {
                         div.show();
 
-                    }else{
+                    } else {
                         div.hide();
                         input.val("");
                     }
@@ -37,8 +37,8 @@
                 e.on("input", redner);
 
 
-               // input.on("input", myset);
-                if(input.val()!="" && input.val()!="not")e.prop('checked', true);
+                // input.on("input", myset);
+                if (input.val() != "" && input.val() != "not") e.prop('checked', true);
                 redner();
             });
             ;
@@ -202,9 +202,6 @@
                     </div>
 
 
-
-
-
                     <label>
                         <input type="checkbox" class="form-check-input"
                                hideClassIfValue=".divRender{{$step->id}}"
@@ -284,60 +281,62 @@
                         @endphp
                     </div>
 
-<BR>
+                    <BR>
 
-                    <label>
-                        <input type="checkbox" class="form-check-input"
-                               hideClassIfValue=".btn_sceneRow{{$step->id}}"
-                               isInputEmpty=".btn_sceneRow{{$step->id}} #id_btn_scene_name"
-                        > Кнопка перехода в сцену
-                        <small class="form-text text-muted">
-                            Название кнопки для перехода в др сцену
-                        </small>
-                    </label>
+                    @for($i=1;$i<=2;$i++)
+                        <label>
+                            <input type="checkbox" class="form-check-input"
+                                   hideClassIfValue=".btn_sceneRow{{$step->id}}_{{$i}}"
+                                   isInputEmpty=".btn_sceneRow{{$step->id}}_{{$i}} #id_btn_scene_name{{$i}}"
+                            > Кнопка перехода в сцену {{$i}}
+                            <small class="form-text text-muted">
+                                Перенести игрока на другую сцену
+                            </small>
+                        </label>
 
 
-                    <div class="row rowInTreeColum btn_sceneRow{{$step->id}}">
-                        @php
-                            FElement::NewInputText()
-                             ->SetLabel("Переход  ")
-                             ->SetPlaceholder("Не открывать")
-                             ->SetName("btn_scene_name")
-                             ->SetDescr("Название кнопки для перехода в др сцену")
-                             ->FrontendValidate()->String(0,75)
-                             ->SetValue(old("btn_scene_name", $step->btn_scene_name))
-                             ->RenderHtml(true);
-                        @endphp
-                        @php
-                            $_list =[];
-                               $_list["not"]="not";
-                            foreach (\App\Services\Bot\ParserBotService::GetRoomClasses() as $V){
-                                $_list[$V]=$V;
-                            }
-                                FElement::New()->SetView()->InputSelect()
-                                ->SetDescr("Куда будет переход")
-                                 ->SetLabel("Что открыть?")
-                                 ->SetName("btn_scene_class")
-                                  ->AddOptionFromArray($_list)
-                                 ->SetValue(old("btn_scene_class", $step->btn_scene_class)  )
-                                  ->RenderHtml(true);
-                        @endphp
+                        <div class="row rowInTreeColum btn_sceneRow{{$step->id}}_{{$i}}">
+                            @php
+                                FElement::NewInputText()
+                                 ->SetLabel("Переход  ")
+                                 ->SetPlaceholder("Не открывать")
+                                 ->SetName("btn_scene_name".$i)
+                                 ->SetDescr("Название кнопки для перехода в др сцену")
+                                 ->FrontendValidate()->String(0,75)
+                                 ->SetValue(old("btn_scene_name", $step['btn_scene_name'.$i]))
+                                 ->RenderHtml(true);
+                            @endphp
+                            @php
+                                $_list =[];
+                                   $_list["not"]="not";
+                                foreach (\App\Services\Bot\ParserBotService::GetRoomClasses() as $V){
+                                    $_list[$V]=$V;
+                                }
+                                    FElement::New()->SetView()->InputSelect()
+                                    ->SetDescr("Куда будет переход")
+                                     ->SetLabel("Что открыть?")
+                                     ->SetName("btn_scene_class".$i)
+                                      ->AddOptionFromArray($_list)
+                                     ->SetValue(old("btn_scene_class".$i, $step['btn_scene_class'.$i])  )
+                                      ->RenderHtml(true);
+                            @endphp
 
-                        @php
-                            $_list =\App\Http\Controllers\Bot\Virtual\RoomVirtualController::RoomVaribles($room);
-                               $_list["not"]="Ничего";
-                                FElement::New()->SetView()->InputSelect()
-                                ->SetDescr("Что передать в параметр id сцены?")
-                                 ->SetLabel("Передать")
-                                 ->SetName("btn_scene_input")
-                                  ->AddOptionFromArray($_list)
-                                 ->SetValue(old("btn_scene_input", $step->btn_scene_input)  )
-                                  ->RenderHtml(true);
-                        @endphp
+                            @php
+                                $_list =\App\Http\Controllers\Bot\Virtual\RoomVirtualController::RoomVaribles($room);
+                                   $_list["not"]="Ничего";
+                                    FElement::New()->SetView()->InputSelect()
+                                    ->SetDescr("Что передать в параметр id сцены?")
+                                     ->SetLabel("Передать")
+                                     ->SetName("btn_scene_input".$i)
+                                      ->AddOptionFromArray($_list)
+                                     ->SetValue(old("btn_scene_input".$i, $step['btn_scene_input'.$i])  )
+                                      ->RenderHtml(true);
+                            @endphp
 
-                    </div>
+                        </div>
 
-                    <br>
+                        <br>
+                    @endfor
 
                     @php
                         FElement::NewInputTextRow()

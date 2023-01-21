@@ -73,20 +73,22 @@ public function Step{{$step->step}}_{{$step->GetStepFunctionName()}}()
         }
 @endif
 
-
-@if($step->btn_scene_name)
-    if ($this->AddButton("{{$step->btn_scene_name}}")) {
-    @if($step->btn_scene_input=="not")
-        return $this->SetRoom(\{{$step->btn_scene_class}}::class);
+@for($i=1;$i<=2;$i++)
+    @if($step['btn_scene_name'.$i])
+        //btn_scene_name{{$i}}: {{$step['btn_scene_name'.$i]}}
+        if ($this->AddButton("{{$step['btn_scene_name'.$i]}}")) {
+        @if($step['btn_scene_input'.$i]=="not")
+            return $this->SetRoom(\{{$step["btn_scene_class".$i]}}::class);
+        @endif
+        @if($step['btn_scene_input'.$i]=="var1")
+            return $this->SetRoom(\{{$step["btn_scene_class".$i]}}::class, ['id'=>$this->{{$room->item_varible_name1}}->id], true);
+        @endif
+        @if($step['btn_scene_input'.$i]=="var2")
+            return $this->SetRoom(\{{$step["btn_scene_class".$i]}}::class, ['id'=>$this->{{$room->item_varible_name2}}->id], true);
+        @endif
+        }
     @endif
-    @if($step->btn_scene_input=="var1")
-        return $this->SetRoom(\{{$step->btn_scene_class}}::class, ['id'=>$this->{{$room->item_varible_name1}}->id]);
-    @endif
-    @if($step->btn_scene_input=="var2")
-        return $this->SetRoom(\{{$step->btn_scene_class}}::class, ['id'=>$this->{{$room->item_varible_name2}}->id]);
-    @endif
-    }
-@endif
+@endfor
 
 @if($step->btn_shop_name)
     //step->btn_shop_parent = {{$step->btn_shop_parent}}
