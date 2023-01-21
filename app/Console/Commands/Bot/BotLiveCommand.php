@@ -15,7 +15,7 @@ class BotLiveCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'bot:test {userId}';
+    protected $signature = 'bot:test {userId} {needTests?}';
 
     /**
      * The console command description.
@@ -58,6 +58,7 @@ class BotLiveCommand extends Command
     {
 
         $userId = $this->argument("userId");
+        $needTests = $this->argument("needTests") ?? 20;
 
         /** @var \App\Models\User $user */
         $user = \App\Models\User::find($userId);
@@ -71,7 +72,7 @@ class BotLiveCommand extends Command
         $this->info("Фин.Сост игрока: " . number_format($money) . ' RUB');
         $this->info("\n\n");
 
-        $needTests = 300;
+
 
         $prevText = '';
         $j = 1000;
