@@ -84,6 +84,7 @@
             $dif = time() - $time;
 
             if ($dif < 59) {
+                if($dif<2)return  "только что";
                 return $dif." сек. назад";
             }else if ($dif / 60 > 1 and $dif / 60 < 59) {
                 return round($dif / 60)." мин. назад";

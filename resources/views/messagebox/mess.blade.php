@@ -19,7 +19,7 @@
             {{$user->name ?? "Не указано"}}
 
         </b>
-        <span class="mess_time"> {{\Carbon\Carbon::parse($history->created_at,"UTC")}}</span>
+        <span class="mess_time"> {{\App\Helpers\TimeHelper::time_back( \Carbon\Carbon::parse($history->created_at,"UTC")->unix() )}}  </span>
         <BR>
         {!! nl2br($history->message) !!}
 
@@ -44,7 +44,7 @@
             {{env("APP_NAME")}}
 
         </b>
-        <span class="mess_time"> {{\Carbon\Carbon::parse($history->created_at,"UTC")}}</span>
+        <span class="mess_time">  {{\App\Helpers\TimeHelper::time_back( \Carbon\Carbon::parse($history->created_at,"UTC")->unix() )}} </span>
         <BR>
         {!! nl2br($history->message_response) !!}
 

@@ -51,7 +51,7 @@ class MessageBoxController extends Controller
 
         $html = "Нет ответа";
         /** @var History $history */
-        $history = $botLogic->history;
+        $history = $botLogic->history ?? null;
         if ($history) {
             $html = view("messagebox.mess", compact('history', 'user'));
         }

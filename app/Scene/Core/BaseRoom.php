@@ -73,6 +73,7 @@ class BaseRoom
 
     public function PrevStep()
     {
+
         return $this->SetStep($this->scene->step - 1);
     }
 
@@ -115,6 +116,11 @@ class BaseRoom
         }
 
         $this->request->message = "";
+
+        if ($this->scene->debug_play) {
+            $sceneRoom->scene->debug_play = true;
+            $sceneRoom->scene->save();
+        }
 
         return $sceneRoom->Handle();
     }

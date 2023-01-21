@@ -6,6 +6,7 @@ use App\Characters\Struct\CarCharacterDataStructure;
 use App\Characters\Struct\GarageCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
 use App\Characters\Struct\WorkbenchStruct;
+use App\Characters\WorkbenchCharacter;
 use App\Models\Bot\ItemCharacterShop;
 
 
@@ -16,7 +17,7 @@ class WorkbenchShop extends ItemCharacterShop
 {
     public $icon = "🛠️";
     public $baseName = "Верстак";
-
+    const characterClass = WorkbenchCharacter::class;
     public $filter_by = "workTo";
     public $titleShop = "Магазин верстаков";
 

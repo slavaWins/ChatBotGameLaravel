@@ -26,7 +26,7 @@ class GarageRoom extends BaseRoomPlus
         $this->response->Reset();
 
         if ($this->AddButton("Арендовать гараж")) {
-            $room = ShopRoom::CreateShopRoomByCharacterType($this->user, GarageCharacter::class, Shop\GarageItemCharacterShop::class);
+            $room = ShopRoom::CreateShopRoomByCharacterType($this->user,  Shop\GarageItemCharacterShop::class);
             return $this->SetRoom($room, null, true);
         }
 
@@ -79,7 +79,7 @@ class GarageRoom extends BaseRoomPlus
 
         if ($this->garage->GetFreeSlotsCount()) {
             if ($this->AddButton("Купить верстак")) {
-                $room = ShopRoom::CreateShopRoomByCharacterType($this->user, WorkbenchCharacter::class, Shop\WorkbenchShop::class, $this->scene->sceneData['id']);
+                $room = ShopRoom::CreateShopRoomByCharacterType($this->user,  Shop\WorkbenchShop::class, $this->scene->sceneData['id']);
                 return $this->SetRoom($room, null, true);
             }
         }
@@ -123,7 +123,7 @@ class GarageRoom extends BaseRoomPlus
 
         if ($this->garage->GetFreeSlotsCount()) {
             if ($this->AddButton("Купить машину")) {
-                $room = ShopRoom::CreateShopRoomByCharacterType($this->user, CarCharacter::class, CarItemCharacterShop::class, $this->scene->sceneData['id']);
+                $room = ShopRoom::CreateShopRoomByCharacterType($this->user,  CarItemCharacterShop::class, $this->scene->sceneData['id']);
                 return $this->SetRoom($room, null, true);
             }
         }

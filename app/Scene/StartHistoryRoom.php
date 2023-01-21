@@ -103,7 +103,7 @@ class StartHistoryRoom extends BaseRoom
             EasyAnaliticsHelper::Increment("user_tracking_hist", 1, "Пользователь. Закончил историю", "Пользователь закончил комнату истории");
             $this->SetRoom(GarageRoom::class);
 
-            $room = ShopRoom::CreateShopRoomByCharacterType($this->user, GarageCharacter::class, GarageItemCharacterShop::class);
+            $room = ShopRoom::CreateShopRoomByCharacterType($this->user, GarageItemCharacterShop::class);
             return $this->SetRoom($room, null, true);
         }
 

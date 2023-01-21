@@ -2,6 +2,7 @@
 
 namespace App\Scene\Core;
 
+use App\Characters\Shop\WorkbenchShop;
 use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\StatStructure;
 use App\Models\Bot\Character;
@@ -142,7 +143,7 @@ class ShopRoom extends BaseRoomPlus
                 foreach ((array)$stat as $kk => $vv) {
                     if ($kk == "price") continue;
                     if ($kk == "hpMax") continue;
-                    if ($stat->$kk->is_hidden_property ) continue;
+                    if ($stat->$kk->is_hidden_property) continue;
                     if ($isFullInfo) $this->response->message .= "\n";
                     $this->response->message .= "  " . $stat->$kk->RenderLine(!$isFullInfo, $isFullInfo);
                 }
@@ -295,12 +296,15 @@ class ShopRoom extends BaseRoomPlus
      * @param int $forParentId после покупки чарактера, владельцем будет так же числится этот Чарактер как родитель
      * @return ShopRoom
      */
-    public static function CreateShopRoomByCharacterType(User $user, $characterClass, $itemShopClass, $forParentId = 0): ShopRoom
+    public static function CreateShopRoomByCharacterType(User $user, $itemShopClass, $forParentId = 0): ShopRoom
     {
 
         $request = new BotRequestStructure();
         $request->user = $user;
         $skillRoom = new ShopRoom($request);
+
+
+        $characterClass = $itemShopClass::characterClass;
 
         $skillRoom->scene->sceneData = [
             'page' => 1,

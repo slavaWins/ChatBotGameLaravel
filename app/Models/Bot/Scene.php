@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $timer_to
  * @property array|mixed $sceneData
  * @property mixed $id
+ * @property mixed|true $debug_play
  */
 class Scene extends Model
 {

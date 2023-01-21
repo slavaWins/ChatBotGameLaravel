@@ -16,14 +16,15 @@ class SceneTest extends TestCase
      */
     public function test_room_routes()
     {
-        $path = app_path("/Scene") . '/';
-        foreach (scandir($path) as $KK => $name) {
-            if ($KK < 2) continue;
-            if ($name == "Core") continue;
+        $rooms= ParserBotService::GetRoomClasses();
 
-            $mypath = $path . $name;
-            $className = str_replace('.php', '', $name);
-            $className = "App\Scene\\" . $className;
+        foreach ($rooms as $KK => $name) {
+
+
+
+            $className = $name;
+
+            echo "   ✓".$name."\n";
 
             $this->assertTrue(class_exists($className), "Не найден класс сцены " . $className);
 

@@ -23,10 +23,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::any('/api/messagebox/send', [\App\Http\Controllers\Bot\Dev\MessageBoxController::class, 'SendMessage']);
 
 
+    Route::get('/admin/bot/virutal/room/{className}/new/step', [\App\Http\Controllers\Bot\Virtual\RoomVirtualController::class, 'createStep'])->name('bot.virtual.room.new.step');
+    Route::post('/admin/bot/virutal/new/room', [\App\Http\Controllers\Bot\Virtual\RoomVirtualController::class, 'createRoom'])->name('bot.virtual.room.new.room');
+    Route::get('/admin/bot/virutal/room/{className}/edit', [\App\Http\Controllers\Bot\Virtual\RoomVirtualController::class, 'index'])->name('bot.virtual.room');
+    Route::get('/admin/bot/virutal/room/{className}/play', [\App\Http\Controllers\Bot\Virtual\RoomVirtualController::class, 'play'])->name('bot.virtual.room.play');
+    Route::post('/admin/bot/virutal/update/step/{vs}', [\App\Http\Controllers\Bot\Virtual\RoomVirtualController::class, 'store'])->name('bot.virtual.room.save');
+    Route::post('/admin/bot/virutal/update/room/{vs}', [\App\Http\Controllers\Bot\Virtual\RoomVirtualController::class, 'updateRoom'])->name('bot.virtual.room.save.room');
 
-
-
-
+    Route::get('/admin/bot/virutal/character/{className}', [\App\Http\Controllers\Bot\Virtual\RoomVirtualController::class, 'character'])->name('bot.virtual.character');
 
 
     Route::get('/admin/excel', [\App\Http\Controllers\LikeExcel\LikeExcelController::class, 'index'])->name('admin.excel');

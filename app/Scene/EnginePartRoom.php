@@ -50,7 +50,7 @@ class EnginePartRoom extends BaseRoomPlus
 
 
         if ($this->AddButton("Купить")) {
-            $room = ShopRoom::CreateShopRoomByCharacterType($this->user, EnginePartCharacter::class, EnginePartShop::class);
+            $room = ShopRoom::CreateShopRoomByCharacterType($this->user,  EnginePartShop::class);
             return $this->SetRoom($room, null, true);
         }
 

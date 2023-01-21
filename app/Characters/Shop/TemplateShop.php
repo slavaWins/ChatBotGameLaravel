@@ -6,6 +6,7 @@ use App\Characters\Struct\CarCharacterDataStructure;
 use App\Characters\Struct\GarageCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
 use App\Characters\Struct\TemplateStructure;
+use App\Characters\TemplateCharacter;
 use App\Models\Bot\ItemCharacterShop;
 
 
@@ -16,7 +17,7 @@ class TemplateShop extends ItemCharacterShop
 {
     public $icon = "💒‍";
     public $baseName = "Template";
-
+    const characterClass = TemplateCharacter::class;
     public $titleShop = "Магазин Template";
 
     public $showInShopPreview = null;

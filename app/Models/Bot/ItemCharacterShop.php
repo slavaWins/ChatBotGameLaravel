@@ -2,6 +2,7 @@
 
 namespace App\Models\Bot;
 
+use App\Characters\PlayerCharacter;
 use App\Characters\Struct\CarCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
 use App\Models\User;
@@ -22,6 +23,7 @@ class ItemCharacterShop extends Model
 {
     use HasFactory;
 
+    const characterClass = PlayerCharacter::class;
     public $icon = "X";
     public $baseName = "Предмет";
     public $titleShop = "Магазин предметов";

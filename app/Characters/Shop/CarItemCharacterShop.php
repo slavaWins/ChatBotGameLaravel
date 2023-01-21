@@ -2,6 +2,8 @@
 
 namespace App\Characters\Shop;
 
+use App\Characters\CarCharacter;
+use App\Characters\PlayerCharacter;
 use App\Characters\Struct\CarCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
 use App\Models\Bot\ItemCharacterShop;
@@ -16,7 +18,7 @@ class CarItemCharacterShop extends ItemCharacterShop
     public $baseName = "Автомобиль";
     public $titleShop = "Автосалон";
 
-
+    const characterClass = CarCharacter::class;
     public $showInShopPreview = [
         "hp",
         "power",

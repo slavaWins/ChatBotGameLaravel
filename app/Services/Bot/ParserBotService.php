@@ -18,7 +18,25 @@ class ParserBotService
         }
         return $list;
     }
+    public static function GetRoomClasses()
+    {
+        $list = [];
 
+        foreach (scandir(app_path("Scene")) as $K => $V) if ($K > 1) {
+            if (!substr_count($V, ".php")) continue;
+            $V = str_replace(".php", "", $V);
+            $V = 'App\Scene\\' . $V;
+            $list[] = $V;
+        }
+
+        foreach (scandir(app_path("Scene/Virtual")) as $K => $V) if ($K > 1) {
+            if (!substr_count($V, ".php")) continue;
+            $V = str_replace(".php", "", $V);
+            $V = 'App\Scene\Virtual\\' . $V;
+            $list[] = $V;
+        }
+        return $list;
+    }
     public static function GetCharacterClasses()
     {
         $list = [];
