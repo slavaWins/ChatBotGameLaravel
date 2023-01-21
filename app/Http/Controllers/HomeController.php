@@ -5,6 +5,7 @@
 
     use App\Actions\AuthSms\SendSms;
     use App\Actions\OpenHomePage;
+    use App\Characters\PlayerCharacter;
     use App\Library\Tarifiner\TarifinerLib;
     use App\Mail\ActivationMailable;
     use app\Models\Trash\Order;
@@ -30,6 +31,13 @@
 */
 
         public function index() {
+
+            /** @var PlayerCharacter $test */
+            $test = PlayerCharacter::find(237);
+            $test->characterData->money+=1;
+           // $test->save();
+
+            echo $test->Render();
 
           //  Auth::user()->GetBasketShortData();
             /*
