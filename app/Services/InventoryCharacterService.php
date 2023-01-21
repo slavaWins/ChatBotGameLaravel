@@ -49,7 +49,7 @@ class InventoryCharacterService
                 if ($garage->characterData->storage_childs >= $garage->characterData->storage_size) {
                     continue;
                 }
-                $item->parent_id = $garage->id;
+                $item->SetParent( $garage->id);
                 $item->save();
                 unset($items[$K]);
                 $garage->characterData->storage_childs++;

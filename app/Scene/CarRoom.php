@@ -72,7 +72,7 @@ class CarRoom extends BaseRoomPlus
             $this->response->message .= "\n\n В " . $item->Render(true, false, false);
 
             if ($this->AddButton($item->name ?? $item->baseName)) {
-                $this->car->parent_id = $item->id;
+                $this->car->SetParent( $item->id);
                 $this->car->save();
 
                 /** @var Scene $garage */
@@ -112,9 +112,12 @@ class CarRoom extends BaseRoomPlus
         $select = $this->PaginateSelector($this->car->GetEngineParts());
 
         if ($select) {
-            $select->parent_id = 0;
+            $select->SetParent( 0);
             $select->save();
+            $this->request->message="";
+
             $this->response->AddWarning("Запчасть снята.", true);
+            $this->_selectorData=null;
             return $this->Handle();
         }
 

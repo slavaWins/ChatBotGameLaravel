@@ -125,10 +125,10 @@ class EnginePartRoom extends BaseRoomPlus
 
         if ($this->AddButton("Установить")) {
             if ($otherPart) {
-                $otherPart->parent_id = 0;
+                $otherPart->SetParent( 0);
                 $otherPart->save();
             }
-            $this->partEngine->parent_id = $this->car->id;
+            $this->partEngine->SetParent(  $this->car->id);
             $this->partEngine->save();
             return $this->SetStep(0)->AddWarning("Деталь установлена!", true);
         }

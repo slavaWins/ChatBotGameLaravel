@@ -15,7 +15,8 @@ class MoneyAnalizService
      */
     public static function GetUserMoneyState(User $user)
     {
-        $money = $user->player->characterData->money ?? 0;
+
+        $money = $user->player->characterData->money;
 
         /** @var Character $character */
         foreach ($user->GetAllCharacters() as $character) {

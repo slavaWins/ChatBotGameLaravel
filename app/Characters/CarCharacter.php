@@ -43,8 +43,11 @@ class CarCharacter extends Character
      */
     public function IssetEnginePart($partType)
     {
+
         $list = $this->GetEngineParts();
+
         if (!$list) return null;
+
         return $list->filter(function (EnginePartCharacter $item) use ($partType) {
             return $item->characterData->partType == $partType;
         })->first() ?? null;

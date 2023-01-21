@@ -129,6 +129,7 @@ class MessageBoxController extends Controller
             unset($botRequest);
         }
 
+
         return "Теперь у игрока: " . number_format($user->player->characterData->money) . " RUB ";
     }
 
@@ -142,6 +143,7 @@ class MessageBoxController extends Controller
 
         self::MakeAutoTest($user, 10, true);
 
+      //  return "OK";
         return redirect()->back();
     }
 

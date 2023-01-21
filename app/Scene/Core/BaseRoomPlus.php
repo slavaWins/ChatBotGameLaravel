@@ -14,7 +14,7 @@ class BaseRoomPlus extends BaseRoom
      * Используется для Селектора, что бы понимать что он выбрал и не обновлять страницу
      * @var Character|null
      */
-    private ?Character $_selectorData;
+    public ?Character $_selectorData;
 
 
     function SetStep($step): BotResponseStructure

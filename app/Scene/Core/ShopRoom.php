@@ -211,7 +211,7 @@ class ShopRoom extends BaseRoomPlus
                 $this->user->player->save();
                 $character = $this->characterClass::CreateCharacter($this->user->id, $item->characterData);
                 $character->name = $item->name;
-                $character->parent_id = $this->scene->sceneData['forParentId'];
+                $character->SetParent($this->scene->sceneData['forParentId']);
                 $character->save();
 
                 $this->DeleteRoom();
