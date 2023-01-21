@@ -32,13 +32,13 @@
 
         public function index() {
 
+
             /** @var PlayerCharacter $test */
-            $test = PlayerCharacter::find(237);
+            /*
+            $test = PlayerCharacter::find(231);
             $test->characterData->money+=1;
-           // $test->save();
-
             echo $test->Render();
-
+*/
           //  Auth::user()->GetBasketShortData();
             /*
                         if (Auth::user()->IsFirstStepRegistration()) {

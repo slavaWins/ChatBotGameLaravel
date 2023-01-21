@@ -230,7 +230,7 @@ class Character extends CachebleModel
         if (!$id) return null;
 
         $className = get_called_class();
-        return $className::find($id); 
+        return $className::find($id);
     }
 
     public static function CreateCharacter($user_id = 0, $characterData = null)
