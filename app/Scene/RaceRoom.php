@@ -8,6 +8,7 @@ use App\Characters\PlayerCharacter;
 use App\Characters\Shop;
 use App\Characters\Shop\CarItemCharacterShop;
 use App\Helpers\PaginationHelper;
+use App\Library\Mp3Builder;
 use App\Library\Structure\StatStructure;
 use App\Models\Bot\Character;
 use App\Models\Bot\ItemCharacterShop;
@@ -15,66 +16,45 @@ use App\Models\Bot\Scene;
 use App\Scene\Core\BaseRoomPlus;
 use App\Scene\Core\ShopRoom;
 use App\Scene\Core\SkillRoom;
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\Log;
 
 class RaceRoom extends BaseRoomPlus
 {
 
 
+    public ?CarCharacter $enemy;
     public ?CarCharacter $car;
-    private ?Shop\StoShop $stoShop;
+    private ?Shop\RaceTrackShop $track;
 
-
-    public static function FilterCarByTarifData($cars, $tarif)
-    {
-        $cars = $cars->filter(function (CarCharacter $car) use ($tarif) {
-            if ($car->characterData->price < $tarif['carPrice']) return false;
-            if ($car->GetHpPercent() * 100 < $tarif['carHp']) return false;
-            return true;
-        });
-        return $cars;
-    }
 
     public function Step0_StoList()
     {
         $this->response->Reset();
 
-        $this->response->message = "Вот какие СТО доступны для машины " . $this->car->GetName();
-        $this->response->message .= $this->car->RenderStats();
+
+        $this->response->message = "Список гонок:";
+        //$this->response->message .= $this->car->RenderStats();
 
 
-        $stats = $this->car->GetStatsCalculate();
+        $tracks = Shop\RaceTrackShop::GetItmes();
 
-        $stoList = Shop\StoShop::GetItmes();
+        $isRedirect = $this->PaginateCollection($tracks, 3, function (Shop\RaceTrackShop $track) {
 
-
-        $isRedirect = $this->PaginateCollection($stoList, 6, function (Shop\StoShop $stoItem) use ($stats) {
-
-            if ($stats->hp->value < $stoItem->characterData->repairToValue) {
+            $this->response->message .= "\n\n  " . $track->name . ': ';
+            $this->response->message .= " " . $track->RenderStats();
 
 
-                $canRepairCount = $stoItem->characterData->repairToValue - $stats->hp->value;
-
-                $priceRepair = $canRepairCount * ($stoItem->characterData->price / 100) * $this->car->GetPriceOneHpRepair();
-
-                $this->response->message .= "\n\n  " . $stoItem->name . ': ';
-                //$this->response->message .= "\n 💵 Ценн " . number_format($tarif['carPrice']) . '₽ ';
-                $this->response->message .= "\n ⚙ Ремонт до: " . number_format($stoItem->characterData->repairToValue) . ' HP. ';
-                $this->response->message .= "\n 💵 Сделает ремонт за : " . number_format($priceRepair) . ' ₽ ';
-
-                if ($this->user->player->characterData->money > $priceRepair) {
-                    if ($this->AddButton($stoItem->name)) {
-                        $this->scene->SetData("stoId", $stoItem->id);
-                        return $this->SetStep(1);
-                    }
-
+            if ($this->user->player->characterData->money > $track->characterData->price) {
+                if ($this->AddButton($track->name)) {
+                    $this->scene->SetData("id", $track->id);
+                    return $this->NextStep();
                 }
-
             }
         });
 
         if ($isRedirect) return $isRedirect;
-
 
         if ($this->AddButton("Выход")) {
             $this->DeleteRoom();
@@ -84,39 +64,20 @@ class RaceRoom extends BaseRoomPlus
         return $this->response;
     }
 
-    public function Step1_Approve()
+    public function Step1_CarSelect()
     {
 
-        $this->response->Reset()->message = $this->stoShop->icon . ' ' . $this->stoShop->name;
-        $this->response->message .= "\n " . $this->user->player->GetStats()->money->RenderLine(false);
-        $this->response->message .= "\n\n " . $this->car->Render(true);
+        $this->response->Reset()->message = $this->track->icon . ' ' . $this->track->name;
+        $items = $this->user->GetAllCharacters(\App\Characters\CarCharacter::class);
 
-        foreach ((array)$this->stoShop->characterData as $K => $statka) {
-            if ($K == 'price') continue;
-            /** @var StatStructure $statka */
-            $this->response->message .= "\n" . $this->stoShop->GetStatsStruct()->$K->RenderLine(false, true);
-        }
+        $selectCharacter = $this->PaginateSelector($items);
 
-        $stoItem = $this->stoShop;
-        $stats = $this->car->GetStatsCalculate();
-        if ($stats->hp->value < $stoItem->characterData->repairToValue && $stats->hp->value<$stats->hp->max) {
-
-            $canRepairCount = $stoItem->characterData->repairToValue - $stats->hp->value;
-            $priceRepair = $canRepairCount * ($stoItem->characterData->price / 100) * $this->car->GetPriceOneHpRepair();
-            $this->response->message .= "\n\n 🔷 Услуга Ремонт:";
-            $this->response->message .= "  💵 " . number_format($priceRepair) . ' ₽ ';
-
-            if ($this->user->player->characterData->money > $priceRepair) {
-                if ($this->AddButton("Ремонт")) {
-                    $this->user->player->characterData->money -= $priceRepair;
-                    $this->user->player->save();
-                    $this->request->message = "";
-                    $this->request->marker = "Ремонт";
-                    $this->car->characterData->hp = $stoItem->characterData->repairToValue;
-                    $this->car->save();
-                    return $this->Handle()->AddWarning("Ремонт выполнен", true);
-                }
-            }
+        if ($selectCharacter) {
+            $this->scene->SetData('car', $selectCharacter->id);
+            $this->scene->save();
+            $this->user->player->characterData->money -= $this->track->characterData->price;
+            $this->user->player->save();
+            return $this->NextStep();
         }
 
         if ($this->AddButton("Назад")) {
@@ -126,52 +87,117 @@ class RaceRoom extends BaseRoomPlus
         return $this->response;
     }
 
-
-    public function Step3_Taxi()
+    public function Step2_Preview()
     {
-        $this->response->Reset();
-        $this->response->message = "Работа выполнена! \n";
 
-        $tarif = self::tarifs[$this->scene->sceneData['tarif']];
-        $this->response->message .= $this->user->player->AddMoney($tarif['money']);
-        $this->response->message .= $this->user->player->AddExpa($tarif['expa']);
-        $this->response->message .= "\n\n" . $this->user->player->GetStats()->money->RenderLine(false);
-
-        $this->response->message .= "\n\n" . $this->car->GetName() . "  " . $this->car->Damage(3);
-
-        $this->car->save();
-        $this->user->player->save();
+        $this->response->Reset()->message = "Превью гонки:";
 
 
-        $this->scene->step = 1;
-        $this->scene->save();
+        $carData = Shop\CarItemCharacterShop::GetItmes()->random();
 
-        $this->response > $this->AddButton("Ок!");
+        if (!isset($this->scene->sceneData['enemy'])) {
+            $enemy = new CarCharacter();
+            $enemy->name = $carData->name;
+            $enemy->characterData = $carData->characterData;
+            $enemy->characterData->power += $enemy->characterData->power* ( $this->track->characterData->level / 11);
+            $enemy->characterData->maxSpeed += $enemy->characterData->maxSpeed* ( $this->track->characterData->level / 11);
+            $enemy->characterData->razgon -= $enemy->characterData->razgon* ( $this->track->characterData->level / 18);
 
+
+            $enemy->save();
+            $this->scene->SetData('enemy', $enemy->id);
+            $this->scene->save();
+            $this->enemy = $enemy;
+        }
+
+
+        $this->response->message .= "\n\nВы уже заплатили взнос: " . $this->track->characterData->price . ' RUB';
+
+        $this->response->message .= "\nВаш соперник:";
+        $this->response->message .= $this->enemy->Render(true);
+
+        $this->response->message .= "\n\n\nВаша машина:";
+        $this->response->message .= $this->car->Render(true);
+
+
+        if ($this->AddButton("Назад")) {
+            return $this->PrevStep();
+        }
+
+        if ($this->AddButton("Гонка")) {
+            return $this->NextStep();
+        }
         return $this->response;
+
     }
 
+    function dates($init)
+    {
+
+        $day = floor($init / 86400);
+        $hours = floor(($init - ($day * 86400)) / 3600);
+        $minutes = floor(($init / 60) % 60);
+        $seconds = $init % 60;
+        if (strlen($minutes) == 1) $minutes = '0' . $minutes;
+        if (strlen($seconds) == 1) $seconds = '0' . $seconds;
+
+        return "$minutes:$seconds";
+    }
+
+    public function Step3_Race()
+    {
+
+        $this->response->Reset()->message = "Итог гонки:";
+
+
+        $this->response->AttachSound(Mp3Builder::GenRandFile(2));
+
+        $timeEnemy = $this->enemy->GetTrackData($this->track->characterData->track_len);
+        $timePlayer = $this->car->GetTrackData($this->track->characterData->track_len);
+
+        $this->response->message .= "\nВаш соперник:";
+        $this->response->message .= $this->enemy->GetName();
+        $this->response->message .= "\nПроехал трассу за \n" . $this->dates($timeEnemy['time_to_track']);
+
+        $this->response->message .= "\n\nВаш :";
+        $this->response->message .= $this->car->GetName();
+        $this->response->message .= "\nПроехал трассу за \n" . $this->dates($timePlayer['time_to_track']);
+
+        if ($timeEnemy < $timePlayer) {
+            $this->response->message .= "\n\n Вы проиграли!";
+        } else {
+            $this->response->message .= "\n\n ПОБЕДА!";
+            $this->response->message .= $this->user->player->AddMoney($this->track->characterData->gift_money);
+            $this->response->message .= $this->user->player->AddExpa(6);
+            $this->user->player->save();
+        }
+
+        $this->scene->SetData('enemy', null);
+        $this->scene->step = 0;
+        $this->scene->save();
+
+        if ($this->AddButton("Другая гонка")) {
+
+        }
+
+        return $this->response;
+
+    }
 
     public function Boot()
     {
 
-        if (isset($this->scene->sceneData['stoId'])) {
-            $this->stoShop = $stoList = Shop\StoShop::FindById($this->scene->sceneData['stoId']);
+        if (isset($this->scene->sceneData['id'])) {
+            $this->track = Shop\RaceTrackShop::FindById($this->scene->sceneData['id']);
         }
 
-        if ($this->scene->sceneData['id'] ?? false) {
-            $this->car = CarCharacter::LoadCharacterById($this->scene->sceneData['id']);
+        if ($this->scene->sceneData['car'] ?? false) {
+            $this->car = CarCharacter::LoadCharacterById($this->scene->sceneData['car']);
         }
-    }
 
-    public function Route()
-    {
-        if ($this->GetStep() == 0) return $this->Step0_StoList();
-        if ($this->GetStep() == 1) return $this->Step1_Approve();
-        if ($this->GetStep() == 2) return $this->Step1_Approve();
-        if ($this->GetStep() == 3) return $this->Step3_Taxi();
-
-        return $this->response;
+        if ($this->scene->sceneData['enemy'] ?? false) {
+            $this->enemy = CarCharacter::LoadCharacterById($this->scene->sceneData['enemy']);
+        }
     }
 
 

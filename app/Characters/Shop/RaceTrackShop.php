@@ -7,6 +7,7 @@ use App\Characters\Struct\GarageCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
 use App\Characters\Struct\RaceTrackStructure;
 use App\Characters\RaceTrackCharacter;
+use App\Library\Structure\StatStructure;
 use App\Models\Bot\ItemCharacterShop;
 
 
@@ -25,4 +26,8 @@ class RaceTrackShop extends ItemCharacterShop
     protected $casts = [
         'characterData' => RaceTrackStructure::class,
     ];
+
+
+
+
 }

@@ -29,6 +29,33 @@ class CarCharacter extends Character
         ];
     }
 
+    public function GetTrackData($len)
+    {
+
+        //time_to_max-время до макс скорости
+        //len_to_100- метров до 100кмч
+        //time_to_track- время до всего трека
+
+        $stats = $this->GetStats();
+
+        $res = [];
+
+        $res['time_to_max'] = (max(1, $stats->maxSpeed->value - 100) * $stats->razgon->value * 0.18) - $stats->razgon->value;
+        $res['len_to_100'] = (30 / 6 * $stats->razgon->value);
+        $res['time_to_track'] = 0;
+
+        $res['time_to_track'] += $res['time_to_max'];
+        if ($len < $res['len_to_100']) {
+            $res['time_to_track'] = $res['time_to_track'] * ($len / $res['len_to_100']);
+        } else {
+            $len -= $res['len_to_100'];
+
+            $res['time_to_track'] += $len * (($stats->maxSpeed->value / 3600) * 1);
+        }
+
+        return $res;
+    }
+
     public function GetPriceOneHpRepair()
     {
         $stats = $this->GetStatsCalculate();

@@ -32,6 +32,11 @@ class GandonVirtualRoom extends BaseRoomPlus
                 return $this->NextStep();
             }
             
+            //btn_scene_name1: Гонка
+            if ($this->AddButton("Гонка")) {
+                return $this->SetRoom(\App\Scene\RaceRoom::class);
+            }
+            
             return $this->response;
         }
         

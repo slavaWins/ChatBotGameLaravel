@@ -5,6 +5,7 @@ namespace App\Models\Bot;
 use App\Characters\PlayerCharacter;
 use App\Characters\Struct\CarCharacterDataStructure;
 use App\Characters\Struct\PlayerCharacterDataStructure;
+use App\Library\Structure\StatStructure;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -86,4 +87,31 @@ class ItemCharacterShop extends Model
 
         return collect($items);
     }
+
+
+
+    public function RenderStats($isShort = false, $isShowDescr = false, $showSkill = false)
+    {
+
+        /** @var StatStructure[] $statsTemplate */
+
+        $cl = $this->casts['characterData'];
+        $statsTemplate = new $cl($this->characterData);
+        $txt = '';
+
+
+        foreach ($statsTemplate as $K => $V) {
+            if (!isset($this->characterData->$K)) continue;
+            if ($V->is_hidden_property) continue;
+            if ($isShort && !$V->isShowShort) continue;
+            if (!$showSkill && substr_count($K, "skill_")) continue;
+
+            if ($V->preapendLabel) {
+                $txt .= "\n\n " . $V->preapendLabel;
+            }
+            $txt .= "\n " . $V->RenderLine($isShort, $isShowDescr);
+        }
+        return $txt;
+    }
+
 }

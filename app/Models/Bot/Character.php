@@ -301,7 +301,7 @@ class Character extends CachebleModel
     {
         $this->characterData->hp -= $amount;
         if ($this->characterData->hp <= 0) $this->characterData->hp = 0;
-        $tex = "  " . $this->GetStats()->hp->icon . " Получен урон: -" . number_format($amount) . " " . $this->GetStats()->hp->postfix;
+        $tex = "  " .  " 💢 Получен урон: -" . number_format($amount) . " " . $this->GetStats()->hp->postfix;
         $tex .= "\n " . $this->GetStatsCalculate()->hp->RenderLine(true);
         return $tex;
     }
