@@ -10,6 +10,7 @@ use App\Http\Controllers\Bot\BotLogicController;
 use App\Http\Controllers\Controller;
 use App\Library\PhpWriter\Writer;
 use App\Models\Bot\VirtualRoom;
+use App\Models\ResponseApi;
 use Illuminate\Http\Request;
 use App\Library\Structure\BotRequestStructure;
 use App\Library\Structure\BotResponseStructure;
@@ -45,19 +46,22 @@ class RoomVirtualController extends Controller
 
         $ar = $vs->toArray();
         foreach ($data as $K => $V) {
-        //    if(!isset($ar[$K]))continue;
+            //    if(!isset($ar[$K]))continue;
             $vs->$K = $V;
         }
 
         if ($vs->selector_character == "not") $vs->selector_character = null;
         if ($vs->btn_scene_class == "not") $vs->btn_scene_class = null;
         if ($vs->btn_shop_class == "not") $vs->btn_shop_class = null;
-        $vs->save();
+
+        if (!$vs->save()) {
+            return ResponseApi::Error("error save");
+        }
 
         self::GenereateCode($vs->className);
 
-
-        return redirect(route('bot.virtual.room', $vs->className).'#step_id'.$vs->id);
+        return ResponseApi::Successful();
+        //return redirect(route('bot.virtual.room', $vs->className).'#step_id'.$vs->id);
     }
 
 
@@ -101,7 +105,7 @@ class RoomVirtualController extends Controller
         //  $steps = VirtualStep::all();
         $text = view("bot.virtual.code.room", compact(['steps', "className", 'room']));
 
-      //  $text = Writer::CodeCommentator($text);
+        //  $text = Writer::CodeCommentator($text);
         $text = Writer::CodeFormater($text);
 
         $text = '<' . '?php' . "\n" . $text;
@@ -201,8 +205,8 @@ class RoomVirtualController extends Controller
 
         return [
             'not' => "Никуда",
-            'var1' =>   $room->item_varible_name1 ?? " var1",
-            'var2' =>   $room->item_varible_name2 ?? " var2",
+            'var1' => $room->item_varible_name1 ?? " var1",
+            'var2' => $room->item_varible_name2 ?? " var2",
         ];
     }
 

@@ -1,41 +1,38 @@
 <?php
 namespace App\Scene\Virtual;
 
-use App\Characters\CarCharacter;
-use App\Characters\EnginePartCharacter;
 use App\Scene\Core\BaseRoomPlus;
+use App\Scene\Core\ShopRoom;
 
-//Это класс комнаты, наследованый от базовой комнаты. В базовой есть наборы функций. Кнопки, пагниаторы, всё для быстроботоводни
 class GandonVirtualRoom extends BaseRoomPlus
 {
     
-    
-    public function Step0_step()
+    public function Step0_SelectEnginePartCharacter()
     {
-        //Очищаем овет от кнопок и текста
         $this->response->Reset();
         
         $this->response->message = "Ок ты здесь";
         
+        $example =  new \App\Characters\EnginePartCharacter();
         
-        //Эта штука проверяет, была ли нажата пользователем кнопка. И в то же время эту кнопку сам создает
-        if ($this->AddButton("Назад")) {
-            return $this->PrevStep();
+        //selector_character_filter player
+        
+        $items = $this->user->GetAllCharacters(\App\Characters\EnginePartCharacter::class);
+        
+        $selectCharacter = $this->PaginateSelector($items);
+        
+        if (count($items) == 1) {
+            //$selectCharacter = $this->items->first();
+            } elseif (count($items) == 0) {
+                $this->response->AddWarning($example->icon." ".$example->baseName.': 0 шт.');
+            }
+            
+            if ($selectCharacter) {
+                
+                return $this->NextStep();
+            }
+            
+            return $this->response;
         }
         
-        
-        //Возвращаем ответ, который удет пользователю. В нем кнопки и текст
-        return $this->response;
-    }
-    
-    
-    //Эта функция вызывается при загрузки сцены
-    function Boot()
-    {
-        if ($this->scene->sceneData['id'] ?? false) {
-        }
-        
-    }
-    
-    
-} 
+    } 

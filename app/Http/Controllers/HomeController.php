@@ -32,7 +32,7 @@
 
         public function index() {
 
-
+dd(decline_number(1,['a','b','c']));
             /** @var PlayerCharacter $test */
             /*
             $test = PlayerCharacter::find(231);

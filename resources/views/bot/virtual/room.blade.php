@@ -79,7 +79,8 @@
         <div class="card-body">
 
 
-            <form method="POST" action="{{ route('bot.virtual.room.save.room', $room) }}">
+            <form method="POST" action="{{ route('bot.virtual.room.save.room', $room) }}"
+            >
                 @csrf
                 <h2 class="mt-4">Настройки комнаты</h2>
 
@@ -144,7 +145,7 @@
     </div>
     @foreach($steps as $step)
 
-        <form method="POST" action="{{ route('bot.virtual.room.save', $step) }}">
+        <div method="POST" action="{{ route('bot.virtual.room.save', $step) }}" class="stepForm_{{$step->id}}">
             @csrf
             <div id="step_id{{$step->id}}" class="row  p-2" style="background: transparent; border: 1px solid #ddd;">
 
@@ -384,10 +385,41 @@
 
                     <BR>
                     <BR>
-                    <button type="submit" class="btn btn-outline-dark">Сохранить</button>
+                    <a type="submit" class="btn btn-outline-dark" onclick="SaveForm(this, {{$step->id}})">Сохранить </a>
                 </div>
             </div>
-        </form>
+        </div>
     @endforeach
+
+    <script>
+        function SaveForm(e, id) {
+            var form = $('.stepForm_' + id);
+
+            var list = {};
+            form.find("input").each(function (e) {
+                list[$(this).attr("name")] = $(this).val();
+            });
+
+            form.find("select").each(function () {
+                list[$(this).attr("name")] = $(this).val();
+            });
+
+            delete list["_token"];
+            delete list["undefined"];
+            delete list["0"];
+            delete list[""];
+
+            $(e).text("...");
+            EasyApi.Post("{{ route('bot.virtual.room.save', $step) }}", list, function (res, err) {
+                if(err){
+                    $(e).text(err);
+                    return;
+                }
+              //  console.log(res);
+                $(e).text("Сохранить");
+            });
+
+        }
+    </script>
 @endsection
 

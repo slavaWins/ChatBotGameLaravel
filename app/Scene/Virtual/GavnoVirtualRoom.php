@@ -129,7 +129,7 @@ class GavnoVirtualRoom extends BaseRoomPlus
                     }
                     
                     if ($this->AddButton("Другая машина")) {
-                        return $this->NextStep();
+                        return $this->PrevStep();
                     }
                     
                     return $this->response;
