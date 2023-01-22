@@ -6,11 +6,10 @@ jobs:
   web-deploy:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
-    env:
-      APP_ENV: production
-      APP_DEBUG: false
-      AUTHSMS_TEST_MODE: false
     steps:
+    - name: Env fix
+      run: echo "APP_ENV=production" >> $GITHUB_ENV
+      
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
     
