@@ -3,18 +3,20 @@ on:
     branches: [ master ]
 name: 🚀 Deploy website on push
 jobs:
-    ci:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v2
-        - name: Create env file
-          run: |
-            touch .env
-            echo APP_DEBUG=false >> .env
-            echo APP_ENV=test_username >> .env
-        - name: FTP-Deploy-Action
-          uses: SamKirkland/FTP-Deploy-Action@3.1.1
-          with:
-            ftp-server: zxc76.beget.tech
-            ftp-username: zxc76_botphpgame
-            ftp-password: u7sWoR7&
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:         
+    - uses: actions/checkout@v3
+    - name: 🚚 Get latest code
+      run: |
+        touch .env
+        echo APP_DEBUG=false >> .env
+        echo APP_ENV=production >> .env
+        
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@4.3.3
+      with:
+        server: zxc76.beget.tech
+        username: zxc76_botphpgame
+        password: u7sWoR7&
