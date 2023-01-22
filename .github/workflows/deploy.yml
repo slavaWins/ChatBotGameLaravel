@@ -13,7 +13,6 @@ jobs:
         touch .env
         echo APP_DEBUG=false >> .env
         echo APP_ENV=production >> .env
-        echo APP_ENV=production > .env
         cat .env
         
     - name: 📂 Sync files
