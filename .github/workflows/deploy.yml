@@ -7,8 +7,13 @@ jobs:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
-    - name: Env fix
-      run: echo "APP_ENV=production" >> $GITHUB_ENV
+    - uses: actions/checkout@v2
+    - name: Env file fix
+      run: |
+        touch .env
+        echo APP_DEBUG=false >> .env
+        echo APP_ENV=production >> .env
+        echo "!.env" > .git-ftp-include # Add git untracked file
       
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
