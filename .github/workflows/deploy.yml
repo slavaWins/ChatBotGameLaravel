@@ -6,13 +6,11 @@ jobs:
   web-deploy:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
+    env:
+      APP_ENV: production
+      APP_DEBUG: false
+      AUTHSMS_TEST_MODE: false
     steps:
-    - name: 🚚 Env fix
-      env:
-        APP_ENV: production
-        APP_DEBUG: false
-        AUTHSMS_TEST_MODE: false
-
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
     
