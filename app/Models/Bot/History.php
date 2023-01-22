@@ -3,8 +3,8 @@
 namespace App\Models\Bot;
 
 use Illuminate\Database\Schema\Blueprint;
-use App\Library\PropertyBuilder\PropertyBuilderStructure;
-use App\Models\PropertyBuilder\PropertyBuilderModel;
+use App\Library\MrProperter\PropertyBuilderStructure;
+use App\Models\PropertyBuilder\MPModel;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -21,7 +21,7 @@ use Rennokki\QueryCache\Traits\QueryCacheable;
  * @property boolean isFromBot
  * @property string|null $attachment_sound
  */
-class History extends PropertyBuilderModel
+class History extends MPModel
 {
 
 

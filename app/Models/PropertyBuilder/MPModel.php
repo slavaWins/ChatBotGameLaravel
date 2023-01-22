@@ -2,19 +2,20 @@
 
 namespace App\Models\PropertyBuilder;
 
-use App\Library\PropertyBuilder\PropertyBuilderStructure;
+use App\Library\MrProperter\MigrationRender;
+use App\Library\MrProperter\PropertyBuilderStructure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use SlavaWins\Formbuilder\Library\FElement;
 
 
-class PropertyBuilderModel extends Model
+class MPModel extends Model
 {
 
 
     public static function GetValidateRules($tag = null)
     {
-        /** @var PropertyBuilderModel $cl */
+        /** @var MPModel $cl */
         $cln = get_called_class();
         $cl = new $cln();
         $props = $cl->GetByTag($tag);
@@ -26,7 +27,7 @@ class PropertyBuilderModel extends Model
          * @var PropertyBuilderStructure $prop
          */
         foreach ($props as $K => $prop) {
-            $text = $prop->typeData;
+            $text = MigrationRender::GetType( $prop->typeData);
             if ($prop->max) $text .= "|max:" . $prop->max;
             if ($prop->min) $text .= "|min:" . $prop->min;
             $rules[$K] = $text;

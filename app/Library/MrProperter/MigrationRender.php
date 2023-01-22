@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Library\PropertyBuilder;
+namespace App\Library\MrProperter;
 
-use App\Models\PropertyBuilder\PropertyBuilderModel;
+use App\Models\PropertyBuilder\MPModel;
 use App\Models\User;
 
 class MigrationRender
@@ -17,45 +17,29 @@ class MigrationRender
         return 'string';
     }
 
-    public static function RenderDoc(PropertyBuilderModel $model)
+    public static function RenderDoc(MPModel $model)
     {
         $list = [];
         $inputs = $model->GetPropertys();
 
+        $text = "/**";
         foreach ($inputs as $ind => $prop) {
             $data = [];
+//     * @property $data[]|mixed $className
+            $text .= "\n * @property " . self::GetType($prop->typeData);
 
-            $data[self::GetType($prop->typeData)] = $ind;
+            if (!$prop->default) $text .= "|null";
+            $text .= '$' . $ind;
 
-            if ($prop->default) $data['default'] = $prop->default;
+            if ($prop->comment || $prop->descr) $text .= $prop->comment ?? $prop->descr;
 
-            if (!$prop->default) $data['nullable'] = null;
-            if ($prop->comment || $prop->descr) $data['comment'] = $prop->comment ?? $prop->descr;
-
-
-            foreach ($data as $K => $V) {
-
-                if (is_string($V)) $V = '"' . $V . '"';
-                if (is_null($V)) $V = '';
-
-                if ($prop->typeData == "checkbox" and $K == "default") {
-                    if ($V) {
-                        $V = "true";
-                    } else {
-                        $V = "false";
-                    }
-                }
-                $data[$K] = $V;
-            }
-            $list[$ind] = $data;
         }
+        $text .= "\n" . '*/';
 
-        $view = view("property-builder.migration", ['list' => $list]);
-        $view = nl2br($view);
-        return $view . ' ';
+        return $text . ' ';
     }
 
-    public static function RenderMigration(PropertyBuilderModel $model)
+    public static function RenderMigration(MPModel $model)
     {
         $list = [];
         $inputs = $model->GetPropertys();
@@ -88,7 +72,8 @@ class MigrationRender
             $list[$ind] = $data;
         }
 
-        $view = view("property-builder.migration", ['list' => $list]);
+        $tableName =  $model->getTable();
+        $view = view("mr-properter.migration", ['list' => $list, 'tableName' => $tableName]);
         $view = nl2br($view);
         return $view . ' ';
     }

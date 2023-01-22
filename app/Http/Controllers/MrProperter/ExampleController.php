@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\PropertyBuilder;
+namespace App\Http\Controllers\MrProperter;
 
 
 use App\Actions\AuthSms\SendSms;
@@ -34,7 +34,7 @@ class ExampleController extends Controller
 
         $model = VirtualStep::all()->first();
 
-        return view('property-builder.index', compact('model'));
+        return view('mr-properter.index', compact('model'));
 
     }
 

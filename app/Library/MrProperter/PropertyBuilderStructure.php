@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Library\PropertyBuilder;
+namespace App\Library\MrProperter;
 
 use App\Models\User;
 use http\Params;

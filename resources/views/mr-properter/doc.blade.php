@@ -1,8 +1,8 @@
 @php
     /** @var MigrationRender $fb */
-    /** @var \App\Library\PropertyBuilder\PropertyBuilderStructure[] $props */
+    /** @var \App\Library\MrProperter\PropertyBuilderStructure[] $props */
 
-use App\Library\PropertyBuilder\MigrationRender;
+use App\Library\MrProperter\MigrationRender;
 @endphp
 
 

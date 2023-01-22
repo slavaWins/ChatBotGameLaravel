@@ -7,7 +7,7 @@ use App\Http\Controllers\Bot\BotLogicController;
 use App\Http\Controllers\Bot\Dev\MessageBoxController;
 use App\Http\Controllers\Bot\Virtual\RoomVirtualController;
 use App\Http\Controllers\LikeExcel\LikeExcelController;
-use App\Http\Controllers\PropertyBuilder\ExampleController;
+use App\Http\Controllers\MrProperter\ExampleController;
 use Illuminate\Support\Facades\Route;
 use SlavaWins\AuthSms\Library\AuthSmsRoute;
 use SlavaWins\AdminWinda\Library\AdminWindaRoute;
@@ -25,8 +25,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     AdminWindaRoute::routes();
 
-    Route::get('/property-builder', [ExampleController::class, 'index'])->name('property-builder.index');
-    Route::post('/property-builder', [ExampleController::class, 'story'])->name('property-builder.story');
+    Route::get('/mr-properter', [ExampleController::class, 'index'])->name('mr-properter.index');
+    Route::post('/mr-properter', [ExampleController::class, 'story'])->name('mr-properter.story');
 
     Route::get('/messagebox', [MessageBoxController::class, 'index'])->name('messagebox.index');
     Route::get('/messagebox/action/clear-history', [MessageBoxController::class, 'ClearHistory'])->name('messagebox.action.clearmessage');

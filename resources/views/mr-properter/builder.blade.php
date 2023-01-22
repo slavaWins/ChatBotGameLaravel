@@ -1,8 +1,8 @@
 @php
     /** @var FormBuilderStructure $fb */
-    /** @var \App\Library\PropertyBuilder\PropertyBuilderStructure $prop */
+    /** @var \App\Library\MrProperter\PropertyBuilderStructure $prop */
 
-use App\Library\PropertyBuilder\FormBuilderStructure;
+use App\Library\MrProperter\FormBuilderStructure;
 @endphp
 
 @if($fb->url)

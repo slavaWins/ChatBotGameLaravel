@@ -2,8 +2,8 @@
 
 namespace App\Models\Bot;
 
-use App\Library\PropertyBuilder\PropertyBuilderStructure;
-use App\Models\PropertyBuilder\PropertyBuilderModel;
+use App\Library\MrProperter\PropertyBuilderStructure;
+use App\Models\PropertyBuilder\MPModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property mixed|string $name
  * @property mixed|string $ind
  */
-class VirtualStep extends PropertyBuilderModel
+class VirtualStep extends MPModel
 {
     use HasFactory;
 

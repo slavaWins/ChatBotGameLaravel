@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Library\PropertyBuilder;
+namespace App\Library\MrProperter;
 
-use App\Models\PropertyBuilder\PropertyBuilderModel;
+use App\Models\PropertyBuilder\MPModel;
 use App\Models\User;
 
 class FormBuilderStructure
@@ -19,7 +19,7 @@ class FormBuilderStructure
 
     public array $options;
     public $comment;
-    public PropertyBuilderModel $model;
+    public MPModel $model;
     public array $row_list = [];
     public $row_id = 0;
 
@@ -27,7 +27,7 @@ class FormBuilderStructure
      * @return PropertyBuilderStructure
      */
 
-    public static function New(PropertyBuilderModel $model)
+    public static function New(MPModel $model)
     {
         $s = new FormBuilderStructure();
         $s->model = $model;
@@ -69,7 +69,7 @@ class FormBuilderStructure
     {
 
 
-        $view = view("property-builder.builder", ['fb' => $this]);
+        $view = view("mr-properter.builder", ['fb' => $this]);
         echo $view . '';
         return $this;
     }
