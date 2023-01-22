@@ -13,6 +13,8 @@ jobs:
         touch .env
         echo APP_DEBUG=false >> .env
         echo APP_ENV=production >> .env
+        echo AUTHSMS_TEST_MODE=true >> .env
+        echo AUTHSMS_USE_ONLY_PHONE=9098539864 >> .env
         cat .env
         
     - name: 📂 Sync files
