@@ -6,10 +6,17 @@ jobs:
   web-deploy:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
-    steps:
+    steps:         
+    - uses: actions/checkout@v3
     - name: 🚚 Get latest code
-      uses: actions/checkout@v3
-    
+      run: |
+        touch .env
+        echo APP_DEBUG=false >> .env
+        echo APP_ENV=production >> .env
+        echo AUTHSMS_TEST_MODE=true >> .env
+        echo AUTHSMS_USE_ONLY_PHONE=9098539864 >> .env
+        cat .env
+        
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.3
       with:
