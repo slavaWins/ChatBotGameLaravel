@@ -6,7 +6,10 @@ jobs:
   web-deploy:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
-    steps:
+    steps:      
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v3
+    
     - uses: actions/checkout@v2
     - name: Env file fix
       run: |
@@ -14,10 +17,7 @@ jobs:
         echo APP_DEBUG=false >> .env
         echo APP_ENV=production >> .env
         echo "!.env" > .git-ftp-include # Add git untracked file
-      
-    - name: 🚚 Get latest code
-      uses: actions/checkout@v3
-    
+        
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.3
       with:
