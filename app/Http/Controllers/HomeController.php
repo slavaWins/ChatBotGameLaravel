@@ -8,6 +8,7 @@
     use App\Characters\PlayerCharacter;
     use App\Library\Tarifiner\TarifinerLib;
     use App\Mail\ActivationMailable;
+    use App\Models\Bot\History;
     use app\Models\Trash\Order;
     use app\Models\Trash\Shop;
     use App\Models\User;
@@ -32,6 +33,7 @@
 
         public function index() {
 
+
             /** @var PlayerCharacter $test */
             /*
             $test = PlayerCharacter::find(231);
@@ -47,7 +49,9 @@
             */
             $shops = [];
 
-            return view('welcome', compact('shops'));
+            $model = History::all()->first();
+
+            return view('welcome', compact('shops','model'));
 
         }
 

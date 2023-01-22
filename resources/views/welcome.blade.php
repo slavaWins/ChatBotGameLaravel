@@ -3,6 +3,7 @@
 @section('content')
 
 
+    {{  $model->BuildInputAll('test')}}
 
     <div class="container-fluid mb-5">
     </div>

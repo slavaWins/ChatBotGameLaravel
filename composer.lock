@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bcd2ca30ad904c5da300b9f09bd5bcdf",
+    "content-hash": "ae6610639eabcef9a898ff56253908d6",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3905,6 +3905,55 @@
                 "source": "https://github.com/slavaWins/formbuilder/tree/master"
             },
             "time": "2023-01-09T14:54:01+00:00"
+        },
+        {
+            "name": "slavawins/packagemaker",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/slavaWins/packagemaker.git",
+                "reference": "9eb5b73134ae4786c5440ca4c086686a22eacd24"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/slavaWins/packagemaker/zipball/9eb5b73134ae4786c5440ca4c086686a22eacd24",
+                "reference": "9eb5b73134ae4786c5440ca4c086686a22eacd24",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3|^8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "PackageMaker\\Providers\\PackageMakerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PackageMaker\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "slavaWins",
+                    "email": "email@example.com",
+                    "homepage": "https://github.com/slavaWins/packagemaker"
+                }
+            ],
+            "description": "Expa",
+            "support": {
+                "issues": "https://github.com/slavaWins/packagemaker/issues",
+                "source": "https://github.com/slavaWins/packagemaker/tree/master"
+            },
+            "time": "2023-01-21T18:00:20+00:00"
         },
         {
             "name": "spatie/laravel-permission",
@@ -9189,7 +9238,8 @@
         "slavawins/adminwinda": 20,
         "slavawins/authsms": 20,
         "slavawins/easyanalitics": 20,
-        "slavawins/formbuilder": 20
+        "slavawins/formbuilder": 20,
+        "slavawins/packagemaker": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
