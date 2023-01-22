@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Library\Tarifiner\TarifinerLib;
 use App\Mail\ActivationMailable;
 use App\Models\Bot\History;
+use App\Models\Bot\VirtualStep;
 use app\Models\Trash\Order;
 use app\Models\Trash\Shop;
 use App\Models\User;
@@ -30,11 +31,10 @@ class ExampleController extends Controller
     public function index()
     {
 
-        $shops = [];
 
-        $model = History::all()->first();
+        $model = VirtualStep::all()->first();
 
-        return view('property-builder.index', compact( 'model'));
+        return view('property-builder.index', compact('model'));
 
     }
 

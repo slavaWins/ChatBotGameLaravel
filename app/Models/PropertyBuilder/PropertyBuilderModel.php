@@ -69,7 +69,22 @@ class PropertyBuilderModel extends Model
         $p = $this->GetPropertys();
         if (!isset($p[$ind])) return null;
         $prop = $p[$ind];
-        $inp = FElement::NewInputTextRow()
+
+        $inp = FElement::NewInputText();
+
+        if ($prop->typeData <> "checkbox") {
+
+        }
+
+        if ($prop->typeData == "checkbox") {
+            $inp = FElement::NewInputText()->SetView()->InputBoolRow();
+        } elseif ($prop->typeData == "text" or $prop->typeData == "int") {
+            $inp = FElement::NewInputText();
+        } elseif ($prop->typeData == "select" ) {
+            $inp = FElement::NewInputText()->SetView()->InputSelect()->AddOptionFromArray($prop->options);
+        }
+
+        $inp =$inp
             ->SetLabel($prop->name)
             ->SetPlaceholder($prop->descr ?? null)
             ->SetName($ind)

@@ -1,20 +1,84 @@
 @php
-    /** @var \App\Models\Bot\History $model */
+    /** @var \App\Models\Bot\VirtualStep $model */
+
+use App\Library\PropertyBuilder\FormBuilderStructure;
 @endphp
 
-@extends('layouts.fullscreen')
+@extends('layouts.containerscreen')
 
 @section('content')
 
-    <h1>пример</h1>
+    <style>
+        body {
+            font-size: 12px;
+            color: #000;
+        }
+    </style>
+
+    <small>FormBuilderStructure</small>
+    <h3>Сборка формы по своей структуре</h3>
 
 
-    <form method="POST" action="{{ route('property-builder.story') }}">
-        @csrf
-        {{  $model->BuildInputAll('test')}}
-        <button type="submit" class="mt-4 btn btn-primary col-12 p-3 shadow-0 btn-submit-auth">
-            Вход
-        </button>
-    </form>
+    <div class="card col-7 mb-4">
+        <div class="card-body">
+            @php
+
+                FormBuilderStructure::New($model)
+                ->Input("selector_character_enabled")
+                ->Row()
+                ->Input("selector_character")
+                ->Input("selector_character_filter")
+                ->Input("selector_character_to_varible")
+                ->Row()
+                ->Input("render_character_enabled")
+                ->Row()
+                ->Input("render_character")
+                ->Row()
+                ->Submit("Отправить")
+                ->Route(route('property-builder.story'))
+                  ->RenderHtml();
+
+
+            @endphp
+        </div>
+    </div>
+
+
+    <small>BuildInputAll</small>
+    <h3>Вывод инпутов</h3>
+    <div class="card col-7 mb-4">
+        <div class="card-body">
+            <form method="POST" action="{{ route('property-builder.story') }}">
+                @csrf
+                {{  $model->BuildInputAll()}}
+                <button type="submit" class="mt-4 btn btn-primary col-12 p-3 shadow-0 btn-submit-auth">
+                    Вход
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <small>MigrationRender</small>
+    <h3>Генерация файла миграции</h3>
+    <div class="card col-12 mb-4">
+        <div class="card-body" style="font-size: 15px; font-family: Arial;">
+
+            {!!  \App\Library\PropertyBuilder\MigrationRender::RenderMigration($model) !!}
+
+        </div>
+    </div>
+
+
+
+    <small>DocRender</small>
+    <h3>Генерация php doc</h3>
+    <div class="card col-12 mb-4">
+        <div class="card-body" style="font-size: 15px; font-family: Arial;">
+
+            {!!  \App\Library\PropertyBuilder\MigrationRender::RenderMigration($model) !!}
+
+        </div>
+    </div>
+
 @endsection
 

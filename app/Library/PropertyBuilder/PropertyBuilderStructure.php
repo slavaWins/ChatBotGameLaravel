@@ -42,6 +42,23 @@ class PropertyBuilderStructure
         $s->name = $name;
         $s->typeData = 'int';
         return $s;
+    }    /**
+ * @return PropertyBuilderStructure
+ */
+    public static function Select($name)
+    {
+        $s = new PropertyBuilderStructure();
+        $s->name = $name;
+        $s->typeData = 'select';
+        return $s;
+    }
+
+    public static function Checkbox($name)
+    {
+        $s = new PropertyBuilderStructure();
+        $s->name = $name;
+        $s->typeData = 'checkbox';
+        return $s;
     }
 
     public static function String($val)

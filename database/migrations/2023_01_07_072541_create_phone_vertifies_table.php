@@ -27,6 +27,7 @@
                 $table->boolean('is_sended_on_phone')->comment("если получилось отправить на телефон смску. Типа вдруг апи не отработал")->default(false);
                 $table->timestamp('last_try')->comment("посл попытка авторизации")->nullable();
 
+
                 $table->timestamps();
             });
         }
