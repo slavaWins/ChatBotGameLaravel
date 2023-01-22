@@ -81,7 +81,7 @@ class PropertyBuilderModel extends Model
 
         $html = $inp->SetValue(old($ind, $this->$ind ?? ""))
             ->RenderHtml(true);
- 
+
     }
 
     /**
