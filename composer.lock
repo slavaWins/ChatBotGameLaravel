@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae6610639eabcef9a898ff56253908d6",
+    "content-hash": "836c1dc7d7d54611094853f4567ab226",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3905,6 +3905,55 @@
                 "source": "https://github.com/slavaWins/formbuilder/tree/master"
             },
             "time": "2023-01-09T14:54:01+00:00"
+        },
+        {
+            "name": "slavawins/mrproperter",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/slavaWins/mrproperter.git",
+                "reference": "3ad364ad76d8c292ebab2bdbf2c4d6875fe90ee4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/slavaWins/mrproperter/zipball/3ad364ad76d8c292ebab2bdbf2c4d6875fe90ee4",
+                "reference": "3ad364ad76d8c292ebab2bdbf2c4d6875fe90ee4",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3|^8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MrProperter\\Providers\\MrProperterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MrProperter\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "slavaWins",
+                    "email": "email@example.com",
+                    "homepage": "https://github.com/slavaWins/mrproperter"
+                }
+            ],
+            "description": "Expa",
+            "support": {
+                "issues": "https://github.com/slavaWins/mrproperter/issues",
+                "source": "https://github.com/slavaWins/mrproperter/tree/master"
+            },
+            "time": "2023-01-22T07:02:07+00:00"
         },
         {
             "name": "slavawins/packagemaker",
@@ -9239,6 +9288,7 @@
         "slavawins/authsms": 20,
         "slavawins/easyanalitics": 20,
         "slavawins/formbuilder": 20,
+        "slavawins/mrproperter": 20,
         "slavawins/packagemaker": 20
     },
     "prefer-stable": true,

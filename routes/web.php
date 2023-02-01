@@ -25,8 +25,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     AdminWindaRoute::routes();
 
-    Route::get('/mr-properter', [ExampleController::class, 'index'])->name('mr-properter.index');
-    Route::post('/mr-properter', [ExampleController::class, 'story'])->name('mr-properter.story');
+    Route::get('/mr-properter', [\App\Http\Controllers\MrProperter\MrProperterController::class, 'index'])->name('mrproperter.index');
+    Route::post('/mr-properter', [\App\Http\Controllers\MrProperter\MrProperterController::class, 'store'])->name('mrproperter.store');
 
     Route::get('/messagebox', [MessageBoxController::class, 'index'])->name('messagebox.index');
     Route::get('/messagebox/action/clear-history', [MessageBoxController::class, 'ClearHistory'])->name('messagebox.action.clearmessage');
