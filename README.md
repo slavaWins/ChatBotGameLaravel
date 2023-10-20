@@ -5,6 +5,5 @@
  
 
 ## Игровой движок чат бота php
+https://www.youtube.com/watch?v=0MzQjRlsmPg
 
-[Кароч это  ](https://www.youtube.com/watch?v=0MzQjRlsmPg)
- 
